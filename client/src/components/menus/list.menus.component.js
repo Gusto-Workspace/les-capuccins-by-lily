@@ -1,0 +1,111 @@
+import Link from "next/link";
+import OtherMenusComponent from "./other-menus.menus.component";
+import SectionHeadingComponent from "../_shared/section-heading.component";
+import { getVisibleDishCategories } from "../../_assets/utils/site-display.utils";
+
+function getCategoryHeading(title) {
+  const normalizedTitle = String(title || "").trim();
+
+  if (!normalizedTitle) {
+    return "Nos suggestions";
+  }
+
+  if (/^nos\s/i.test(normalizedTitle)) {
+    return normalizedTitle;
+  }
+
+  return `Nos ${normalizedTitle.toLowerCase()}`;
+}
+
+function MenuEntry({ name, price, description }) {
+  return (
+    <div className="pb-4 last:pb-0 tablet:pb-5">
+      <div className="flex items-start gap-4">
+        <h4 className="min-w-0 text-[21px] font-bold leading-[1.08] tracking-[-0.02em] text-black tablet:text-[24px]">
+          {name}
+        </h4>
+
+        {price ? (
+          <>
+            <div className="mt-[15px] min-w-0 flex-1 border-b border-dotted border-[rgba(223,160,132,0.78)]" />
+            <span className="shrink-0 pt-1 text-[18px] font-bold leading-none text-black tablet:text-[20px]">
+              {price}
+            </span>
+          </>
+        ) : null}
+      </div>
+
+      {description ? (
+        <p className="mt-1.5 max-w-[94%] text-[16px] leading-[1.28] tracking-[0.01em] text-[rgba(122,95,84,0.9)] tablet:text-[18px]">
+          {description}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+export default function ListMenusComponent({ restaurantData }) {
+  const categories = getVisibleDishCategories(restaurantData);
+
+  return (
+    <section className="site-shell px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+      <div className="mx-auto max-w-[1280px]">
+        <SectionHeadingComponent
+          eyebrow="La carte"
+          title="Nos plats à la carte"
+          description="Les plats, pizzas et recettes de la maison sont présentés ici à part. Les formules et menus sont regroupés plus bas dans une section dédiée."
+        />
+
+        {categories.length ? (
+          <div className="mx-auto mt-14 max-w-[980px]">
+            <div className="space-y-12 tablet:space-y-16">
+              {categories.map((category) => (
+                <article key={category.id} className="pb-2 last:pb-0">
+                  <div className="mx-auto max-w-[860px] text-center">
+                    <p className="script-font text-[50px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[62px]">
+                      {getCategoryHeading(category.title)}
+                    </p>
+
+                    {category.description ? (
+                      <p className="mx-auto mt-3 max-w-[720px] text-[16px] leading-[1.65] text-[rgba(122,95,84,0.88)] tablet:text-[17px]">
+                        {category.description}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  <div className="mt-7 space-y-5 tablet:space-y-6">
+                    {category.items.map((item) => (
+                      <MenuEntry
+                        key={item.id}
+                        name={item.name}
+                        price={item.price}
+                        description={item.description}
+                      />
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="mx-auto mt-14 max-w-[760px] px-8 py-12 text-center">
+            <p className="script-font text-[40px] leading-none text-[var(--site-orange)]">
+              Carte en préparation
+            </p>
+            <p className="mt-4 text-[17px] leading-[1.85] text-[var(--site-ink-soft)]">
+              Les plats visibles sur le site seront ajoutés ici très bientôt.
+            </p>
+          </div>
+        )}
+
+        <OtherMenusComponent restaurantData={restaurantData} />
+
+        <div className="mt-14 flex justify-center">
+          <Link href="/reservations" className="site-button">
+            Réserver une table
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
