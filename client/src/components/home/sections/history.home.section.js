@@ -19,19 +19,18 @@ export default function HistoryHomeSection({ restaurantName }) {
         </div>
       </div>
 
-      {/* <div className="pointer-events-none absolute right-0 top-8 hidden desktop:block">
-        <div className="relative h-[320px] w-[320px]">
+      <div className="pointer-events-none absolute -right-24 top-8 hidden desktop:block">
+        <div className="relative h-[420px] w-[420px] opacity-85">
           <Image
-            src="/img/history/2.png"
+            src="/img/elements/3.png"
             alt=""
             fill
-            sizes="320px"
+            sizes="420px"
             className="object-contain"
           />
         </div>
-      </div> */}
-
-      <div className="relative mx-auto max-w-[1120px] text-center desktop:px-[220px]">
+      </div>
+      <div className="relative z-10 mx-auto max-w-[1120px] text-center desktop:px-[220px]">
         <HomeSectionHeading
           eyebrow="Découvrez"
           title="Notre histoire"

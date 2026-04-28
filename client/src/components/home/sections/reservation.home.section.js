@@ -1,6 +1,7 @@
 import Image from "next/image";
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import BookingBarComponent from "../../reservations/booking-bar.component";
+import GraphicElementComponent from "../../_shared/graphic-element.component";
 
 export default function ReservationHomeSection({ restaurantData }) {
   return (
@@ -27,7 +28,12 @@ export default function ReservationHomeSection({ restaurantData }) {
       />
 
       <div className="relative mx-auto grid max-w-[1400px] gap-10 desktop:grid-cols-[0.86fr_1.14fr] desktop:items-center">
-        <div className="text-[var(--site-cream)]">
+        <GraphicElementComponent
+          src="/img/elements/10.png"
+          className="bottom-[-220px] right-[-254px] hidden h-[400px] w-[400px] opacity-20 desktop:block"
+          sizes="170px"
+        />
+        <div className="relative z-10 text-[var(--site-cream)]">
           <div className="mb-6">
             <div className="relative h-[192px] w-[192px] tablet:h-[206px] tablet:w-[206px]">
               <Image
@@ -51,7 +57,9 @@ export default function ReservationHomeSection({ restaurantData }) {
           </p>
         </div>
 
-        <BookingBarComponent restaurant={restaurantData} />
+        <div className="relative z-10">
+          <BookingBarComponent restaurant={restaurantData} />
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import HomeSectionHeading from "../home-section-heading.component";
+import GraphicElementComponent from "../../_shared/graphic-element.component";
 
 const specialties = [
   {
@@ -55,37 +56,49 @@ export default function SpecialtiesHomeSection() {
       />
 
       <div className="relative mx-auto max-w-[1400px]">
-        <HomeSectionHeading title="Nos spécialités" light titleClassName="uppercase" />
+        <GraphicElementComponent
+          src="/img/elements/9.png"
+          className="bottom-[-222px] left-[-192px] hidden h-[270px] w-[270px] opacity-34 desktop:block"
+          sizes="270px"
+        />
+        <GraphicElementComponent
+          src="/img/elements/6.png"
+          className="right-[-174px] -top-[154px] hidden h-[280px] w-[280px] opacity-34 desktop:block"
+          sizes="280px"
+        />
+        <div className="relative z-10">
+          <HomeSectionHeading title="Nos spécialités" light titleClassName="uppercase" />
 
-        <div className="mt-16 grid gap-8 desktop:grid-cols-4 desktop:gap-0">
-          {specialties.map((item, index) => (
-            <article
-              key={item.title}
-              className={`px-2 text-center desktop:px-8 ${
-                index < specialties.length - 1
-                  ? "desktop:border-r desktop:border-[rgba(246,231,230,0.32)]"
-                  : ""
-              }`}
-            >
-              <div className="mb-6 flex justify-center">
-                <div className="relative h-[86px] w-[86px] tablet:h-[94px] tablet:w-[94px]">
-                  <Image
-                    src={item.icon}
-                    alt=""
-                    fill
-                    sizes="94px"
-                    className="object-contain"
-                  />
+          <div className="mt-16 grid gap-8 desktop:grid-cols-4 desktop:gap-0">
+            {specialties.map((item, index) => (
+              <article
+                key={item.title}
+                className={`px-2 text-center desktop:px-8 ${
+                  index < specialties.length - 1
+                    ? "desktop:border-r desktop:border-[rgba(246,231,230,0.32)]"
+                    : ""
+                }`}
+              >
+                <div className="mb-6 flex justify-center">
+                  <div className="relative h-[86px] w-[86px] tablet:h-[94px] tablet:w-[94px]">
+                    <Image
+                      src={item.icon}
+                      alt=""
+                      fill
+                      sizes="94px"
+                      className="object-contain"
+                    />
+                  </div>
                 </div>
-              </div>
-              <h3 className="yeseva-one-regular text-[31px] uppercase leading-[0.96] text-[var(--site-cream)]">
-                {item.title}
-              </h3>
-              <p className="mx-auto mt-5 max-w-[250px] text-[16px] leading-[1.85] text-[rgba(246,231,230,0.88)]">
-                {item.description}
-              </p>
-            </article>
-          ))}
+                <h3 className="yeseva-one-regular text-[31px] uppercase leading-[0.96] text-[var(--site-cream)]">
+                  {item.title}
+                </h3>
+                <p className="mx-auto mt-5 max-w-[250px] text-[16px] leading-[1.85] text-[rgba(246,231,230,0.88)]">
+                  {item.description}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

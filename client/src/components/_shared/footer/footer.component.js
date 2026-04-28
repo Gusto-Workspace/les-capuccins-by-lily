@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useContext } from "react";
 import { GlobalContext } from "@/contexts/global.context";
 import WaveDividerComponent from "../wave-divider.component";
+import GraphicElementComponent from "../graphic-element.component";
 import {
   getRestaurantBrandParts,
   getSocialLinks,
@@ -28,7 +29,17 @@ export default function FooterComponent() {
       />
 
       <div className="mx-auto max-w-[1600px]">
-        <div className="flex flex-col gap-10 border-b border-[rgba(246,231,230,0.36)] pb-10 desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-16">
+        <GraphicElementComponent
+          src="/img/elements/10.png"
+          className="bottom-[-22px] left-[-22px] hidden h-[150px] w-[150px] opacity-30 desktop:block"
+          sizes="190px"
+        />
+        <GraphicElementComponent
+          src="/img/elements/9.png"
+          className="bottom-[-18px] right-[-22px] hidden h-[146px] w-[146px] opacity-30 desktop:block"
+          sizes="180px"
+        />
+        <div className="relative z-10 flex flex-col gap-10 border-b border-[rgba(246,231,230,0.36)] pb-10 desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-16">
           <Link href="/" className="flex items-center gap-4 self-start">
             <div className="relative h-[68px] w-[68px] overflow-hidden rounded-full border border-[rgba(246,231,230,0.4)] bg-white/12">
               <Image
@@ -64,7 +75,7 @@ export default function FooterComponent() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 py-8 text-center tablet:text-left desktop:flex-row desktop:items-center desktop:justify-between">
+        <div className="relative z-10 flex flex-col gap-8 py-8 text-center tablet:text-left desktop:flex-row desktop:items-center desktop:justify-between">
           <p className="text-[14px] leading-[1.7] text-[rgba(246,231,230,0.82)]">
             © {new Date().getFullYear()} {brand.full}. Tous droits réservés.
           </p>
