@@ -5,6 +5,26 @@ import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
+import SectionHeadingComponent from "@/components/_shared/section-heading.component";
+import RevealOnScrollComponent from "@/components/_shared/motion/reveal-on-scroll.component";
+import GraphicElementComponent from "@/components/_shared/graphic-element.component";
+
+function PolicySection({ title, children, last = false }) {
+  return (
+    <section
+      className={`py-6 tablet:py-7 desktop:py-8 ${
+        last ? "" : "border-b border-[var(--site-line)]"
+      }`}
+    >
+      <h2 className="yeseva-one-regular text-[24px] leading-[1.04] text-[var(--site-ink)] tablet:text-[30px]">
+        {title}
+      </h2>
+      <div className="mt-4 space-y-3 text-[15px] leading-[1.85] text-[var(--site-ink-soft)] tablet:text-[16px] desktop:text-[17px]">
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export default function PolicyPage() {
   const heroRef = useRef(null);
@@ -21,9 +41,7 @@ export default function PolicyPage() {
       ([entry]) => {
         setShowScrolledNav(entry.intersectionRatio <= 0.1);
       },
-      {
-        threshold: [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1],
-      },
+      { threshold: [0, 0.05, 0.1, 0.25, 0.5, 0.75, 1] },
     );
 
     observer.observe(heroEl);
@@ -37,7 +55,7 @@ export default function PolicyPage() {
         title={title}
         description={description}
         path="/policy"
-        image="/img/reservations/2.jpg"
+        image="/img/hero/header.jpg"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Politique de confidentialité", path: "/policy" },
@@ -59,288 +77,206 @@ export default function PolicyPage() {
 
         <div ref={heroRef}>
           <BannerComponent
+            eyebrow="Données"
             title="Politique de confidentialité"
-            imgUrl="reservations/2.jpg"
-            opacity={true}
+            description="Cette page résume les données pouvant être traitées via le site, leurs finalités et les droits associés."
+            imgUrl="hero/header.jpg"
           />
         </div>
 
-        <section className="w-full bg-[#eeebe6] px-5 py-20 text-[#111111] tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
-          <div className="mx-auto max-w-[1600px]">
-            <div className="mx-auto max-w-[980px] text-center">
-              <p className="mb-4 text-[12px] font-light uppercase tracking-[0.28em] text-[#b48a45] tablet:mb-5 tablet:text-[14px] tablet:tracking-[0.42em] desktop:text-[16px]">
-                Informations
-              </p>
+        <section className="relative overflow-hidden bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+          <GraphicElementComponent
+            src="/img/elements/3.png"
+            className="left-[-44px] top-[180px] hidden h-[170px] w-[170px] opacity-30 desktop:block"
+            sizes="170px"
+            disableMotion
+          />
+          <GraphicElementComponent
+            src="/img/elements/1.png"
+            className="bottom-[120px] right-[-40px] hidden h-[160px] w-[160px] opacity-30 desktop:block"
+            sizes="160px"
+            disableMotion
+          />
 
-              <h1 className="yeseva-one-regular text-[28px] uppercase leading-[1.08] tracking-[-0.04em] tablet:text-[40px] desktop:text-[54px]">
-                Politique de confidentialité
-              </h1>
+          <div className="relative z-10 mx-auto max-w-[1400px]">
+            <SectionHeadingComponent
+              eyebrow="Protection"
+              title="Politique de confidentialité"
+              description="Les traitements décrits ci-dessous correspondent aux fonctionnalités visibles sur le site à ce jour."
+            />
 
-              <p className="mx-auto mt-5 max-w-[760px] text-[15px] font-light leading-[1.8] text-black/60 tablet:mt-6 tablet:text-[17px] tablet:leading-[1.85] desktop:text-[18px]">
-                Cette politique explique quelles données peuvent être traitées
-                via le site, pour quelles finalités, et quels droits vous pouvez
-                exercer sur ces informations.
-              </p>
-            </div>
-
-            <div className="mx-auto mt-12 max-w-[980px] border border-[#b48a45]/20 bg-white/60 p-6 tablet:mt-14 tablet:p-8 desktop:mt-16 desktop:p-12">
-              <div className="rounded-[18px] border border-[#b48a45]/20 bg-[#f8f5ef] px-5 py-4 text-[14px] font-light leading-[1.75] text-black/65 tablet:text-[15px]">
-                Cette page a été rédigée pour correspondre aux fonctionnalités
-                actuellement visibles dans le code du site : formulaire de
-                contact, réservation en ligne, mesure technique de session de
-                visite et parcours d’empreinte bancaire via prestataire sécurisé
-                lorsque cette fonctionnalité est activée.
+            <RevealOnScrollComponent
+              delay={120}
+              variant="soft"
+              className="site-card mx-auto mt-14 max-w-[980px] rounded-[34px] p-6 tablet:p-8 desktop:p-12"
+            >
+              <div className="rounded-[22px] border border-[var(--site-line)] bg-[rgba(223,160,132,0.1)] px-5 py-5 text-[14px] leading-[1.75] text-[var(--site-ink-soft)] tablet:text-[15px]">
+                Cette page doit être complétée si de nouveaux services, outils
+                marketing, cookies ou prestataires sont ajoutés au site après
+                sa mise en ligne.
               </div>
 
-              <div className="mt-8 space-y-0">
-                <section className="border-b border-[#111111]/10 py-6 first:pt-0 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Responsable du traitement
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Le responsable du traitement des données personnelles
-                      collectées via le site correspond à l’exploitant du
-                      restaurant <strong>Les Capucins by Lily</strong>.
-                    </p>
-                    <p>
-                      Pour toute demande relative à vos données, vous pouvez
-                      utiliser la{" "}
-                      <Link
-                        href="/contact"
-                        className="text-[#b48a45] underline underline-offset-4"
-                      >
-                        page de contact
-                      </Link>{" "}
-                      du site. Les coordonnées juridiques précises du
-                      responsable de traitement doivent être validées et
-                      complétées avant mise en production définitive.
-                    </p>
-                  </div>
-                </section>
+              <div className="mt-8">
+                <PolicySection title="Responsable du traitement">
+                  <p>
+                    Le responsable du traitement des données personnelles
+                    collectées via le site correspond à l’exploitant du
+                    restaurant{" "}
+                    <strong className="text-[var(--site-ink)]">
+                      Les Capucins by Lily
+                    </strong>
+                    .
+                  </p>
+                  <p>
+                    Pour toute demande relative à vos données, vous pouvez
+                    utiliser la{" "}
+                    <Link
+                      href="/contact"
+                      className="text-[var(--site-orange-deep)] underline underline-offset-4 transition hover:text-[var(--site-ink)]"
+                    >
+                      page contact
+                    </Link>
+                    .
+                  </p>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Données susceptibles d’être collectées
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <ul className="ml-5 list-disc space-y-2">
-                      <li>
-                        Formulaire de contact : nom complet, adresse e-mail,
-                        téléphone, sujet, contenu du message.
-                      </li>
-                      <li>
-                        Réservation : date, horaire, nombre de convives, prénom,
-                        nom, e-mail, téléphone et commentaire éventuel.
-                      </li>
-                      <li>
-                        Suivi technique de réservation : identifiants
-                        temporaires liés à une réservation en attente
-                        d’empreinte bancaire ou de finalisation.
-                      </li>
-                      <li>
-                        Navigation technique : informations strictement
-                        nécessaires au fonctionnement du site, notamment
-                        certains stockages locaux du navigateur.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
+                <PolicySection title="Données susceptibles d’être collectées">
+                  <ul className="ml-5 list-disc space-y-2">
+                    <li>
+                      Formulaire de contact : nom, e-mail, téléphone et contenu
+                      du message.
+                    </li>
+                    <li>
+                      Réservation : identité de contact, nombre de convives,
+                      date, horaire et commentaire éventuel.
+                    </li>
+                    <li>
+                      Données techniques strictement nécessaires au bon
+                      fonctionnement du site et à la continuité de certaines
+                      étapes de réservation.
+                    </li>
+                  </ul>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Finalités du traitement
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <ul className="ml-5 list-disc space-y-2">
-                      <li>
-                        Répondre aux demandes envoyées via le formulaire de
-                        contact.
-                      </li>
-                      <li>
-                        Gérer, confirmer et suivre les réservations effectuées
-                        sur le site.
-                      </li>
-                      <li>
-                        Sécuriser certaines réservations au moyen d’une
-                        empreinte ou d’un parcours de paiement via Stripe
-                        lorsque cette option est activée.
-                      </li>
-                      <li>
-                        Assurer le bon fonctionnement technique du site et
-                        limiter certains doublons de session de visite.
-                      </li>
-                      <li>
-                        Conserver les éléments nécessaires à la gestion des
-                        échanges, à la preuve et au traitement d’éventuels
-                        litiges.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
+                <PolicySection title="Finalités du traitement">
+                  <ul className="ml-5 list-disc space-y-2">
+                    <li>Répondre aux demandes envoyées via le formulaire.</li>
+                    <li>
+                      Gérer, confirmer et suivre les réservations effectuées sur
+                      le site.
+                    </li>
+                    <li>
+                      Sécuriser certaines réservations lorsqu’un prestataire
+                      spécialisé intervient dans le parcours.
+                    </li>
+                    <li>
+                      Assurer le fonctionnement technique du site et conserver
+                      les éléments utiles au suivi des échanges.
+                    </li>
+                  </ul>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Bases juridiques
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Les traitements sont réalisés selon les cas sur la base de
-                      l’exécution de mesures précontractuelles ou contractuelles
-                      demandées par l’utilisateur, du respect d’obligations
-                      légales et de l’intérêt légitime de l’exploitant à
-                      administrer son activité, sécuriser les réservations et
-                      assurer le fonctionnement du site.
-                    </p>
-                  </div>
-                </section>
+                <PolicySection title="Bases juridiques">
+                  <p>
+                    Les traitements sont réalisés selon les cas sur la base de
+                    l’exécution de mesures précontractuelles ou contractuelles,
+                    du respect d’obligations légales ou de l’intérêt légitime
+                    de l’exploitant à administrer son activité et ses
+                    réservations.
+                  </p>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Destinataires des données
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Les données sont destinées aux personnes habilitées au
-                      sein du restaurant ainsi qu’aux prestataires techniques
-                      strictement nécessaires au service.
-                    </p>
-                    <ul className="ml-5 list-disc space-y-2">
-                      <li>
-                        Prestataire d’e-mail transactionnel Brevo pour
-                        l’acheminement des messages envoyés via le formulaire de
-                        contact.
-                      </li>
-                      <li>
-                        Prestataire de paiement Stripe lorsqu’une réservation
-                        nécessite une empreinte bancaire ou une action de
-                        sécurisation.
-                      </li>
-                      <li>
-                        Prestataires techniques intervenant pour l’hébergement,
-                        la maintenance, l’infrastructure API, la base de données
-                        et la sécurité du site.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
+                <PolicySection title="Destinataires des données">
+                  <p>
+                    Les données sont accessibles uniquement aux personnes
+                    habilitées et aux prestataires techniques nécessaires au
+                    service.
+                  </p>
+                  <ul className="ml-5 list-disc space-y-2">
+                    <li>
+                      Prestataire d’e-mail transactionnel pour l’envoi des
+                      messages de contact.
+                    </li>
+                    <li>
+                      Prestataire de paiement ou de sécurisation de réservation
+                      lorsqu’un parcours spécifique est activé.
+                    </li>
+                    <li>
+                      Prestataires techniques liés à l’hébergement, à
+                      l’infrastructure et à la maintenance du site.
+                    </li>
+                  </ul>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Durée de conservation
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Les données sont conservées pendant la durée nécessaire à
-                      la finalité pour laquelle elles ont été collectées, puis
-                      archivées pendant la durée utile au respect des
-                      obligations légales et à la gestion d’éventuels
-                      contentieux.
-                    </p>
-                    <ul className="ml-5 list-disc space-y-2">
-                      <li>
-                        Les messages de contact sont conservés le temps
-                        nécessaire au traitement de la demande et au suivi de la
-                        relation.
-                      </li>
-                      <li>
-                        Les données de réservation sont conservées pour la
-                        gestion opérationnelle du service puis archivées si
-                        nécessaire à des fins administratives, comptables ou
-                        probatoires.
-                      </li>
-                      <li>
-                        Le stockage local `lastVisitSession` a une durée de
-                        session courte d’environ cinq minutes.
-                      </li>
-                      <li>
-                        Le stockage local lié à une réservation en attente est
-                        supprimé lorsqu’elle est annulée, expirée ou finalisée.
-                      </li>
-                    </ul>
-                  </div>
-                </section>
+                <PolicySection title="Durée de conservation">
+                  <p>
+                    Les données sont conservées pendant la durée strictement
+                    nécessaire à la finalité poursuivie, puis archivées lorsque
+                    cela est nécessaire au respect des obligations légales ou à
+                    la gestion d’un éventuel litige.
+                  </p>
+                  <ul className="ml-5 list-disc space-y-2">
+                    <li>
+                      Les messages de contact sont conservés le temps utile au
+                      traitement de la demande.
+                    </li>
+                    <li>
+                      Les données de réservation sont conservées pour la
+                      gestion opérationnelle du service et son suivi
+                      administratif.
+                    </li>
+                    <li>
+                      Les stockages locaux techniques sont supprimés ou expirent
+                      automatiquement selon leur usage.
+                    </li>
+                  </ul>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Cookies, localStorage et traceurs techniques
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Le site n’intègre pas, à notre connaissance, de dispositif
-                      de suivi publicitaire ou de ciblage marketing tiers dans
-                      sa version actuelle.
-                    </p>
-                    <p>
-                      En revanche, des stockages techniques du navigateur
-                      peuvent être utilisés pour le bon fonctionnement du
-                      service, notamment pour le suivi d’une session de visite
-                      et la reprise d’une réservation en attente. Lors d’un
-                      parcours sécurisé de réservation, Stripe peut également
-                      utiliser ses propres traceurs techniques indispensables à
-                      la sécurisation du paiement ou de l’empreinte bancaire.
-                    </p>
-                  </div>
-                </section>
+                <PolicySection title="Cookies et stockages techniques">
+                  <p>
+                    Le site n’intègre pas, à notre connaissance, de suivi
+                    publicitaire tiers dans sa version actuelle. En revanche,
+                    certains stockages techniques du navigateur peuvent être
+                    utilisés pour le bon fonctionnement du site, notamment pour
+                    conserver un état temporaire lié à la navigation ou à une
+                    réservation en cours.
+                  </p>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Transferts hors Union européenne
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Certains prestataires techniques peuvent traiter tout ou
-                      partie des données en dehors de l’Union européenne. Dans
-                      cette hypothèse, les transferts doivent être encadrés par
-                      les garanties juridiques appropriées prévues par la
-                      réglementation applicable.
-                    </p>
-                  </div>
-                </section>
+                <PolicySection title="Transferts hors Union européenne">
+                  <p>
+                    Certains prestataires techniques peuvent traiter certaines
+                    données en dehors de l’Union européenne. Le cas échéant,
+                    ces transferts doivent être encadrés par les garanties
+                    juridiques appropriées prévues par la réglementation
+                    applicable.
+                  </p>
+                </PolicySection>
 
-                <section className="border-b border-[#111111]/10 py-6 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Vos droits
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Conformément à la réglementation applicable, vous pouvez
-                      demander l’accès à vos données, leur rectification, leur
-                      effacement, la limitation de certains traitements, vous
-                      opposer à un traitement lorsque cela est possible et
-                      demander la portabilité des données concernées lorsque les
-                      conditions légales sont réunies.
-                    </p>
-                    <p>
-                      Vous pouvez exercer vos droits via la{" "}
-                      <Link
-                        href="/contact"
-                        className="text-[#b48a45] underline underline-offset-4"
-                      >
-                        page contact
-                      </Link>{" "}
-                      ou par courrier adressé au siège social. Vous disposez
-                      également du droit d’introduire une réclamation auprès de
-                      la CNIL.
-                    </p>
-                  </div>
-                </section>
+                <PolicySection title="Vos droits">
+                  <p>
+                    Vous pouvez demander l’accès à vos données, leur
+                    rectification, leur effacement, la limitation de certains
+                    traitements ou vous opposer à un traitement lorsque la loi
+                    le permet.
+                  </p>
+                  <p>
+                    Si vous estimez que vos droits ne sont pas respectés, vous
+                    pouvez également introduire une réclamation auprès de la
+                    CNIL.
+                  </p>
+                </PolicySection>
 
-                <section className="py-6 last:pb-0 tablet:py-7 desktop:py-8">
-                  <h2 className="yeseva-one-regular text-[22px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[26px] desktop:text-[30px]">
-                    Mise à jour de la politique
-                  </h2>
-                  <div className="mt-4 space-y-3 text-[15px] font-light leading-[1.8] text-black/70 tablet:text-[16px] desktop:text-[17px]">
-                    <p>
-                      Cette politique peut être modifiée afin de refléter une
-                      évolution technique, organisationnelle ou réglementaire.
-                      La version publiée sur cette page est celle applicable à
-                      la date de sa consultation.
-                    </p>
-                  </div>
-                </section>
+                <PolicySection title="Mise à jour de la politique" last>
+                  <p>
+                    Cette politique peut être mise à jour pour refléter une
+                    évolution du site, des outils utilisés ou du cadre légal.
+                    La version publiée sur cette page est celle applicable à la
+                    date de consultation.
+                  </p>
+                </PolicySection>
               </div>
-            </div>
+            </RevealOnScrollComponent>
           </div>
         </section>
 

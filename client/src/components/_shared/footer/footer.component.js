@@ -49,8 +49,8 @@ export default function FooterComponent() {
           className="bottom-[-18px] right-[-22px] hidden h-[146px] w-[146px] opacity-30 desktop:block"
           sizes="180px"
         />
-        <div className="relative z-10 flex flex-col gap-10 border-b border-[rgba(246,231,230,0.36)] pb-10 desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-16">
-          <Link href="/" className="flex items-center gap-4 self-start">
+        <div className="relative z-10 flex flex-col items-center gap-10 border-b border-[rgba(246,231,230,0.36)] pb-10 text-center desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-16 desktop:text-left">
+          <Link href="/" className="flex items-center gap-4 desktop:self-start">
             <div className="relative h-[68px] w-[68px] overflow-hidden rounded-full border border-[rgba(246,231,230,0.4)] bg-white/12">
               <Image
                 src="/img/logo.png"
@@ -70,11 +70,13 @@ export default function FooterComponent() {
             </div>
           </Link>
 
-          <div className="flex flex-wrap items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[rgba(246,231,230,0.85)]">
+          <div className="flex flex-col items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[rgba(246,231,230,0.85)] desktop:flex-row desktop:flex-wrap desktop:justify-end">
             {footerLinks.map((item, index) => (
               <div key={item.href} className="flex items-center gap-3">
                 {index > 0 ? (
-                  <span className="text-[rgba(246,231,230,0.7)]">•</span>
+                  <span className="hidden text-[rgba(246,231,230,0.7)] desktop:inline">
+                    •
+                  </span>
                 ) : null}
                 <Link href={item.href} className="transition hover:text-white">
                   {item.label}
@@ -84,10 +86,21 @@ export default function FooterComponent() {
           </div>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-8 py-8 text-center tablet:text-left desktop:flex-row desktop:items-center desktop:justify-between">
-          <p className="text-[14px] leading-[1.7] text-[rgba(246,231,230,0.82)]">
-            © {new Date().getFullYear()} {brand.full}. Tous droits réservés.
-          </p>
+        <div className="relative z-10 flex flex-col gap-8 py-8 text-center desktop:flex-row desktop:items-center desktop:justify-between desktop:text-left">
+          <div className="flex flex-col items-center gap-4 desktop:items-start">
+            <p className="text-[14px] leading-[1.7] text-[rgba(246,231,230,0.82)]">
+              © {new Date().getFullYear()} {brand.full}. Tous droits réservés.
+            </p>
+            <div className="flex flex-col items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-[rgba(246,231,230,0.82)] desktop:flex-row desktop:items-center desktop:gap-3">
+              <Link href="/legales" className="transition hover:text-white">
+                Mentions légales
+              </Link>
+              <span className="hidden desktop:inline">•</span>
+              <Link href="/policy" className="transition hover:text-white">
+                Politique de confidentialité
+              </Link>
+            </div>
+          </div>
 
           <div className="flex flex-wrap items-center justify-center gap-5 desktop:justify-end">
             {socialLinks.map((item) => (
