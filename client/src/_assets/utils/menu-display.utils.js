@@ -9,7 +9,7 @@ function toFiniteNumber(value) {
 export function formatMenuPrice(value) {
   const numericValue = toFiniteNumber(value);
 
-  if (numericValue === null) {
+  if (numericValue === null || numericValue <= 0) {
     return "";
   }
 
@@ -17,6 +17,10 @@ export function formatMenuPrice(value) {
 }
 
 export function splitMenuText(value) {
+  if (!String(value || "").trim()) {
+    return [];
+  }
+
   return String(value || "")
     .split(/\r?\n/)
     .map((line) => {
@@ -58,13 +62,13 @@ export function getMenuTitle(menu, index = 0) {
 export function getMenuPriceLabel(menu) {
   const directPrice = toFiniteNumber(menu?.price);
 
-  if (directPrice !== null) {
+  if (directPrice !== null && directPrice > 0) {
     return formatMenuPrice(directPrice);
   }
 
   const combinationPrices = (menu?.combinations || [])
     .map((combination) => toFiniteNumber(combination?.price))
-    .filter((price) => price !== null);
+    .filter((price) => price !== null && price > 0);
 
   if (!combinationPrices.length) {
     return "";

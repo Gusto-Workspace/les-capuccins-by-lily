@@ -18,6 +18,10 @@ export function formatEuroPrice(value) {
     return value ? String(value) : "";
   }
 
+  if (numericValue <= 0) {
+    return "";
+  }
+
   return `${numericValue.toFixed(2).replace(".", ",")} €`;
 }
 

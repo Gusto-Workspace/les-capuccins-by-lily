@@ -77,7 +77,7 @@ export default function ListMenusComponent({ restaurantData }) {
           rotatePatch="8deg"
         />
 
-        <div className="relative z-10">
+        <div className="relative z-30">
           <SectionHeadingComponent
             eyebrow="La carte"
             title="Nos plats à la carte"

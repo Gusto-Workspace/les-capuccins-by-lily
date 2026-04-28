@@ -21,22 +21,26 @@ function normalizeKey(value) {
 }
 
 function RestaurantMenuBlock({ block }) {
+  const lines = Array.isArray(block?.lines) ? block.lines : [];
+  const hasLines = lines.length > 0;
+
   return (
-    <div className="rounded-[22px] border border-[rgba(223,160,132,0.22)] bg-white/78 px-5 py-5 shadow-[0_12px_34px_rgba(127,83,66,0.08)]">
-      <div className="flex items-start justify-between gap-4">
-        <h4 className="max-w-[78%] text-[19px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--site-ink)] tablet:text-[21px]">
+    <div className="mx-auto w-full max-w-[430px] rounded-[24px] border border-[rgba(223,160,132,0.22)] bg-white/82 px-6 py-6 text-center shadow-[0_14px_36px_rgba(127,83,66,0.08)]">
+      <div className="flex flex-col items-center">
+        <h4 className="max-w-[90%] text-[21px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--site-ink)] tablet:text-[23px]">
           {block.title}
         </h4>
 
         {block.price ? (
-          <span className="shrink-0 pt-1 text-[16px] font-bold leading-none text-[var(--site-orange-deep)] tablet:text-[18px]">
+          <span className="mt-3 inline-flex rounded-full border border-[rgba(223,160,132,0.22)] bg-[rgba(246,229,218,0.68)] px-3 py-1.5 text-[13px] font-bold uppercase tracking-[0.16em] text-[var(--site-orange-deep)] tablet:text-[14px]">
             {block.price}
           </span>
         ) : null}
       </div>
 
-      <div className="mt-4 space-y-2.5">
-        {block.lines?.map((line, index) => {
+      {hasLines ? (
+        <div className="mt-5 space-y-2.5">
+          {lines.map((line, index) => {
           if (isMenuBlankLine(line)) {
             return <div key={`${block.id}-blank-${index}`} className="h-2" aria-hidden="true" />;
           }
@@ -45,7 +49,7 @@ function RestaurantMenuBlock({ block }) {
             return (
               <p
                 key={`${block.id}-separator-${index}`}
-                className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
+                className="text-center text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
               >
                 {line}
               </p>
@@ -55,13 +59,14 @@ function RestaurantMenuBlock({ block }) {
           return (
             <p
               key={`${block.id}-${index}`}
-              className="text-[15px] leading-[1.55] text-[rgba(71,42,34,0.74)] tablet:text-[16px]"
+              className="text-center text-[15px] leading-[1.65] text-[rgba(71,42,34,0.74)] tablet:text-[16px]"
             >
               {line}
             </p>
           );
-        })}
-      </div>
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -75,28 +80,28 @@ function RestaurantMenuCard({ menu, index = 0 }) {
   }
 
   return (
-    <article className="rounded-[34px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-7 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-8">
-      <div className="border-b border-[rgba(223,160,132,0.2)] pb-5 text-center">
+    <article className="rounded-[38px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-8 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-9">
+      <div className="border-b border-[rgba(223,160,132,0.2)] pb-6 text-center">
         <div className="mx-auto max-w-[720px]">
-          <p className="script-font text-[50px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[62px]">
+          <p className="script-font text-[52px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[64px]">
             {getMenuTitle(menu, index + 1)}
           </p>
 
           {menu?.description ? (
-            <p className="mx-auto mt-3 max-w-[620px] text-[16px] leading-[1.65] text-[rgba(71,42,34,0.76)]">
+            <p className="mx-auto mt-4 max-w-[620px] text-[16px] leading-[1.75] text-[rgba(71,42,34,0.76)]">
               {menu.description}
             </p>
           ) : null}
         </div>
 
         {priceLabel ? (
-          <span className="mt-5 inline-flex w-fit rounded-full border border-[rgba(223,160,132,0.24)] bg-white/76 px-4 py-2 text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--site-orange-deep)]">
+          <span className="mt-5 inline-flex w-fit rounded-full border border-[rgba(223,160,132,0.24)] bg-white/82 px-4 py-2 text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--site-orange-deep)]">
             {priceLabel}
           </span>
         ) : null}
       </div>
 
-      <div className="mt-6 grid gap-4">
+      <div className="mt-7 grid gap-4 justify-items-center">
         {menuBlocks.map((block) => (
           <RestaurantMenuBlock key={block.id} block={block} />
         ))}
@@ -107,21 +112,21 @@ function RestaurantMenuCard({ menu, index = 0 }) {
 
 function CategoryMenuItem({ item }) {
   return (
-    <div className="rounded-[20px] bg-white/78 px-4 py-4 shadow-[0_10px_30px_rgba(127,83,66,0.06)]">
-      <div className="flex items-start justify-between gap-4">
-        <h4 className="max-w-[76%] text-[19px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--site-ink)] tablet:text-[21px]">
+    <div className="mx-auto w-full max-w-[430px] rounded-[22px] bg-white/82 px-5 py-5 text-center shadow-[0_10px_30px_rgba(127,83,66,0.06)]">
+      <div className="flex flex-col items-center">
+        <h4 className="max-w-[92%] text-[19px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--site-ink)] tablet:text-[21px]">
           {item.name}
         </h4>
 
         {item.price ? (
-          <span className="shrink-0 pt-1 text-[16px] font-bold leading-none text-[var(--site-orange-deep)] tablet:text-[18px]">
+          <span className="mt-3 inline-flex rounded-full border border-[rgba(223,160,132,0.22)] bg-[rgba(246,229,218,0.68)] px-3 py-1.5 text-[13px] font-bold uppercase tracking-[0.16em] text-[var(--site-orange-deep)] tablet:text-[14px]">
             {item.price}
           </span>
         ) : null}
       </div>
 
       {item.description ? (
-        <p className="mt-2 text-[15px] leading-[1.5] text-[rgba(71,42,34,0.74)] tablet:text-[16px]">
+        <p className="mt-4 text-[15px] leading-[1.65] text-[rgba(71,42,34,0.74)] tablet:text-[16px]">
           {item.description}
         </p>
       ) : null}
@@ -131,20 +136,20 @@ function CategoryMenuItem({ item }) {
 
 function CategoryMenuCard({ category }) {
   return (
-    <article className="rounded-[34px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-7 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-8">
-      <div className="border-b border-[rgba(223,160,132,0.2)] pb-5 text-center">
-        <h3 className="script-font text-[50px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[62px]">
+    <article className="rounded-[38px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-8 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-9">
+      <div className="border-b border-[rgba(223,160,132,0.2)] pb-6 text-center">
+        <h3 className="script-font text-[52px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[64px]">
           {category.title}
         </h3>
 
         {category.description ? (
-          <p className="mx-auto mt-3 max-w-[620px] text-[16px] leading-[1.65] text-[rgba(71,42,34,0.76)]">
+          <p className="mx-auto mt-4 max-w-[620px] text-[16px] leading-[1.75] text-[rgba(71,42,34,0.76)]">
             {category.description}
           </p>
         ) : null}
       </div>
 
-      <div className="mt-6 grid gap-4">
+      <div className="mt-7 grid gap-4 justify-items-center">
         {category.items.map((item) => (
           <CategoryMenuItem key={item.id} item={item} />
         ))}
@@ -186,9 +191,10 @@ export default function OtherMenusComponent({ restaurantData }) {
         className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
         imageSizes="208px"
         rotatePatch="8deg"
+        layerClassName="z-[1]"
       />
 
-      <div className="relative z-10">
+      <div className="relative z-30">
         <SectionHeadingComponent
           eyebrow="Les menus"
           title="Nos menus & formules"
