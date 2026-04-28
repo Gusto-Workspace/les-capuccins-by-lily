@@ -42,7 +42,7 @@ export default function NewsPage() {
         title="Actualités - Les Capucins by Lily"
         description="Retrouvez les actualités, nouveautés et temps forts du restaurant Les Capucins by Lily."
         path="/news"
-        image="/img/news/1.jpg"
+        image="/img/news/header_news.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Actualités", path: "/news" },
@@ -67,7 +67,7 @@ export default function NewsPage() {
             title="Actualités"
             eyebrow="À suivre"
             description="Événements, nouveautés, rendez-vous et temps forts du restaurant."
-            imgUrl="news/1.jpg"
+            imgUrl="news/header_news.png"
           />
         </div>
 

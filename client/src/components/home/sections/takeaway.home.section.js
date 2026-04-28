@@ -8,12 +8,12 @@ export default function TakeawayHomeSection() {
   return (
     <section
       id="emporter"
-      className="relative overflow-hidden bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[120px]"
+      className="relative overflow-visible bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[120px]"
     >
       <div className="relative mx-auto max-w-[1400px]">
         <GraphicElementComponent
           src="/img/elements/7.png"
-          className="right-[-188px] top-[74px] hidden h-[350px] w-[350px] rotate-[8deg] opacity-42 desktop:block"
+          className="right-[-108px] top-[74px] hidden h-[350px] w-[350px] rotate-[8deg] opacity-42 desktop:block"
           sizes="250px"
         />
         <StickerPhotoComponent

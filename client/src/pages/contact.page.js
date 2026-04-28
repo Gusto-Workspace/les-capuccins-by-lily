@@ -39,7 +39,7 @@ export default function ContactPage() {
         title="Contact - Les Capucins by Lily"
         description="Contactez Les Capucins by Lily pour une réservation, une demande d’information ou un message."
         path="/contact"
-        image="/img/contact/1.jpg"
+        image="/img/contact/header_contact.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Contact", path: "/contact" },
@@ -64,7 +64,7 @@ export default function ContactPage() {
             title="Nous contacter"
             eyebrow="Contact"
             description="Une question, une demande particulière ou une réservation de groupe ? L’équipe vous répond rapidement."
-            imgUrl="contact/1.jpg"
+            imgUrl="contact/header_contact.png"
           />
         </div>
 

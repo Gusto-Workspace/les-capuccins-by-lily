@@ -8,6 +8,8 @@ import {
 } from "../../_assets/utils/menu-display.utils";
 import { getVisibleMenuCategories } from "../../_assets/utils/site-display.utils";
 import SectionHeadingComponent from "../_shared/section-heading.component";
+import GraphicElementComponent from "../_shared/graphic-element.component";
+import StickerPhotoComponent from "../_shared/sticker-photo.component";
 
 function normalizeKey(value) {
   return String(value || "")
@@ -166,29 +168,49 @@ export default function OtherMenusComponent({ restaurantData }) {
   }
 
   return (
-    <section className="mt-20">
-      <SectionHeadingComponent
-        eyebrow="Les menus"
-        title="Nos menus & formules"
-        description="Retrouvez ici les formules du midi, menus complets et propositions regroupées à part de la carte, avec une présentation dédiée."
+    <section className="relative mt-24 overflow-visible">
+      <GraphicElementComponent
+        src="/img/elements/1.png"
+        className="left-[-118px] top-[64px] hidden h-[250px] w-[250px] opacity-42 desktop:block"
+        sizes="250px"
+      />
+      <GraphicElementComponent
+        src="/img/elements/8.png"
+        className="right-[-112px] bottom-[44px] hidden h-[240px] w-[240px] opacity-40 desktop:block"
+        sizes="240px"
+      />
+      <StickerPhotoComponent
+        src="/img/photos/3.jpeg"
+        alt="Pizza colorée"
+        className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
+        imageSizes="208px"
+        rotatePatch="8deg"
       />
 
-      <div
-        className={`mt-12 grid gap-6 ${
-          totalMenuCards > 1 ? "desktop:grid-cols-2" : "mx-auto max-w-[760px]"
-        }`}
-      >
-        {menuCategories.map((category) => (
-          <CategoryMenuCard key={category.id} category={category} />
-        ))}
+      <div className="relative z-10">
+        <SectionHeadingComponent
+          eyebrow="Les menus"
+          title="Nos menus & formules"
+          description="Retrouvez ici les formules du midi, menus complets et propositions regroupées à part de la carte, avec une présentation dédiée."
+        />
 
-        {menus.map((menu, index) => (
-          <RestaurantMenuCard
-            key={menu?._id || `menu-${index}`}
-            menu={menu}
-            index={index}
-          />
-        ))}
+        <div
+          className={`mt-12 grid gap-6 ${
+            totalMenuCards > 1 ? "desktop:grid-cols-2" : "mx-auto max-w-[760px]"
+          }`}
+        >
+          {menuCategories.map((category) => (
+            <CategoryMenuCard key={category.id} category={category} />
+          ))}
+
+          {menus.map((menu, index) => (
+            <RestaurantMenuCard
+              key={menu?._id || `menu-${index}`}
+              menu={menu}
+              index={index}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

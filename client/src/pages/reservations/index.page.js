@@ -43,7 +43,7 @@ export default function ReservationsPage() {
         title="Réserver une table - Les Capucins by Lily"
         description="Réservez votre table en ligne chez Les Capucins by Lily et choisissez votre date, votre horaire et votre nombre de convives."
         path="/reservations"
-        image="/img/reservations/2.jpg"
+        image="/img/reservations/header_reservations.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Réserver", path: "/reservations" },
@@ -68,7 +68,7 @@ export default function ReservationsPage() {
             title="Réserver une table"
             eyebrow="À votre table"
             description="Préparez votre venue et choisissez le créneau qui vous convient en quelques instants."
-            imgUrl="reservations/2.jpg"
+            imgUrl="reservations/header_reservations.png"
           />
         </div>
 

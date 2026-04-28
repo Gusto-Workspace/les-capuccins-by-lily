@@ -42,7 +42,7 @@ export default function MenusPage() {
         title="Carte & Menus - Les Capucins by Lily"
         description="Découvrez la carte et les menus des Capucins by Lily : cuisine italienne, recettes maison et suggestions du moment."
         path="/menus"
-        image="/img/menu-inspired/2.jpg"
+        image="/img/menu-inspired/header_menu.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Carte & menus", path: "/menus" },
@@ -67,7 +67,7 @@ export default function MenusPage() {
             title="Carte & Menus"
             eyebrow="La maison"
             description="Une carte pensée pour le partage, les envies du moment et les classiques italiens qui font revenir."
-            imgUrl="menu-inspired/2.jpg"
+            imgUrl="menu-inspired/header_menu.png"
           />
         </div>
 
