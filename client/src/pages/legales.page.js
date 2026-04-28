@@ -110,12 +110,6 @@ export default function LegalesPage() {
               variant="soft"
               className="site-card mx-auto mt-14 max-w-[980px] rounded-[34px] p-6 tablet:p-8 desktop:p-12"
             >
-              <div className="rounded-[22px] border border-[var(--site-line)] bg-[rgba(223,160,132,0.1)] px-5 py-5 text-[14px] leading-[1.75] text-[var(--site-ink-soft)] tablet:text-[15px]">
-                Certaines informations administratives définitives de
-                l’exploitant doivent encore être confirmées avant toute mise en
-                production finale des mentions légales.
-              </div>
-
               <div className="mt-8">
                 <LegalSection title="Éditeur du site">
                   <p>

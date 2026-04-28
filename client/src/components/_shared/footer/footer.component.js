@@ -89,9 +89,17 @@ export default function FooterComponent() {
         <div className="relative z-10 flex flex-col gap-8 py-8 text-center desktop:flex-row desktop:items-center desktop:justify-between desktop:text-left">
           <div className="flex flex-col items-center gap-4 desktop:items-start">
             <p className="text-[14px] leading-[1.7] text-[rgba(246,231,230,0.82)]">
-              © {new Date().getFullYear()} {brand.full}. Tous droits réservés.
+              © {new Date().getFullYear()} {brand.full}. Tous droits réservés.{" "}
+              <a
+                href="https://gusto-manager.com"
+                target="_blank"
+                rel="noreferrer"
+                className="transition hover:text-white"
+              >
+                Propulsé par Gusto Manager
+              </a>
             </p>
-            <div className="flex flex-col items-center gap-2 text-[12px] font-medium uppercase tracking-[0.16em] text-[rgba(246,231,230,0.82)] desktop:flex-row desktop:items-center desktop:gap-3">
+            <div className="flex flex-col items-center gap-2 text-[12px] font-medium tracking-[0.16em] text-[rgba(246,231,230,0.82)] desktop:flex-row desktop:items-center desktop:gap-3">
               <Link href="/legales" className="transition hover:text-white">
                 Mentions légales
               </Link>
