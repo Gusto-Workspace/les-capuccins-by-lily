@@ -1,7 +1,7 @@
 import Link from "next/link";
 import HomeSectionHeading from "../home-section-heading.component";
 import HomeMenuPreviewColumn from "../home-menu-preview-column.component";
-import GraphicElementComponent from "../../_shared/graphic-element.component";
+import StickerPhotoComponent from "../../_shared/sticker-photo.component";
 
 const fallbackMenuColumns = [
   {
@@ -46,17 +46,20 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
   const homeMenuColumns = menuColumns.length ? menuColumns : fallbackMenuColumns;
 
   return (
-    <section className="relative overflow-hidden bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+    <section className="relative overflow-visible bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
       <div className="relative mx-auto max-w-[1400px]">
-        <GraphicElementComponent
-          src="/img/elements/3.png"
-          className="bottom-[-126px] left-[-186px] hidden h-[350px] w-[350px] opacity-35 desktop:block"
-          sizes="350px"
+        <StickerPhotoComponent
+          src="/img/photos/3.jpeg"
+          alt="Pizza de la maison"
+          className="right-[-12px] top-[-220px] h-[210px] w-[210px] rotate-[8deg]"
+          imageSizes="210px"
+          rotatePatch="9deg"
         />
-        <GraphicElementComponent
-          src="/img/elements/8.png"
-          className="right-[-186px] -bottom-[124px] hidden h-[250px] w-[250px] opacity-42 desktop:block scale-x-[-1]"
-          sizes="250px"
+        <StickerPhotoComponent
+          src="/img/photos/4.jpeg"
+          alt="Pizza blanche"
+          className="bottom-[-214px] left-[28px] h-[220px] w-[220px] rotate-[-6deg]"
+          imageSizes="220px"
         />
         <div className="relative z-10">
           <HomeSectionHeading

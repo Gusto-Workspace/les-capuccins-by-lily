@@ -2,6 +2,7 @@ import Link from "next/link";
 import HomeActionLink from "../home-action-link.component";
 import HomeSectionHeading from "../home-section-heading.component";
 import GraphicElementComponent from "../../_shared/graphic-element.component";
+import StickerPhotoComponent from "../../_shared/sticker-photo.component";
 
 export default function TakeawayHomeSection() {
   return (
@@ -11,14 +12,15 @@ export default function TakeawayHomeSection() {
     >
       <div className="relative mx-auto max-w-[1400px]">
         <GraphicElementComponent
-          src="/img/elements/1.png"
-          className="bottom-[26px] left-[-158px] hidden h-[290px] w-[290px] opacity-42 desktop:block"
-          sizes="270px"
-        />
-        <GraphicElementComponent
           src="/img/elements/7.png"
           className="right-[-188px] top-[74px] hidden h-[350px] w-[350px] rotate-[8deg] opacity-42 desktop:block"
           sizes="250px"
+        />
+        <StickerPhotoComponent
+          src="/img/photos/2.jpeg"
+          alt="Plat de la maison"
+          className="bottom-[-92px] left-[80px] h-[190px] w-[245px] rotate-[-5deg]"
+          imageSizes="245px"
         />
         <div className="relative z-10">
           <HomeSectionHeading
