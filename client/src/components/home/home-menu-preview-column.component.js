@@ -5,13 +5,13 @@ export default function HomeMenuPreviewColumn({
 }) {
   return (
     <div
-      className={`py-2 ${
+      className={`mx-auto max-w-[420px] py-2 text-center desktop:mx-0 desktop:max-w-none desktop:text-left ${
         bordered
           ? "desktop:border-r desktop:border-[var(--site-line)] desktop:pr-8"
           : ""
       }`}
     >
-      <div className="mb-7 flex items-center gap-3">
+      <div className="mb-7 flex items-center justify-center gap-3 desktop:justify-start">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--site-line)] bg-white/55 text-[14px] font-semibold text-[var(--site-orange-deep)]">
           ●
         </span>
@@ -23,7 +23,7 @@ export default function HomeMenuPreviewColumn({
       <div className="space-y-5">
         {items.map((item) => (
           <div key={item.id}>
-            <div className="flex items-start gap-4">
+            <div className="flex flex-col items-center gap-2 desktop:flex-row desktop:items-start desktop:gap-4">
               <p className="min-w-0 text-[16px] font-semibold text-[var(--site-ink)]">
                 {item.name}
               </p>
@@ -38,7 +38,7 @@ export default function HomeMenuPreviewColumn({
             </div>
 
             {item.description ? (
-              <p className="mt-2 max-w-[320px] text-[13px] leading-[1.7] text-[var(--site-ink-soft)]">
+              <p className="mx-auto mt-2 max-w-[320px] text-[13px] leading-[1.7] text-[var(--site-ink-soft)] desktop:mx-0">
                 {item.description}
               </p>
             ) : null}

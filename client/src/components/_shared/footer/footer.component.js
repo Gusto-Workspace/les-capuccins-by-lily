@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useContext } from "react";
 import { GlobalContext } from "@/contexts/global.context";
+import { hasVisibleNews } from "@/_assets/utils/news.utils";
 import WaveDividerComponent from "../wave-divider.component";
 import GraphicElementComponent from "../graphic-element.component";
 import {
@@ -14,6 +15,15 @@ export default function FooterComponent() {
   const restaurantData = restaurantContext?.restaurantData;
   const brand = getRestaurantBrandParts();
   const socialLinks = getSocialLinks(restaurantData);
+  const footerLinks = [
+    { label: "Carte & menus", href: "/menus" },
+    { label: "Réserver", href: "/reservations" },
+    { label: "Vente à emporter", href: "/#emporter" },
+    ...(hasVisibleNews(restaurantData)
+      ? [{ label: "Actualités", href: "/news" }]
+      : []),
+    { label: "Contact", href: "/contact" },
+  ];
 
   return (
     <footer className="relative overflow-hidden bg-[var(--site-orange)] px-5 pb-10 pt-24 text-[var(--site-cream)] tablet:px-8 tablet:pb-12 desktop:px-[90px]">
@@ -61,17 +71,16 @@ export default function FooterComponent() {
           </Link>
 
           <div className="flex flex-wrap items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-[rgba(246,231,230,0.85)]">
-            <Link href="/menus" className="transition hover:text-white">
-              Carte & menus
-            </Link>
-            <span className="text-[rgba(246,231,230,0.7)]">•</span>
-            <Link href="/reservations" className="transition hover:text-white">
-              Réserver
-            </Link>
-            <span className="text-[rgba(246,231,230,0.7)]">•</span>
-            <Link href="/contact" className="transition hover:text-white">
-              Contact
-            </Link>
+            {footerLinks.map((item, index) => (
+              <div key={item.href} className="flex items-center gap-3">
+                {index > 0 ? (
+                  <span className="text-[rgba(246,231,230,0.7)]">•</span>
+                ) : null}
+                <Link href={item.href} className="transition hover:text-white">
+                  {item.label}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
 

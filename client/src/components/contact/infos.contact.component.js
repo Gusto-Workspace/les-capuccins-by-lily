@@ -31,7 +31,7 @@ export default function InfosContactComponent() {
             variant="right"
             className="site-card rounded-[34px] p-6 tablet:p-8 desktop:p-10"
           >
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-center gap-3 text-center desktop:flex-row desktop:items-center desktop:text-left">
               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--site-line)] bg-white text-[var(--site-orange-deep)]">
                 <Clock3 size={18} strokeWidth={1.6} />
               </div>
@@ -52,7 +52,7 @@ export default function InfosContactComponent() {
                       key={`schedule-skeleton-${index}`}
                       className="rounded-[18px] border border-[var(--site-line)] bg-white/70 px-5 py-4"
                     >
-                      <div className="flex items-center justify-between gap-6">
+                      <div className="flex flex-col items-center gap-3 text-center desktop:flex-row desktop:justify-between desktop:gap-6 desktop:text-left">
                         <div className="h-4 w-24 animate-pulse rounded bg-[rgba(223,160,132,0.24)]" />
                         <div className="h-4 w-40 animate-pulse rounded bg-black/6" />
                       </div>
@@ -63,7 +63,7 @@ export default function InfosContactComponent() {
                       key={item.day}
                       className="rounded-[18px] border border-[var(--site-line)] bg-white/70 px-5 py-4"
                     >
-                      <div className="flex flex-col gap-1 tablet:flex-row tablet:items-center tablet:justify-between tablet:gap-6">
+                      <div className="flex flex-col items-center gap-1 text-center desktop:flex-row desktop:items-center desktop:justify-between desktop:gap-6 desktop:text-left">
                         <p className="text-[17px] font-medium text-[var(--site-ink)]">
                           {item.day}
                         </p>
@@ -81,7 +81,7 @@ export default function InfosContactComponent() {
                   ))}
             </div>
 
-            <div className="mt-8 rounded-[22px] border border-[var(--site-line)] bg-[rgba(223,160,132,0.12)] px-5 py-5">
+            <div className="mt-8 rounded-[22px] border border-[var(--site-line)] bg-[rgba(223,160,132,0.12)] px-5 py-5 text-center desktop:text-left">
               <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]">
                 Réservations de groupe
               </p>
