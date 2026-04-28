@@ -19,7 +19,7 @@ export default function HomePageComponent({ heroRef = null }) {
   const restaurantName = getRestaurantDisplayName();
   const menuColumns = getHomeMenuPreview(restaurantData, {
     limitCategories: 3,
-    limitItems: 5,
+    limitItems: 3,
   }).map((category) => ({
     ...category,
     items: category.items.slice(0, 5),
