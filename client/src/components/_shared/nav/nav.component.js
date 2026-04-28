@@ -14,6 +14,7 @@ const baseMenuItems = [
   { label: "Actualités", href: "/news", visibilityKey: "news" },
   { label: "Contact", href: "/contact" },
 ];
+let hasAssignedInitialNavReveal = false;
 
 function isCurrentPath(routerPath, href) {
   if (href === "/") {
@@ -48,7 +49,14 @@ export default function NavComponent({
   const router = useRouter();
   const { restaurantContext } = useContext(GlobalContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hasStartedNewsVisibilityCheck, setHasStartedNewsVisibilityCheck] =
+    useState(false);
   const [newsVisibilityResolved, setNewsVisibilityResolved] = useState(false);
+  const [navReady, setNavReady] = useState(false);
+  const [animateOnMount, setAnimateOnMount] = useState(false);
+  const [mountReady, setMountReady] = useState(false);
+  const [visibilityTransitionsEnabled, setVisibilityTransitionsEnabled] =
+    useState(false);
   const restaurantData = restaurantContext?.restaurantData;
   const restaurantDataLoading = restaurantContext?.dataLoading;
   const brand = getRestaurantBrandParts(restaurantData);
@@ -66,16 +74,81 @@ export default function NavComponent({
   );
 
   useEffect(() => {
-    if (restaurantDataLoading) {
+    if (isVisible && !hasAssignedInitialNavReveal) {
+      hasAssignedInitialNavReveal = true;
+      setAnimateOnMount(true);
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (restaurantDataLoading || restaurantData) {
+      setHasStartedNewsVisibilityCheck(true);
+    }
+  }, [restaurantData, restaurantDataLoading]);
+
+  useEffect(() => {
+    if (newsVisibilityResolved) {
       return;
     }
 
-    const frame = window.requestAnimationFrame(() => {
-      setNewsVisibilityResolved(true);
-    });
+    if (restaurantData) {
+      const frame = window.requestAnimationFrame(() => {
+        setNewsVisibilityResolved(true);
+        setNavReady(true);
+      });
 
-    return () => window.cancelAnimationFrame(frame);
-  }, [restaurantData, restaurantDataLoading]);
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    if (hasStartedNewsVisibilityCheck && !restaurantDataLoading) {
+      const frame = window.requestAnimationFrame(() => {
+        setNewsVisibilityResolved(true);
+        setNavReady(true);
+      });
+
+      return () => window.cancelAnimationFrame(frame);
+    }
+
+    const fallback = window.setTimeout(() => {
+      setNewsVisibilityResolved(true);
+      setNavReady(true);
+    }, 500);
+
+    return () => window.clearTimeout(fallback);
+  }, [
+    hasStartedNewsVisibilityCheck,
+    newsVisibilityResolved,
+    restaurantData,
+    restaurantDataLoading,
+  ]);
+
+  useEffect(() => {
+    if (!navReady) {
+      return;
+    }
+
+    let firstFrame = null;
+    let secondFrame = null;
+
+    if (animateOnMount) {
+      setVisibilityTransitionsEnabled(true);
+      firstFrame = window.requestAnimationFrame(() => {
+        secondFrame = window.requestAnimationFrame(() => {
+          setMountReady(true);
+        });
+      });
+    } else {
+      setMountReady(true);
+      firstFrame = window.requestAnimationFrame(() => {
+        setVisibilityTransitionsEnabled(true);
+      });
+    }
+
+    return () => {
+      if (firstFrame) window.cancelAnimationFrame(firstFrame);
+      if (secondFrame) window.cancelAnimationFrame(secondFrame);
+    };
+  }, [animateOnMount, navReady]);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -92,6 +165,7 @@ export default function NavComponent({
   }, [menuOpen]);
 
   const navTextClass = scrolled ? "text-[var(--site-ink)]" : "text-white";
+  const navIsDisplayed = navReady && mountReady && isVisible;
 
   return (
     <>
@@ -150,8 +224,12 @@ export default function NavComponent({
       </aside>
 
       <nav
-        className={`fixed left-0 top-0 z-[50] w-full transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-          isVisible
+        className={`fixed left-0 top-0 z-[50] w-full ${
+          visibilityTransitionsEnabled
+            ? "transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+            : "transition-none"
+        } ${
+          navIsDisplayed
             ? "translate-y-0 opacity-100"
             : "-translate-y-full opacity-0"
         } ${
@@ -161,7 +239,7 @@ export default function NavComponent({
         }`}
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="mx-auto flex h-[88px] w-full max-w-[1600px] items-center justify-between px-5 pt-2 tablet:px-8 tablet:pt-3 min-[1180px]:pt-0 desktop:px-10">
+        <div className="mx-auto flex h-[88px] w-full max-w-[1600px] items-center justify-between px-5 tablet:px-8 min-[1180px]:pt-0 desktop:px-10">
           <Link href="/" aria-label="Accueil">
             <Brand logoSrc={logoSrc} brand={brand} />
           </Link>
