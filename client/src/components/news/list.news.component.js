@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import { formatNewsDate, getVisibleNews } from "../../_assets/utils/news.utils";
 
@@ -59,8 +60,8 @@ function LoadingSection() {
 
 function NewsCard({ item, onOpen }) {
   return (
-    <article className="site-card flex h-full flex-col overflow-hidden rounded-[32px] transition-transform duration-300 hover:-translate-y-[2px]">
-      <div className="relative h-[260px] overflow-hidden">
+    <article className="site-card group flex h-full flex-col overflow-hidden rounded-[32px] transition-transform duration-300 hover:-translate-y-[2px]">
+      <div className="site-media-zoom relative h-[260px] overflow-hidden">
         <NewsImage item={item} />
       </div>
 
@@ -185,11 +186,13 @@ export default function ListNewsComponent({
           ) : (
             <div className="mt-14 grid grid-cols-1 gap-6 desktop:grid-cols-3">
               {visibleNews.map((item, index) => (
-                <NewsCard
+                <RevealOnScrollComponent
                   key={item?._id || `news-${index}`}
-                  item={item}
-                  onOpen={setSelectedNews}
-                />
+                  delay={index * 90}
+                  variant="up"
+                >
+                  <NewsCard item={item} onOpen={setSelectedNews} />
+                </RevealOnScrollComponent>
               ))}
             </div>
           )}

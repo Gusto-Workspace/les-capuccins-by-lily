@@ -2,6 +2,7 @@ import Link from "next/link";
 import OtherMenusComponent from "./other-menus.menus.component";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import GraphicElementComponent from "../_shared/graphic-element.component";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import StickerPhotoComponent from "../_shared/sticker-photo.component";
 import { getVisibleDishCategories } from "../../_assets/utils/site-display.utils";
 
@@ -86,8 +87,14 @@ export default function ListMenusComponent({ restaurantData }) {
           {categories.length ? (
             <div className="mx-auto mt-14 max-w-[980px]">
               <div className="space-y-12 tablet:space-y-16">
-                {categories.map((category) => (
-                  <article key={category.id} className="pb-2 last:pb-0">
+                {categories.map((category, index) => (
+                  <RevealOnScrollComponent
+                    as="article"
+                    key={category.id}
+                    variant="up"
+                    delay={index * 80}
+                    className="pb-2 last:pb-0"
+                  >
                     <div className="mx-auto max-w-[860px] text-center">
                       <p className="script-font text-[50px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[62px]">
                         {getCategoryHeading(category.title)}
@@ -110,28 +117,32 @@ export default function ListMenusComponent({ restaurantData }) {
                         />
                       ))}
                     </div>
-                  </article>
+                  </RevealOnScrollComponent>
                 ))}
               </div>
             </div>
           ) : (
-            <div className="mx-auto mt-14 max-w-[760px] px-8 py-12 text-center">
+            <RevealOnScrollComponent className="mx-auto mt-14 max-w-[760px] px-8 py-12 text-center">
               <p className="script-font text-[40px] leading-none text-[var(--site-orange)]">
                 Carte en préparation
               </p>
               <p className="mt-4 text-[17px] leading-[1.85] text-[var(--site-ink-soft)]">
                 Les plats visibles sur le site seront ajoutés ici très bientôt.
               </p>
-            </div>
+            </RevealOnScrollComponent>
           )}
 
           <OtherMenusComponent restaurantData={restaurantData} />
 
-          <div className="mt-14 flex justify-center">
+          <RevealOnScrollComponent
+            delay={220}
+            variant="soft"
+            className="mt-14 flex justify-center"
+          >
             <Link href="/reservations" className="site-button">
               Réserver une table
             </Link>
-          </div>
+          </RevealOnScrollComponent>
         </div>
       </div>
     </section>

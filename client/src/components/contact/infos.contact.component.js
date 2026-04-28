@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Clock3 } from "lucide-react";
 import { GlobalContext } from "@/contexts/global.context";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import FormContactCompnent from "./form.contact.component";
 import { buildContactSchedules } from "../../_assets/utils/contact.utils";
@@ -21,9 +22,15 @@ export default function InfosContactComponent() {
         />
 
         <div className="mt-14 grid gap-6 desktop:grid-cols-[1.1fr_0.9fr]">
-          <FormContactCompnent />
+          <RevealOnScrollComponent variant="left">
+            <FormContactCompnent />
+          </RevealOnScrollComponent>
 
-          <div className="site-card rounded-[34px] p-6 tablet:p-8 desktop:p-10">
+          <RevealOnScrollComponent
+            delay={120}
+            variant="right"
+            className="site-card rounded-[34px] p-6 tablet:p-8 desktop:p-10"
+          >
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--site-line)] bg-white text-[var(--site-orange-deep)]">
                 <Clock3 size={18} strokeWidth={1.6} />
@@ -84,7 +91,7 @@ export default function InfosContactComponent() {
                 réponse adaptée.
               </p>
             </div>
-          </div>
+          </RevealOnScrollComponent>
         </div>
       </div>
     </section>

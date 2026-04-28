@@ -1,6 +1,7 @@
 import Link from "next/link";
 import HomeSectionHeading from "../home-section-heading.component";
 import HomeMenuPreviewColumn from "../home-menu-preview-column.component";
+import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.component";
 import StickerPhotoComponent from "../../_shared/sticker-photo.component";
 
 const fallbackMenuColumns = [
@@ -54,12 +55,14 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
           className="right-[-12px] top-[-220px] h-[210px] w-[210px] rotate-[8deg]"
           imageSizes="210px"
           rotatePatch="9deg"
+          revealDelay={80}
         />
         <StickerPhotoComponent
           src="/img/photos/4.jpeg"
           alt="Pizza blanche"
           className="bottom-[-214px] left-[28px] h-[220px] w-[220px] rotate-[-6deg]"
           imageSizes="220px"
+          revealDelay={140}
         />
         <div className="relative z-10">
           <HomeSectionHeading
@@ -70,20 +73,29 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
 
           <div className="mt-14 grid gap-8 desktop:grid-cols-3 desktop:gap-8">
             {homeMenuColumns.map((category, index) => (
-              <HomeMenuPreviewColumn
+              <RevealOnScrollComponent
                 key={category.id}
-                title={category.title}
-                items={category.items}
-                bordered={index < homeMenuColumns.length - 1}
-              />
+                delay={120 + index * 90}
+                variant="up"
+              >
+                <HomeMenuPreviewColumn
+                  title={category.title}
+                  items={category.items}
+                  bordered={index < homeMenuColumns.length - 1}
+                />
+              </RevealOnScrollComponent>
             ))}
           </div>
 
-          <div className="mt-12 flex justify-center">
+          <RevealOnScrollComponent
+            delay={320}
+            variant="soft"
+            className="mt-12 flex justify-center"
+          >
             <Link href="/menus" className="site-button">
               Voir la carte complète
             </Link>
-          </div>
+          </RevealOnScrollComponent>
         </div>
       </div>
     </section>

@@ -142,7 +142,7 @@ export default function NavComponent({
             : "-translate-y-full opacity-0"
         } ${
           scrolled
-            ? "bg-[rgba(246,231,230,0.92)] shadow-[0_16px_48px_rgba(127,83,66,0.12)] backdrop-blur-xl"
+            ? "bg-[rgba(246,231,230,0.92)] shadow-[0_16px_48px_rgba(127,83,66,0.12)]"
             : "bg-transparent"
         }`}
       >

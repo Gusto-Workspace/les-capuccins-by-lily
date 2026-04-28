@@ -1,5 +1,6 @@
 import Image from "next/image";
 import HomeSectionHeading from "../home-section-heading.component";
+import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.component";
 import StickerPhotoComponent from "../../_shared/sticker-photo.component";
 
 export default function HistoryHomeSection({ restaurantName }) {
@@ -25,6 +26,7 @@ export default function HistoryHomeSection({ restaurantName }) {
         alt="Vue de la salle"
         className="bottom-[-240px] left-[42px] h-[320px] w-[225px] rotate-[-8deg]"
         imageSizes="190px"
+        revealDelay={60}
       />
       <StickerPhotoComponent
         src="/img/photos/1.jpeg"
@@ -32,6 +34,7 @@ export default function HistoryHomeSection({ restaurantName }) {
         className="bottom-[100px] right-[28px] h-[350px] w-[263px] rotate-[8deg]"
         imageSizes="263px"
         rotatePatch="7deg"
+        revealDelay={140}
       />
       <div className="relative z-10 mx-auto max-w-[1120px] text-center desktop:px-[220px]">
         <HomeSectionHeading
@@ -40,20 +43,35 @@ export default function HistoryHomeSection({ restaurantName }) {
           titleClassName="uppercase tracking-[-0.02em]"
         />
 
-        <p className="mx-auto mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]">
+        <RevealOnScrollComponent
+          as="p"
+          delay={220}
+          variant="soft"
+          className="mx-auto mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
+        >
           Chez {restaurantName}, nous partageons notre passion pour la pizza et
           la cuisine italienne faite maison.
-        </p>
+        </RevealOnScrollComponent>
 
-        <p className="mx-auto mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]">
+        <RevealOnScrollComponent
+          as="p"
+          delay={300}
+          variant="soft"
+          className="mx-auto mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
+        >
           Notre équipe sélectionne des ingrédients frais et de qualité pour
           vous offrir une expérience culinaire unique dans une ambiance
           chaleureuse et accueillante.
-        </p>
+        </RevealOnScrollComponent>
 
-        <p className="script-font mt-10 text-[44px] leading-none text-[var(--site-ink)] tablet:text-[54px]">
+        <RevealOnScrollComponent
+          as="p"
+          delay={380}
+          variant="up"
+          className="script-font mt-10 text-[44px] leading-none text-[var(--site-ink)] tablet:text-[54px]"
+        >
           Lily & l&apos;équipe
-        </p>
+        </RevealOnScrollComponent>
       </div>
     </section>
   );

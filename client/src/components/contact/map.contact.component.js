@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
 import { GlobalContext } from "@/contexts/global.context";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import {
   buildContactInfos,
@@ -29,7 +30,10 @@ export default function MapContactComponent() {
         />
 
         <div className="mt-14 grid gap-6 desktop:grid-cols-[0.86fr_1.14fr]">
-          <div className="site-card rounded-[34px] p-6 tablet:p-8 desktop:p-10">
+          <RevealOnScrollComponent
+            variant="left"
+            className="site-card rounded-[34px] p-6 tablet:p-8 desktop:p-10"
+          >
             <div className="space-y-5">
               {dataLoading
                 ? ["Adresse", "Téléphone", "Email"].map((label) => (
@@ -77,9 +81,13 @@ export default function MapContactComponent() {
                     );
                   })}
             </div>
-          </div>
+          </RevealOnScrollComponent>
 
-          <div className="site-card overflow-hidden rounded-[34px] p-3 tablet:p-4">
+          <RevealOnScrollComponent
+            delay={120}
+            variant="right"
+            className="site-card overflow-hidden rounded-[34px] p-3 tablet:p-4"
+          >
             <div className="h-[340px] overflow-hidden rounded-[28px] tablet:h-[420px] desktop:h-full desktop:min-h-[560px]">
               {dataLoading ? (
                 <div className="h-full animate-pulse bg-[rgba(223,160,132,0.18)]" />
@@ -96,7 +104,7 @@ export default function MapContactComponent() {
                 </div>
               )}
             </div>
-          </div>
+          </RevealOnScrollComponent>
         </div>
       </div>
     </section>

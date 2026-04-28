@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { Loader2, ChevronDown } from "lucide-react";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import {
   formatReservationDateForApi,
@@ -552,7 +553,10 @@ export default function FormReservationComponent({
           <div className="mx-auto mt-14 max-w-[1380px]">
             {!dataLoading ? (
               <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-                <div className="site-card rounded-[30px] p-5 tablet:max-w-[360px] tablet:p-6">
+                <RevealOnScrollComponent
+                  variant="left"
+                  className="site-card rounded-[30px] p-5 tablet:max-w-[360px] tablet:p-6"
+                >
                   <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
                     Personnes
                   </label>
@@ -576,10 +580,13 @@ export default function FormReservationComponent({
                       className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--site-ink-soft)]"
                     />
                   </div>
-                </div>
+                </RevealOnScrollComponent>
 
                 <div className="grid gap-6 desktop:grid-cols-[1fr_1fr]">
-                  <div className="site-card rounded-[30px] p-5 tablet:p-6 desktop:p-7">
+                  <RevealOnScrollComponent
+                    variant="left"
+                    className="site-card rounded-[30px] p-5 tablet:p-6 desktop:p-7"
+                  >
                     <div className="mb-5">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
                         Calendrier
@@ -599,9 +606,11 @@ export default function FormReservationComponent({
                         className="reservation-calendar w-full border-none bg-transparent"
                       />
                     </div>
-                  </div>
+                  </RevealOnScrollComponent>
 
-                  <div
+                  <RevealOnScrollComponent
+                    delay={120}
+                    variant="right"
                     className={`site-card relative rounded-[30px] p-5 tablet:p-6 desktop:p-7 ${
                       invalidFields.reservationTime
                         ? "border-[#c55050] bg-[#fff4f1]"
@@ -667,10 +676,14 @@ export default function FormReservationComponent({
                         </p>
                       )
                     )}
-                  </div>
+                  </RevealOnScrollComponent>
                 </div>
 
-                <div className="site-card rounded-[30px] p-5 tablet:p-6 desktop:p-7">
+                <RevealOnScrollComponent
+                  delay={180}
+                  variant="up"
+                  className="site-card rounded-[30px] p-5 tablet:p-6 desktop:p-7"
+                >
                   <div className="mb-7 tablet:mb-8">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
                       Vos informations
@@ -756,7 +769,7 @@ export default function FormReservationComponent({
                       )}
                     </button>
                   </div>
-                </div>
+                </RevealOnScrollComponent>
               </form>
             ) : (
               <p className="flex h-[320px] w-full items-center justify-center gap-2 text-[var(--site-ink-soft)] tablet:h-[400px]">

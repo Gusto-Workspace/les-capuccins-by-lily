@@ -1,42 +1,96 @@
-import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Home, CalendarDays, Phone } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
+import GraphicElementComponent from "@/components/_shared/graphic-element.component";
+import RevealOnScrollComponent from "@/components/_shared/motion/reveal-on-scroll.component";
+import SectionHeadingComponent from "@/components/_shared/section-heading.component";
+import StickerPhotoComponent from "@/components/_shared/sticker-photo.component";
+import WaveDividerComponent from "@/components/_shared/wave-divider.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
 
 const quickLinks = [
   {
-    href: "/menus",
-    label: "Découvrir la carte",
+    href: "/",
+    label: "Retour à l’accueil",
     description:
-      "Retrouvez la carte, les menus et les suggestions de Les Capucins by Lily.",
+      "Retrouvez immédiatement la page d’accueil, l’ambiance du lieu et les accès principaux du site.",
+    icon: Home,
+  },
+  {
+    href: "/menus",
+    label: "Carte & menus",
+    description:
+      "Consultez la carte, les suggestions et les menus disponibles de la maison.",
+    icon: ArrowRight,
   },
   {
     href: "/reservations",
     label: "Réserver une table",
     description:
-      "Accédez directement à la réservation en ligne pour préparer votre venue.",
+      "Préparez votre venue et choisissez directement votre créneau en ligne.",
+    icon: CalendarDays,
   },
   {
     href: "/contact",
     label: "Nous contacter",
     description:
-      "Une demande particulière, un groupe ou une question pratique : la page contact reste à portée de main.",
+      "Une question, un groupe ou une demande particulière ? L’équipe reste joignable.",
+    icon: Phone,
   },
 ];
+
+function QuickLinkCard({ item, index }) {
+  const Icon = item.icon;
+
+  return (
+    <RevealOnScrollComponent
+      as="article"
+      delay={index * 80}
+      variant="up"
+      className="site-card flex h-full flex-col rounded-[30px] p-6 tablet:p-8"
+    >
+      <div className="flex items-center gap-4">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--site-line)] bg-white/72 text-[var(--site-orange-deep)]">
+          <Icon size={20} strokeWidth={1.7} />
+        </div>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]">
+          0{index + 1}
+        </span>
+      </div>
+
+      <h3 className="yeseva-one-regular mt-8 text-[34px] leading-[0.92] text-[var(--site-ink)] tablet:text-[38px]">
+        {item.label}
+      </h3>
+
+      <p className="mt-5 flex-1 text-[16px] leading-[1.8] text-[var(--site-ink-soft)] tablet:text-[17px]">
+        {item.description}
+      </p>
+
+      <Link
+        href={item.href}
+        className="mt-8 inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange-deep)] transition hover:opacity-70"
+      >
+        Explorer
+        <ArrowRight size={16} strokeWidth={1.7} />
+      </Link>
+    </RevealOnScrollComponent>
+  );
+}
 
 export default function NotFoundPage() {
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
-  const [introVisible, setIntroVisible] = useState(false);
 
   useEffect(() => {
     const heroEl = heroRef.current;
-    if (!heroEl) return;
+
+    if (!heroEl) {
+      return undefined;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -52,33 +106,17 @@ export default function NotFoundPage() {
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      setIntroVisible(true);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
-
-  function getRevealClassNames(
-    delayClassName,
-    hiddenTransformClassName = "translate-y-8",
-    visibleTransformClassName = "translate-y-0",
-  ) {
-    return `${introVisible ? `${visibleTransformClassName} opacity-100` : `${hiddenTransformClassName} opacity-0`} transform-gpu transition-all duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${delayClassName} motion-reduce:translate-x-0 motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none`;
-  }
-
   return (
     <>
       <SeoHeadComponent
         title="Page introuvable - Les Capucins by Lily"
-        description="La page demandée est introuvable. Revenez à l'accueil, consultez la carte ou réservez une table chez Les Capucins by Lily."
+        description="La page demandée est introuvable. Revenez à l’accueil, consultez la carte ou réservez votre table chez Les Capucins by Lily."
         path="/404"
-        image="/img/hero/2.jpg"
+        image="/img/hero/header.jpg"
         noIndex
       />
 
-      <div className="relative bg-[#022401]">
+      <div className="relative bg-[var(--site-cream)]">
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
@@ -94,143 +132,158 @@ export default function NotFoundPage() {
         <main>
           <section
             ref={heroRef}
-            className="relative overflow-hidden bg-[#022401] px-5 pb-20 pt-[128px] text-white tablet:px-8 tablet:pb-24 tablet:pt-[148px] desktop:px-[90px] desktop:pb-[120px] desktop:pt-[172px]"
+            className="relative isolate overflow-hidden px-5 pb-28 pt-36 text-[var(--site-cream)] tablet:px-8 tablet:pb-32 tablet:pt-40 desktop:px-[90px] desktop:pb-36 desktop:pt-44"
           >
-            <div className="absolute inset-0">
-              <div className="absolute inset-y-0 right-0 hidden w-full bg-[#0a2f07]/20 desktop:block desktop:w-[60%]" />
-              <div className="absolute inset-0 bg-black/12" />
-            </div>
+            <div
+              className="absolute inset-0 bg-cover bg-center site-ken-burns"
+              style={{ backgroundImage: "url('/img/hero/header.jpg')" }}
+            />
+            <div className="absolute inset-0 bg-[rgba(55,26,16,0.64)]" />
 
-            <div className="relative mx-auto grid max-w-[1600px] gap-14 min-[1180px]:grid-cols-[minmax(0,1fr)_minmax(420px,620px)] min-[1180px]:items-center min-[1180px]:gap-[72px]">
+            <div className="relative mx-auto grid max-w-[1500px] gap-12 desktop:grid-cols-[1.05fr_0.95fr] desktop:items-center desktop:gap-20">
               <div className="relative z-10 max-w-[760px]">
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-0 top-[-58px] hidden yeseva-one-regular text-[170px] leading-none tracking-[-0.08em] text-white/5 desktop:block"
+                <RevealOnScrollComponent
+                  as="p"
+                  variant="up"
+                  className="script-font text-[48px] leading-none text-[var(--site-orange)] tablet:text-[62px] desktop:text-[74px]"
                 >
-                  404
-                </span>
+                  Oups
+                </RevealOnScrollComponent>
 
-                <p
-                  className={`${getRevealClassNames("delay-[80ms]", "-translate-x-8", "translate-x-0")} text-[12px] uppercase tracking-[0.34em] text-[#d4bf96] tablet:text-[14px] tablet:tracking-[0.4em] desktop:text-[15px]`}
-                >
-                  Erreur 404
-                </p>
-
-                <h1
-                  className={`${getRevealClassNames("delay-[180ms]", "-translate-x-10", "translate-x-0")} yeseva-one-regular mt-5 max-w-[680px] text-[44px] leading-[0.96] tracking-[-0.05em] text-white tablet:text-[64px] desktop:text-[86px] desktop:leading-[0.92]`}
+                <RevealOnScrollComponent
+                  as="h1"
+                  delay={90}
+                  variant="up"
+                  className="yeseva-one-regular mt-4 text-balance text-[54px] leading-[0.92] text-[var(--site-cream)] tablet:text-[74px] desktop:text-[96px]"
                 >
                   Cette page n&apos;est plus à la carte.
-                </h1>
+                </RevealOnScrollComponent>
 
-                <p
-                  className={`${getRevealClassNames("delay-[280ms]", "-translate-x-12", "translate-x-0")} mt-6 max-w-[640px] text-[17px] font-extralight leading-[1.75] text-white/74 tablet:text-[19px] desktop:mt-8 desktop:text-[22px] desktop:leading-[1.7]`}
+                <RevealOnScrollComponent
+                  as="p"
+                  delay={180}
+                  variant="soft"
+                  className="mt-6 max-w-[640px] text-[17px] leading-[1.9] text-[var(--site-cream-soft)] tablet:text-[19px]"
                 >
-                  L&apos;adresse demandée est introuvable, a peut-être été
-                  déplacée ou n&apos;est plus disponible. Vous pouvez revenir à
+                  L&apos;adresse que vous cherchez n&apos;est plus disponible
+                  ou a changé. Le plus simple est de repartir vers
                   l&apos;accueil, consulter la carte ou réserver votre table en
                   quelques secondes.
-                </p>
+                </RevealOnScrollComponent>
 
-                <div
-                  className={`${getRevealClassNames("delay-[380ms]")} mt-10 flex flex-col gap-4 tablet:mt-11 tablet:flex-row`}
+                <RevealOnScrollComponent
+                  delay={260}
+                  variant="soft"
+                  className="mt-8 flex flex-col gap-4 tablet:flex-row"
                 >
-                  <Link
-                    href="/"
-                    className="flex h-[54px] w-full max-w-[260px] items-center justify-center bg-[#bb924b] px-6 text-[12px] font-medium uppercase tracking-[0.24em] text-white transition hover:opacity-90 tablet:text-[13px] tablet:tracking-[0.28em]"
-                  >
-                    Retour à l&apos;accueil
+                  <Link href="/" className="site-button">
+                    Retour à l’accueil
                   </Link>
-
                   <Link
                     href="/reservations"
-                    className="flex h-[54px] w-full max-w-[260px] items-center justify-center border border-white/18 bg-white/5 px-6 text-[12px] font-medium uppercase tracking-[0.24em] text-white transition hover:border-[#d4bf96] hover:bg-white/10 tablet:text-[13px] tablet:tracking-[0.28em]"
+                    className="site-button site-button--secondary"
                   >
                     Réserver une table
                   </Link>
-                </div>
+                </RevealOnScrollComponent>
 
-                <div
-                  className={`${getRevealClassNames("delay-[480ms]")} mt-10 border-l border-[#b48a45] pl-5 tablet:mt-12 tablet:pl-6`}
+                <RevealOnScrollComponent
+                  delay={340}
+                  variant="soft"
+                  className="mt-10 rounded-[24px] border border-[rgba(246,231,230,0.24)] bg-[rgba(255,255,255,0.08)] px-5 py-5 tablet:max-w-[540px] tablet:px-6"
                 >
-                  <p className="text-[12px] uppercase tracking-[0.24em] text-[#d4bf96] tablet:text-[13px] tablet:tracking-[0.3em]">
-                    Besoin d&apos;un autre chemin ?
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange)]">
+                    Erreur 404
                   </p>
-
-                  <p className="mt-3 max-w-[540px] text-[15px] font-light leading-[1.75] text-white/66 tablet:text-[16px] desktop:text-[18px]">
-                    Les accès essentiels du site restent disponibles juste
+                  <p className="mt-3 text-[15px] leading-[1.8] text-[rgba(246,231,230,0.82)] tablet:text-[16px]">
+                    Les accès essentiels du site restent disponibles juste en
                     dessous pour éviter toute impasse.
                   </p>
-                </div>
+                </RevealOnScrollComponent>
               </div>
 
-              <div
-                className={`${getRevealClassNames("delay-[260ms]", "translate-y-12", "translate-y-0")} relative z-10 mx-auto w-full max-w-[620px]`}
+              <RevealOnScrollComponent
+                delay={180}
+                variant="zoom"
+                className="relative z-10 mx-auto w-full max-w-[560px]"
               >
-                <div className="relative overflow-hidden rounded-t-[180px] border border-[#b48a45]/80 p-3 tablet:rounded-t-[230px] tablet:p-4 desktop:rounded-t-full">
-                  <div className="relative h-[420px] overflow-hidden rounded-t-[168px] tablet:h-[540px] tablet:rounded-t-[214px] desktop:h-[660px] desktop:rounded-t-full">
-                    <Image
-                      src="/img/hero/2.jpg"
-                      alt="Vue du restaurant Les Capucins by Lily"
-                      fill
-                      priority
-                      className="object-cover"
-                    />
+                <div className="site-soft-card rounded-[34px] border border-[rgba(246,231,230,0.26)] px-6 py-6 tablet:px-8 tablet:py-8">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange)]">
+                    Les Capucins by Lily
+                  </p>
+                  <p className="script-font mt-4 text-[46px] leading-none text-[var(--site-cream)] tablet:text-[58px]">
+                    Toujours la bonne adresse
+                  </p>
+                  <p className="mt-4 text-[16px] leading-[1.85] text-[rgba(246,231,230,0.82)] tablet:text-[17px]">
+                    Cuisine italienne généreuse, ambiance chaleureuse et accès
+                    directs vers les pages les plus utiles du site.
+                  </p>
 
-                    <div className="absolute inset-0 bg-black/36" />
+                  <div className="mt-8 grid gap-4 tablet:grid-cols-2">
+                    <div className="rounded-[22px] border border-[rgba(246,231,230,0.22)] bg-[rgba(255,255,255,0.08)] px-4 py-4">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange)]">
+                        Carte
+                      </p>
+                      <p className="mt-2 text-[15px] leading-[1.75] text-[rgba(246,231,230,0.84)]">
+                        Pizzas, plats, desserts et suggestions.
+                      </p>
+                    </div>
 
-                    <div className="absolute inset-x-0 bottom-0 p-6 tablet:p-8 desktop:p-10">
-                      <div className="max-w-[360px] border border-white/12 bg-[#082d06]/78 p-5 backdrop-blur-md tablet:p-6">
-                        <p className="text-[11px] uppercase tracking-[0.28em] text-[#d4bf96] tablet:text-[12px]">
-                          Les Capucins by Lily
-                        </p>
-                        <p className="yeseva-one-regular mt-3 text-[28px] leading-[1.02] text-white tablet:text-[36px] desktop:text-[38px]">
-                          Le bon endroit, même après une erreur de parcours.
-                        </p>
-                      </div>
+                    <div className="rounded-[22px] border border-[rgba(246,231,230,0.22)] bg-[rgba(255,255,255,0.08)] px-4 py-4">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange)]">
+                        Réservation
+                      </p>
+                      <p className="mt-2 text-[15px] leading-[1.75] text-[rgba(246,231,230,0.84)]">
+                        Une table en quelques clics, selon vos disponibilités.
+                      </p>
                     </div>
                   </div>
                 </div>
-              </div>
+              </RevealOnScrollComponent>
             </div>
+
+            <WaveDividerComponent
+              fill="var(--site-cream)"
+              detail="rgba(223,160,132,0.9)"
+              secondaryDetail="rgba(255,255,255,0.62)"
+              height={108}
+              position="bottom"
+              flipY
+              scaleY={0.95}
+              overlap={8}
+            />
           </section>
 
-          <section className="bg-[#eeebe6] px-5 py-20 text-[#111111] tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[120px]">
-            <div className="mx-auto max-w-[1600px]">
-              <div className="mx-auto max-w-[760px] text-center">
-                <p className="text-[12px] uppercase tracking-[0.32em] text-[#b48a45] tablet:text-[14px] tablet:tracking-[0.38em]">
-                  Navigation rapide
-                </p>
+          <section className="site-shell relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+            <div className="relative mx-auto max-w-[1450px]">
+              <GraphicElementComponent
+                src="/img/elements/4.png"
+                className="left-[-78px] top-[26px] hidden h-[240px] w-[160px] opacity-42 desktop:block"
+                sizes="160px"
+              />
+              <GraphicElementComponent
+                src="/img/elements/2.png"
+                className="right-[-122px] top-[32%] hidden h-[220px] w-[220px] opacity-38 desktop:block"
+                sizes="220px"
+              />
+            
 
-                <h2 className="yeseva-one-regular mt-5 text-[34px] uppercase leading-[1.04] tracking-[-0.04em] tablet:text-[44px] desktop:text-[54px]">
-                  Peut-être cherchiez-vous plutôt...
-                </h2>
-              </div>
+              <div className="relative z-10">
+                <SectionHeadingComponent
+                  eyebrow="Navigation rapide"
+                  title="Retrouvez le bon chemin"
+                  description="Les pages principales du site restent accessibles ici pour vous permettre de reprendre votre visite sans détour."
+                />
 
-              <div className="mt-12 grid gap-5 tablet:mt-14 min-[900px]:grid-cols-3">
-                {quickLinks.map((item, index) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="group flex h-full flex-col border border-[#cdb78c]/55 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:border-[#b48a45] tablet:p-8"
-                  >
-                    <span className="text-[12px] uppercase tracking-[0.28em] text-[#b48a45]">
-                      0{index + 1}
-                    </span>
-
-                    <h3 className="yeseva-one-regular mt-10 text-[28px] uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] tablet:text-[32px]">
-                      {item.label}
-                    </h3>
-
-                    <p className="mt-5 flex-1 text-[16px] font-light leading-[1.75] text-black/62 tablet:text-[17px]">
-                      {item.description}
-                    </p>
-
-                    <span className="mt-10 inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.24em] text-[#111111] transition group-hover:text-[#b48a45] tablet:text-[13px] tablet:tracking-[0.28em]">
-                      Explorer
-                      <ArrowRight size={16} strokeWidth={1.7} />
-                    </span>
-                  </Link>
-                ))}
+                <div className="mt-14 grid gap-6 tablet:grid-cols-2">
+                  {quickLinks.map((item, index) => (
+                    <QuickLinkCard
+                      key={item.href}
+                      item={item}
+                      index={index}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </section>

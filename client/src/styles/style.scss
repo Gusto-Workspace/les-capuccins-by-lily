@@ -55,21 +55,78 @@ a {
   border: 1px solid var(--site-line);
   background: rgba(255, 255, 255, 0.72);
   box-shadow: var(--site-shadow);
-  backdrop-filter: blur(8px);
 }
 
 .site-soft-card {
   border: 1px solid rgba(246, 231, 230, 0.18);
   background: rgba(255, 255, 255, 0.14);
   box-shadow: 0 20px 50px rgba(54, 25, 16, 0.16);
-  backdrop-filter: blur(12px);
 }
 
 .site-menu-sheet {
   border: 0;
   background: transparent;
   box-shadow: none;
-  backdrop-filter: none;
+}
+
+.site-reveal {
+  opacity: 0;
+  transition-property: opacity, transform;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.site-reveal.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.site-reveal--up {
+  transform: translate3d(0, 34px, 0);
+}
+
+.site-reveal--left {
+  transform: translate3d(-34px, 0, 0);
+}
+
+.site-reveal--right {
+  transform: translate3d(34px, 0, 0);
+}
+
+.site-reveal--zoom {
+  transform: translate3d(0, 24px, 0) scale(0.92);
+}
+
+.site-reveal--soft {
+  transform: translate3d(0, 18px, 0);
+}
+
+.site-ken-burns {
+  animation: site-ken-burns 16s ease-in-out infinite alternate;
+  transform-origin: center center;
+}
+
+.site-hover-lift {
+  transition:
+    box-shadow 0.45s ease,
+    filter 0.45s ease;
+}
+
+.site-hover-lift:hover {
+  box-shadow: 0 28px 54px rgba(71, 42, 34, 0.28);
+  filter: saturate(1.04);
+}
+
+.site-media-zoom img,
+.site-media-zoom picture,
+.site-media-zoom .site-media-zoom__target {
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-media-zoom:hover img,
+.site-media-zoom:hover picture,
+.site-media-zoom:hover .site-media-zoom__target {
+  transform: scale(1.05);
 }
 
 .site-input,
@@ -166,4 +223,37 @@ a {
   font-size: 14px;
   font-style: normal;
   color: rgba(71, 42, 34, 0.45);
+}
+
+@keyframes site-ken-burns {
+  0% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .site-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .site-ken-burns {
+    animation: none;
+  }
+
+  .site-hover-lift,
+  .site-media-zoom img,
+  .site-media-zoom picture,
+  .site-media-zoom .site-media-zoom__target {
+    transition: none;
+  }
 }

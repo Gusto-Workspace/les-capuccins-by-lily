@@ -9,6 +9,7 @@ import {
 import { getVisibleMenuCategories } from "../../_assets/utils/site-display.utils";
 import SectionHeadingComponent from "../_shared/section-heading.component";
 import GraphicElementComponent from "../_shared/graphic-element.component";
+import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
 import StickerPhotoComponent from "../_shared/sticker-photo.component";
 
 function normalizeKey(value) {
@@ -200,15 +201,19 @@ export default function OtherMenusComponent({ restaurantData }) {
           }`}
         >
           {menuCategories.map((category) => (
-            <CategoryMenuCard key={category.id} category={category} />
+            <RevealOnScrollComponent key={category.id} variant="up">
+              <CategoryMenuCard category={category} />
+            </RevealOnScrollComponent>
           ))}
 
           {menus.map((menu, index) => (
-            <RestaurantMenuCard
+            <RevealOnScrollComponent
               key={menu?._id || `menu-${index}`}
-              menu={menu}
-              index={index}
-            />
+              delay={menuCategories.length * 80 + index * 90}
+              variant="up"
+            >
+              <RestaurantMenuCard menu={menu} index={index} />
+            </RevealOnScrollComponent>
           ))}
         </div>
       </div>

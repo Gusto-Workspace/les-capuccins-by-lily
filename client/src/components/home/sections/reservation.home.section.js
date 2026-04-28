@@ -2,6 +2,7 @@ import Image from "next/image";
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import BookingBarComponent from "../../reservations/booking-bar.component";
 import GraphicElementComponent from "../../_shared/graphic-element.component";
+import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.component";
 
 export default function ReservationHomeSection({ restaurantData }) {
   return (
@@ -32,8 +33,12 @@ export default function ReservationHomeSection({ restaurantData }) {
           src="/img/elements/10.png"
           className="bottom-[-220px] right-[-254px] hidden h-[400px] w-[400px] opacity-20 desktop:block"
           sizes="170px"
+          disableMotion
         />
-        <div className="relative z-10 text-[var(--site-cream)]">
+        <RevealOnScrollComponent
+          variant="left"
+          className="relative z-10 text-[var(--site-cream)]"
+        >
           <div className="mb-6">
             <div className="relative h-[192px] w-[192px] tablet:h-[206px] tablet:w-[206px]">
               <Image
@@ -55,11 +60,15 @@ export default function ReservationHomeSection({ restaurantData }) {
             Nous avons hâte de vous accueillir pour un moment gourmand et
             convivial.
           </p>
-        </div>
+        </RevealOnScrollComponent>
 
-        <div className="relative z-10">
+        <RevealOnScrollComponent
+          delay={140}
+          variant="right"
+          className="relative z-10"
+        >
           <BookingBarComponent restaurant={restaurantData} />
-        </div>
+        </RevealOnScrollComponent>
       </div>
     </section>
   );

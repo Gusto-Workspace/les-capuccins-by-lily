@@ -2,6 +2,7 @@ import Image from "next/image";
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import HomeSectionHeading from "../home-section-heading.component";
 import GraphicElementComponent from "../../_shared/graphic-element.component";
+import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.component";
 
 const specialties = [
   {
@@ -71,8 +72,11 @@ export default function SpecialtiesHomeSection() {
 
           <div className="mt-16 grid gap-8 desktop:grid-cols-4 desktop:gap-0">
             {specialties.map((item, index) => (
-              <article
+              <RevealOnScrollComponent
+                as="article"
                 key={item.title}
+                delay={120 + index * 90}
+                variant="up"
                 className={`px-2 text-center desktop:px-8 ${
                   index < specialties.length - 1
                     ? "desktop:border-r desktop:border-[rgba(246,231,230,0.32)]"
@@ -96,7 +100,7 @@ export default function SpecialtiesHomeSection() {
                 <p className="mx-auto mt-5 max-w-[250px] text-[16px] leading-[1.85] text-[rgba(246,231,230,0.88)]">
                   {item.description}
                 </p>
-              </article>
+              </RevealOnScrollComponent>
             ))}
           </div>
         </div>
