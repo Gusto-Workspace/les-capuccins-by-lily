@@ -40,7 +40,10 @@ export default function SeoHead({
     <Head>
       <title>{title}</title>
       <meta name="description" content={description} />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+      />
       <meta name="robots" content={robots} />
       <meta name="author" content={DEFAULT_SITE_NAME} />
       <meta name="application-name" content={DEFAULT_SITE_NAME} />

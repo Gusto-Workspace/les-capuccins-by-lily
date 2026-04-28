@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.component";
@@ -22,12 +23,18 @@ function NewsImage({ item, className = "" }) {
     <div
       className={`flex h-full min-h-[240px] w-full items-center justify-center bg-[rgba(246,229,218,0.92)] text-center text-[var(--site-ink-soft)] ${className}`.trim()}
     >
-      <div className="px-8">
-        <p className="script-font text-[42px] leading-none text-[var(--site-orange-deep)]">
-          Actualité
-        </p>
-        <p className="yeseva-one-regular mt-2 text-[34px] leading-[0.92] text-[var(--site-ink)]">
-          À venir
+      <div className="flex flex-col items-center px-8">
+        <div className="relative h-[96px] w-[96px] tablet:h-[118px] tablet:w-[118px]">
+          <Image
+            src="/img/logo.png"
+            alt="Logo Les Capucins by Lily"
+            fill
+            sizes="118px"
+            className="object-contain"
+          />
+        </div>
+        <p className="yeseva-one-regular mt-5 text-[28px] leading-[0.92] text-[var(--site-ink)] tablet:text-[34px]">
+          Les Capucins by Lily
         </p>
       </div>
     </div>

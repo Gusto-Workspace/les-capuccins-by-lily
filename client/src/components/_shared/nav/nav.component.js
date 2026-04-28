@@ -48,20 +48,34 @@ export default function NavComponent({
   const router = useRouter();
   const { restaurantContext } = useContext(GlobalContext);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [newsVisibilityResolved, setNewsVisibilityResolved] = useState(false);
   const restaurantData = restaurantContext?.restaurantData;
+  const restaurantDataLoading = restaurantContext?.dataLoading;
   const brand = getRestaurantBrandParts(restaurantData);
 
   const menuItems = useMemo(
     () =>
       baseMenuItems.filter((item) => {
         if (item.visibilityKey === "news") {
-          return hasVisibleNews(restaurantData);
+          return newsVisibilityResolved && hasVisibleNews(restaurantData);
         }
 
         return true;
       }),
-    [restaurantData],
+    [newsVisibilityResolved, restaurantData],
   );
+
+  useEffect(() => {
+    if (restaurantDataLoading) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setNewsVisibilityResolved(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [restaurantData, restaurantDataLoading]);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -145,8 +159,9 @@ export default function NavComponent({
             ? "bg-[rgba(246,231,230,0.92)] shadow-[0_16px_48px_rgba(127,83,66,0.12)]"
             : "bg-transparent"
         }`}
+        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <div className="mx-auto flex h-[88px] w-full max-w-[1600px] items-center justify-between px-5 tablet:px-8 desktop:px-10">
+        <div className="mx-auto flex h-[88px] w-full max-w-[1600px] items-center justify-between px-5 pt-2 tablet:px-8 tablet:pt-3 min-[1180px]:pt-0 desktop:px-10">
           <Link href="/" aria-label="Accueil">
             <Brand logoSrc={logoSrc} brand={brand} />
           </Link>
