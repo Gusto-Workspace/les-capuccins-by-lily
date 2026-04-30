@@ -27,7 +27,11 @@ export default function HomePageComponent({ heroRef = null }) {
 
   return (
     <div className="overflow-x-hidden">
-      <HeroHomeSection heroRef={heroRef} brandMain={brand.main} />
+      <HeroHomeSection
+        heroRef={heroRef}
+        brandMain={brand.main}
+        brandAccent={brand.accent}
+      />
       <HistoryHomeSection restaurantName={restaurantName} />
       <SpecialtiesHomeSection />
       <MenuPreviewHomeSection menuColumns={menuColumns} />

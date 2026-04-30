@@ -2,7 +2,11 @@ import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.compo
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import HomeActionLink from "../home-action-link.component";
 
-export default function HeroHomeSection({ heroRef = null, brandMain }) {
+export default function HeroHomeSection({
+  heroRef = null,
+  brandMain,
+  brandAccent,
+}) {
   return (
     <section
       ref={heroRef}
@@ -30,7 +34,12 @@ export default function HeroHomeSection({ heroRef = null, brandMain }) {
             variant="up"
             className="yeseva-one-regular mt-3 text-balance text-[64px] leading-[0.9] text-[var(--site-cream)] tablet:text-[98px] desktop:text-[128px]"
           >
-            {brandMain}
+            <span className="mx-auto flex w-fit max-w-full flex-col items-stretch">
+              <span>{brandMain}</span>
+              <span className="script-font -mt-1 pr-1 text-right text-[36px] font-normal leading-none text-[var(--site-orange)] tablet:-mt-2 tablet:text-[52px] desktop:text-[62px]">
+                {brandAccent}
+              </span>
+            </span>
           </RevealOnScrollComponent>
 
           <RevealOnScrollComponent
