@@ -49,8 +49,8 @@ export default function HistoryHomeSection({ restaurantName }) {
           variant="soft"
           className="mx-auto mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
-          Chez {restaurantName}, nous partageons notre passion pour la pizza et
-          la cuisine italienne faite maison.
+          Bienvenue aux Capucins by Lily, où le fait-maison et la passion
+          guident chaque recette.
         </RevealOnScrollComponent>
 
         <RevealOnScrollComponent
@@ -59,9 +59,9 @@ export default function HistoryHomeSection({ restaurantName }) {
           variant="soft"
           className="mx-auto mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
-          Notre équipe sélectionne des ingrédients frais et de qualité pour
-          vous offrir une expérience culinaire unique dans une ambiance
-          chaleureuse et accueillante.
+          À emporter, nous vous proposons des salades, des desserts et des
+          pizzas aux généreux rebords, garnies de produits frais italiens, pour
+          un plaisir simple et sincère.
         </RevealOnScrollComponent>
 
         <RevealOnScrollComponent
