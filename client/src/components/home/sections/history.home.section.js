@@ -47,7 +47,7 @@ export default function HistoryHomeSection({ restaurantName }) {
           as="p"
           delay={220}
           variant="soft"
-          className="mx-auto mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
+          className="mx-auto text-balance mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
           Bienvenue aux Capucins by Lily, où le fait-maison et la passion
           guident chaque recette.
@@ -57,7 +57,7 @@ export default function HistoryHomeSection({ restaurantName }) {
           as="p"
           delay={300}
           variant="soft"
-          className="mx-auto mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
+          className="mx-auto text-balance mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
           À emporter, nous vous proposons des salades, des desserts et des
           pizzas aux généreux rebords, garnies de produits frais italiens, pour
