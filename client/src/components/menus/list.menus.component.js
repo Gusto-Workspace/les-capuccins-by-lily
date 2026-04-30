@@ -51,7 +51,7 @@ export default function ListMenusComponent({ restaurantData }) {
   const categories = getVisibleDishCategories(restaurantData);
 
   return (
-    <section className="site-shell relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+    <section className="site-shell overflow-x-hidden relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
       <div className="relative mx-auto max-w-[1380px]">
         <GraphicElementComponent
           src="/img/elements/4.png"

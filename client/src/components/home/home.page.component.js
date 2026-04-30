@@ -26,13 +26,13 @@ export default function HomePageComponent({ heroRef = null }) {
   }));
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       <HeroHomeSection heroRef={heroRef} brandMain={brand.main} />
       <HistoryHomeSection restaurantName={restaurantName} />
       <SpecialtiesHomeSection />
       <MenuPreviewHomeSection menuColumns={menuColumns} />
       <ReservationHomeSection restaurantData={restaurantData} />
       <TakeawayHomeSection />
-    </>
+    </div>
   );
 }
