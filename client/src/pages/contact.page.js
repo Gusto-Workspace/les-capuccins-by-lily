@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-// I18N
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 // COMPONENTS
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
@@ -10,8 +7,9 @@ import MapContactComponent from "@/components/contact/map.contact.component";
 import InfosContactComponent from "@/components/contact/infos.contact.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
-export default function ContactPage() {
+export default function ContactPage({ seoRestaurantData = null }) {
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
 
@@ -37,13 +35,14 @@ export default function ContactPage() {
     <>
       <SeoHeadComponent
         title="Contact - Les Capucins by Lily"
-        description="Contactez Les Capucins by Lily pour une réservation, une demande d’information ou un message."
+        description="Contactez Les Capucins by Lily à Turenne pour une réservation, une demande de groupe ou toute information pratique."
         path="/contact"
         image="/img/contact/header_contact.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Contact", path: "/contact" },
         ]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -77,9 +76,5 @@ export default function ContactPage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }

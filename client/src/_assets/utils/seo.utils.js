@@ -42,7 +42,31 @@ export function normalizeBaseUrl(value) {
     return DEFAULT_SITE_URL;
   }
 
-  return sanitizedValue.replace(/\/+$/, "");
+  const normalizedValue = sanitizedValue.replace(/\/+$/, "");
+
+  if (
+    normalizedValue === "lescapucinsbylily.fr" ||
+    normalizedValue === "www.lescapucinsbylily.fr"
+  ) {
+    return "https://www.lescapucinsbylily.fr";
+  }
+
+  if (/^https?:\/\//i.test(normalizedValue)) {
+    try {
+      const url = new URL(normalizedValue);
+
+      if (url.hostname === "lescapucinsbylily.fr") {
+        url.protocol = "https:";
+        url.hostname = "www.lescapucinsbylily.fr";
+      }
+
+      return url.toString().replace(/\/+$/, "");
+    } catch {
+      return normalizedValue;
+    }
+  }
+
+  return normalizedValue;
 }
 
 export function buildAbsoluteUrl(baseUrl, path) {

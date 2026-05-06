@@ -4,7 +4,6 @@ import {
 } from "@/_assets/utils/seo.utils";
 
 function buildSitemapXml(baseUrl) {
-  const currentDate = new Date().toISOString();
   const entries = getSeoRouteEntries(baseUrl);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -13,7 +12,6 @@ ${entries
   .map(
     (entry) => `  <url>
     <loc>${entry.url}</loc>
-    <lastmod>${currentDate}</lastmod>
     <changefreq>${entry.changefreq}</changefreq>
     <priority>${entry.priority}</priority>
   </url>`,

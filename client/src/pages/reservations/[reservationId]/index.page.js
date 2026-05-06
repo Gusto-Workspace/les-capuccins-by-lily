@@ -8,7 +8,7 @@ export default function ReservationResumePage({ reservationId }) {
         title="Suivi de réservation - Les Capucins by Lily"
         description="Consultez le suivi de votre réservation Les Capucins by Lily."
         path={reservationId ? `/reservations/${reservationId}` : "/reservations"}
-        image="/img/reservations/2.jpg"
+        image="/img/reservations/header_reservations.png"
         noIndex={true}
       />
 

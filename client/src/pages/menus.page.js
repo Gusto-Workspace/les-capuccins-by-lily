@@ -1,19 +1,17 @@
 import { useContext, useEffect, useRef, useState } from "react";
 
-// I18N
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 // COMPONENTS
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
 import ListMenusComponent from "@/components/menus/list.menus.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
 // CONTEXT
 import { GlobalContext } from "@/contexts/global.context";
 
-export default function MenusPage() {
+export default function MenusPage({ seoRestaurantData = null }) {
   const { restaurantContext } = useContext(GlobalContext);
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
@@ -40,13 +38,14 @@ export default function MenusPage() {
     <>
       <SeoHeadComponent
         title="Carte & Menus - Les Capucins by Lily"
-        description="Découvrez la carte et les menus des Capucins by Lily : cuisine italienne, recettes maison et suggestions du moment."
+        description="Découvrez la carte et les menus du restaurant Les Capucins by Lily à Turenne : cuisine italienne, pizzas, suggestions et recettes maison."
         path="/menus"
         image="/img/menu-inspired/header_menu.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Carte & menus", path: "/menus" },
         ]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -80,9 +79,5 @@ export default function MenusPage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common", "menus"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }

@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
-// I18N
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 // COMPONENTS
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
 import HomePageComponent from "@/components/home/home.page.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
-export default function HomePage() {
+export default function HomePage({ seoRestaurantData = null }) {
   const heroRef = useRef(null);
 
   const [showScrolledNav, setShowScrolledNav] = useState(false);
@@ -41,6 +39,7 @@ export default function HomePage() {
         path="/"
         image="/img/hero/header.jpg"
         breadcrumbs={[{ name: "Accueil", path: "/" }]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -64,9 +63,5 @@ export default function HomePage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common", "index"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }

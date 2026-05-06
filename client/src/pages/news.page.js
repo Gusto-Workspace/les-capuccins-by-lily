@@ -1,19 +1,17 @@
 import { useEffect, useRef, useState, useContext } from "react";
 
-// I18N
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 // COMPONENTS
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
 import ListNewsComponent from "@/components/news/list.news.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
 // CONTEXT
 import { GlobalContext } from "@/contexts/global.context";
 
-export default function NewsPage() {
+export default function NewsPage({ seoRestaurantData = null }) {
   const { restaurantContext } = useContext(GlobalContext);
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
@@ -40,13 +38,14 @@ export default function NewsPage() {
     <>
       <SeoHeadComponent
         title="Actualités - Les Capucins by Lily"
-        description="Retrouvez les actualités, nouveautés et temps forts du restaurant Les Capucins by Lily."
+        description="Retrouvez les actualités, nouveautés et temps forts du restaurant Les Capucins by Lily à Turenne."
         path="/news"
         image="/img/news/header_news.png"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Actualités", path: "/news" },
         ]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -83,9 +82,5 @@ export default function NewsPage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }

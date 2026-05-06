@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import NavComponent from "@/components/_shared/nav/nav.component";
 import FooterComponent from "@/components/_shared/footer/footer.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
@@ -8,6 +7,7 @@ import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
 import SectionHeadingComponent from "@/components/_shared/section-heading.component";
 import RevealOnScrollComponent from "@/components/_shared/motion/reveal-on-scroll.component";
 import GraphicElementComponent from "@/components/_shared/graphic-element.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
 function LegalSection({ title, children, last = false }) {
   return (
@@ -26,7 +26,7 @@ function LegalSection({ title, children, last = false }) {
   );
 }
 
-export default function LegalesPage() {
+export default function LegalesPage({ seoRestaurantData = null }) {
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
   const title = "Mentions légales - Les Capucins by Lily";
@@ -60,6 +60,7 @@ export default function LegalesPage() {
           { name: "Accueil", path: "/" },
           { name: "Mentions légales", path: "/legales" },
         ]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -239,9 +240,5 @@ export default function LegalesPage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }

@@ -17,9 +17,10 @@ export default function SeoHead({
   type = "website",
   noIndex = false,
   breadcrumbs = [],
+  restaurantData = null,
 }) {
   const { restaurantContext } = useContext(GlobalContext);
-  const restaurantData = restaurantContext?.restaurantData;
+  const restaurantSeoData = restaurantData || restaurantContext?.restaurantData;
   const baseUrl = normalizeBaseUrl(process.env.NEXT_PUBLIC_BASE_URL);
   const canonicalUrl = buildAbsoluteUrl(baseUrl, path);
   const imageUrl = buildAbsoluteUrl(baseUrl, image);
@@ -28,7 +29,7 @@ export default function SeoHead({
     : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
   const schemas = buildSeoSchemas({
     baseUrl,
-    restaurant: restaurantData,
+    restaurant: restaurantSeoData,
     title,
     description,
     canonicalUrl,
@@ -50,7 +51,13 @@ export default function SeoHead({
       <meta name="apple-mobile-web-app-title" content={DEFAULT_SITE_NAME} />
       <meta name="theme-color" content="#dfa084" />
       <meta name="format-detection" content="telephone=yes, address=yes, email=yes" />
-      <link rel="canonical" href={canonicalUrl} />
+      {!noIndex ? <link rel="canonical" href={canonicalUrl} /> : null}
+      {!noIndex ? (
+        <>
+          <link rel="alternate" hrefLang="fr-FR" href={canonicalUrl} />
+          <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
+        </>
+      ) : null}
 
       <meta property="og:site_name" content={DEFAULT_SITE_NAME} />
       <meta property="og:locale" content="fr_FR" />
@@ -59,6 +66,7 @@ export default function SeoHead({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:secure_url" content={imageUrl} />
       <meta property="og:image:alt" content={title} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -67,16 +75,19 @@ export default function SeoHead({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+      <meta name="twitter:image:alt" content={title} />
 
-      {schemas.map((schema, index) => (
-        <script
-          key={`seo-schema-${index}`}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema),
-          }}
-        />
-      ))}
+      {!noIndex
+        ? schemas.map((schema, index) => (
+            <script
+              key={`seo-schema-${index}`}
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify(schema),
+              }}
+            />
+          ))
+        : null}
     </Head>
   );
 }

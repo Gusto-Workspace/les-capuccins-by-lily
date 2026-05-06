@@ -1,8 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 
-// I18N
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-
 // CONTEXT
 import { GlobalContext } from "@/contexts/global.context";
 
@@ -12,8 +9,9 @@ import FooterComponent from "@/components/_shared/footer/footer.component";
 import BannerComponent from "@/components/_shared/banner/banner.component";
 import FormReservationsComponent from "@/components/reservations/form.reservations.component";
 import SeoHeadComponent from "@/components/_shared/seo/seo-head.component";
+import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
-export default function ReservationsPage() {
+export default function ReservationsPage({ seoRestaurantData = null }) {
   const { restaurantContext } = useContext(GlobalContext);
 
   const heroRef = useRef(null);
@@ -48,6 +46,7 @@ export default function ReservationsPage() {
           { name: "Accueil", path: "/" },
           { name: "Réserver", path: "/reservations" },
         ]}
+        restaurantData={seoRestaurantData}
       />
 
       <div className="relative">
@@ -85,9 +84,5 @@ export default function ReservationsPage() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["common"])),
-    },
-  };
+  return buildStaticPageProps(locale, ["common"]);
 }
