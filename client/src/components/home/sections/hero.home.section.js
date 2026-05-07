@@ -14,7 +14,7 @@ export default function HeroHomeSection({
     >
       <div
         className="absolute inset-[-4%] bg-cover bg-center site-ken-burns"
-        style={{ backgroundImage: "url('/img/hero/header.jpg')" }}
+        style={{ backgroundImage: "url('/img/hero/header.webp')" }}
       />
       <div className="absolute inset-0 bg-[rgba(55,26,16,0.56)]" />
 
@@ -48,8 +48,9 @@ export default function HeroHomeSection({
             variant="soft"
             className="mt-6 max-w-[640px] text-[18px] leading-[1.9] text-[var(--site-cream-soft)] tablet:text-[20px]"
           >
-            Une cuisine authentique, des produits frais et une ambiance
-            conviviale au coeur de Turenne.
+            Restaurant italien et pizzeria à Turenne, nous proposons une
+            cuisine maison, des produits frais et une ambiance conviviale au
+            coeur du village.
           </RevealOnScrollComponent>
 
           <RevealOnScrollComponent

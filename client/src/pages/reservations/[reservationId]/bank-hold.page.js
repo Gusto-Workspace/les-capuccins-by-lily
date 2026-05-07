@@ -12,7 +12,7 @@ export default function ReservationBankHoldPage({ reservationId }) {
             ? `/reservations/${reservationId}/bank-hold`
             : "/reservations"
         }
-        image="/img/reservations/header_reservations.png"
+        image="/img/reservations/header_reservations.webp"
         noIndex={true}
       />
 

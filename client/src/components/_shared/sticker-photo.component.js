@@ -45,7 +45,7 @@ export default function StickerPhotoComponent({
               style={{ transform: `translateX(-50%) rotate(${rotatePatch})` }}
             >
               <Image
-                src="/img/photos/patch.png"
+                src="/img/photos/patch.webp"
                 alt=""
                 fill
                 sizes="86px"
@@ -76,7 +76,7 @@ export default function StickerPhotoComponent({
                 style={{ transform: `translateX(-50%) rotate(${rotatePatch})` }}
               >
                 <Image
-                  src="/img/photos/patch.png"
+                  src="/img/photos/patch.webp"
                   alt=""
                   fill
                   sizes="86px"

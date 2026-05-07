@@ -50,7 +50,7 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
     <section className="relative overflow-visible bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
       <div className="relative mx-auto max-w-[1400px]">
         <StickerPhotoComponent
-          src="/img/photos/3.jpeg"
+          src="/img/photos/3.webp"
           alt="Pizza de la maison"
           className="right-[-12px] top-[-220px] h-[210px] w-[210px] rotate-[8deg]"
           imageSizes="210px"
@@ -58,7 +58,7 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
           revealDelay={80}
         />
         <StickerPhotoComponent
-          src="/img/photos/4.jpeg"
+          src="/img/photos/4.webp"
           alt="Pizza blanche"
           className="bottom-[-214px] left-[28px] h-[220px] w-[220px] rotate-[-6deg]"
           imageSizes="220px"

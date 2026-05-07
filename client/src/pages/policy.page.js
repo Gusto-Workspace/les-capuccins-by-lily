@@ -55,7 +55,7 @@ export default function PolicyPage({ seoRestaurantData = null }) {
         title={title}
         description={description}
         path="/policy"
-        image="/img/hero/header.jpg"
+        image="/img/hero/header.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Politique de confidentialité", path: "/policy" },
@@ -67,13 +67,13 @@ export default function PolicyPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
@@ -81,7 +81,7 @@ export default function PolicyPage({ seoRestaurantData = null }) {
             eyebrow="Données"
             title="Politique de confidentialité"
             description="Cette page résume les données pouvant être traitées via le site, leurs finalités et les droits associés."
-            imgUrl="hero/header.jpg"
+            imgUrl="hero/header.webp"
           />
         </div>
 

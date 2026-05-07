@@ -186,7 +186,7 @@ export default function OtherMenusComponent({ restaurantData }) {
         sizes="240px"
       />
       <StickerPhotoComponent
-        src="/img/photos/3.jpeg"
+        src="/img/photos/3.webp"
         alt="Pizza colorée"
         className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
         imageSizes="208px"

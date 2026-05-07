@@ -18,7 +18,7 @@ export default function InfosContactComponent() {
         <SectionHeadingComponent
           eyebrow="Échanger"
           title="Horaires & demandes"
-          description="Pour une question, une réservation de groupe ou une demande particulière, contactez directement l’équipe."
+          description="Pour une question sur le restaurant, une réservation de groupe ou une demande particulière à Turenne, contactez directement l’équipe."
         />
 
         <div className="mt-14 grid gap-6 desktop:grid-cols-[1.1fr_0.9fr]">

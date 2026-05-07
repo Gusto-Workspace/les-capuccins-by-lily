@@ -7,25 +7,25 @@ import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.compo
 const specialties = [
   {
     title: "Pizzas artisanales",
-    icon: "/img/specialities/pizza.png",
+    icon: "/img/specialities/pizza.webp",
     description:
       "Pâte maison fermentée, garnitures généreuses et cuisson soignée pour préserver texture et gourmandise.",
   },
   {
     title: "Produits frais",
-    icon: "/img/specialities/cheese.png",
+    icon: "/img/specialities/cheese.webp",
     description:
       "Nous sélectionnons chaque jour des ingrédients de qualité auprès de producteurs et partenaires choisis avec soin.",
   },
   {
     title: "Saveurs italiennes",
-    icon: "/img/specialities/olive.png",
+    icon: "/img/specialities/olive.webp",
     description:
       "Des recettes authentiques inspirées des traditions italiennes, pensées pour le plaisir de la table.",
   },
   {
     title: "Fait maison",
-    icon: "/img/specialities/leef.png",
+    icon: "/img/specialities/leef.webp",
     description:
       "Tout est préparé sur place avec exigence, générosité et l’envie de vous offrir le meilleur.",
   },

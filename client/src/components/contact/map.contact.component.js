@@ -26,7 +26,7 @@ export default function MapContactComponent() {
         <SectionHeadingComponent
           eyebrow="Venir"
           title="Nous trouver facilement"
-          description="Adresse, téléphone, email et localisation : toutes les informations utiles pour organiser votre venue."
+          description="Adresse du restaurant, téléphone, email et localisation à Turenne : toutes les informations utiles pour organiser votre venue."
         />
 
         <div className="mt-14 grid gap-6 desktop:grid-cols-[0.86fr_1.14fr]">

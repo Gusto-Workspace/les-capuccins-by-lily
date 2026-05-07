@@ -42,7 +42,7 @@ export default function ReservationHomeSection({ restaurantData }) {
           <div className="mb-6">
             <div className="relative mx-auto h-[192px] w-[192px] tablet:h-[206px] tablet:w-[206px] desktop:mx-0">
               <Image
-                src="/img/reservations/booking.png"
+                src="/img/reservations/booking.webp"
                 alt=""
                 fill
                 sizes="206px"

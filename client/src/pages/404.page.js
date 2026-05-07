@@ -112,7 +112,7 @@ export default function NotFoundPage() {
         title="Page introuvable - Les Capucins by Lily"
         description="La page demandée est introuvable. Revenez à l’accueil, consultez la carte ou réservez votre table chez Les Capucins by Lily."
         path="/404"
-        image="/img/hero/header.jpg"
+        image="/img/hero/header.webp"
         noIndex
       />
 
@@ -120,13 +120,13 @@ export default function NotFoundPage() {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <main>
@@ -136,7 +136,7 @@ export default function NotFoundPage() {
           >
             <div
               className="absolute inset-0 bg-cover bg-center site-ken-burns"
-              style={{ backgroundImage: "url('/img/hero/header.jpg')" }}
+              style={{ backgroundImage: "url('/img/hero/header.webp')" }}
             />
             <div className="absolute inset-0 bg-[rgba(55,26,16,0.64)]" />
 

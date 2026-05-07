@@ -26,7 +26,7 @@ function NewsImage({ item, className = "" }) {
       <div className="flex flex-col items-center px-8">
         <div className="relative h-[96px] w-[96px] tablet:h-[118px] tablet:w-[118px]">
           <Image
-            src="/img/logo.png"
+            src="/img/logo.webp"
             alt="Logo Les Capucins by Lily"
             fill
             sizes="118px"

@@ -64,13 +64,13 @@ export default function ListMenusComponent({ restaurantData }) {
           sizes="230px"
         />
         <StickerPhotoComponent
-          src="/img/photos/hall.jpeg"
+          src="/img/photos/hall.webp"
           alt="Entrée du restaurant"
           className="left-[-112px] top-[206px] h-[250px] w-[178px] rotate-[-7deg]"
           imageSizes="178px"
         />
         <StickerPhotoComponent
-          src="/img/photos/2.jpeg"
+          src="/img/photos/2.webp"
           alt="Plat dressé"
           className="right-[-114px] top-[25%] h-[176px] w-[228px] rotate-[7deg]"
           imageSizes="228px"

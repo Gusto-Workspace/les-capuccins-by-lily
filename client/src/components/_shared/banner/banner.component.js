@@ -5,7 +5,7 @@ export default function BannerComponent({
   title,
   eyebrow = "Découvrez",
   description = "",
-  imgUrl = "hero/header.jpg",
+  imgUrl = "hero/header.webp",
 }) {
   return (
     <section className="relative text-balance isolate flex min-h-[460px] items-center overflow-hidden px-5 pb-24 pt-36 text-[var(--site-cream)] tablet:min-h-[520px] tablet:px-8 tablet:pb-28 tablet:pt-40 desktop:min-h-[620px] desktop:px-[90px] desktop:pt-44">

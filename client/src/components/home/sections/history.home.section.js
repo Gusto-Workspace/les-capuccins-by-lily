@@ -12,7 +12,7 @@ export default function HistoryHomeSection({ restaurantName }) {
       <div className="pointer-events-none absolute -left-48 top-10 hidden desktop:block">
         <div className="relative h-[620px] w-[620px] opacity-20">
           <Image
-            src="/img/history/1.png"
+            src="/img/history/1.webp"
             alt=""
             fill
             sizes="620px"
@@ -22,14 +22,14 @@ export default function HistoryHomeSection({ restaurantName }) {
       </div>
 
       <StickerPhotoComponent
-        src="/img/photos/hall.jpeg"
+        src="/img/photos/hall.webp"
         alt="Vue de la salle"
         className="bottom-[-240px] left-[42px] h-[320px] w-[225px] rotate-[-8deg]"
         imageSizes="190px"
         revealDelay={60}
       />
       <StickerPhotoComponent
-        src="/img/photos/1.jpeg"
+        src="/img/photos/1.webp"
         alt="Salade de la maison"
         className="bottom-[100px] right-[28px] h-[350px] w-[263px] rotate-[8deg]"
         imageSizes="263px"
@@ -49,8 +49,8 @@ export default function HistoryHomeSection({ restaurantName }) {
           variant="soft"
           className="mx-auto text-balance mt-8 max-w-[620px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
-          Bienvenue aux Capucins by Lily, où le fait-maison et la passion
-          guident chaque recette.
+          Les Capucins by Lily est un restaurant italien à Turenne où le
+          fait-maison, la passion et la générosité guident chaque recette.
         </RevealOnScrollComponent>
 
         <RevealOnScrollComponent
@@ -59,9 +59,9 @@ export default function HistoryHomeSection({ restaurantName }) {
           variant="soft"
           className="mx-auto text-balance mt-6 max-w-[680px] text-[17px] leading-[1.95] text-[var(--site-ink-soft)] tablet:text-[18px]"
         >
-          À emporter, nous vous proposons des salades, des desserts et des
-          pizzas aux généreux rebords, garnies de produits frais italiens, pour
-          un plaisir simple et sincère.
+          Sur place ou à emporter, nous proposons des salades, des desserts et
+          des pizzas aux généreux rebords, garnies de produits frais italiens,
+          pour un plaisir simple et sincère au coeur de Turenne.
         </RevealOnScrollComponent>
 
         <RevealOnScrollComponent

@@ -55,7 +55,7 @@ export default function LegalesPage({ seoRestaurantData = null }) {
         title={title}
         description={description}
         path="/legales"
-        image="/img/hero/header.jpg"
+        image="/img/hero/header.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Mentions légales", path: "/legales" },
@@ -67,13 +67,13 @@ export default function LegalesPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
@@ -81,7 +81,7 @@ export default function LegalesPage({ seoRestaurantData = null }) {
             eyebrow="Informations"
             title="Mentions légales"
             description="Les informations d’identification du site, de son hébergement et du cadre général d’utilisation sont regroupées ici."
-            imgUrl="hero/header.jpg"
+            imgUrl="hero/header.webp"
           />
         </div>
 

@@ -34,8 +34,8 @@ export default function ContactPage({ seoRestaurantData = null }) {
   return (
     <>
       <SeoHeadComponent
-        title="Contact - Les Capucins by Lily"
-        description="Contactez Les Capucins by Lily à Turenne pour une réservation, une demande de groupe ou toute information pratique."
+        title="Contact restaurant à Turenne | Les Capucins by Lily"
+        description="Adresse, téléphone, horaires et formulaire de contact du restaurant Les Capucins by Lily à Turenne, place de la Halle."
         path="/contact"
         image="/img/contact/header_contact.webp"
         breadcrumbs={[
@@ -49,20 +49,20 @@ export default function ContactPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
           <BannerComponent
             title="Nous contacter"
             eyebrow="Contact"
-            description="Une question, une demande particulière ou une réservation de groupe ? L’équipe vous répond rapidement."
+            description="Une question, une demande particulière ou une réservation de groupe pour notre restaurant à Turenne ? L’équipe vous répond rapidement."
             imgUrl="contact/header_contact.webp"
           />
         </div>

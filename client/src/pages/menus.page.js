@@ -37,10 +37,10 @@ export default function MenusPage({ seoRestaurantData = null }) {
   return (
     <>
       <SeoHeadComponent
-        title="Carte & Menus - Les Capucins by Lily"
-        description="Découvrez la carte et les menus du restaurant Les Capucins by Lily à Turenne : cuisine italienne, pizzas, suggestions et recettes maison."
+        title="Carte du restaurant à Turenne | Pizzas & cuisine italienne | Les Capucins by Lily"
+        description="Consultez la carte de notre restaurant à Turenne : pizzas artisanales, cuisine italienne, suggestions maison et plats à emporter."
         path="/menus"
-        image="/img/menu-inspired/header_menu.png"
+        image="/img/menu-inspired/header_menu.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Carte & menus", path: "/menus" },
@@ -52,21 +52,21 @@ export default function MenusPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
           <BannerComponent
             title="Carte & Menus"
             eyebrow="La maison"
-            description="Une carte pensée pour le partage, les envies du moment et les classiques italiens qui font revenir."
-            imgUrl="menu-inspired/header_menu.png"
+            description="Une carte de restaurant à Turenne pensée pour le partage, les envies du moment et les classiques italiens qui font revenir."
+            imgUrl="menu-inspired/header_menu.webp"
           />
         </div>
 

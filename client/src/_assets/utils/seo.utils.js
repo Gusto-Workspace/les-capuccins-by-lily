@@ -2,7 +2,8 @@ import { getRestaurantDisplayName, getSocialLinks } from "./site-display.utils";
 
 export const DEFAULT_SITE_NAME = "Les Capucins by Lily";
 export const DEFAULT_SITE_URL = "http://localhost:8003";
-export const DEFAULT_SOCIAL_IMAGE = "/img/hero/header.jpg";
+export const DEFAULT_SOCIAL_IMAGE = "/img/hero/header.webp";
+export const DEFAULT_LOGO_IMAGE = "/img/logo.webp";
 
 const schemaDayByKey = {
   lundi: "Monday",
@@ -90,6 +91,7 @@ function toSchemaPostalAddress(address) {
   const postalCode = normalizeText(address.zipCode);
   const addressLocality = normalizeText(address.city);
   const addressCountry = normalizeText(address.country) || "FR";
+  const addressRegion = normalizeText(address.region || address.state);
 
   if (!streetAddress && !postalCode && !addressLocality) {
     return null;
@@ -100,8 +102,73 @@ function toSchemaPostalAddress(address) {
     streetAddress: streetAddress || undefined,
     postalCode: postalCode || undefined,
     addressLocality: addressLocality || undefined,
+    addressRegion: addressRegion || undefined,
     addressCountry,
   };
+}
+
+function toMapUrl(address, businessName) {
+  const query = [
+    normalizeText(address?.line1),
+    normalizeText(address?.zipCode),
+    normalizeText(address?.city),
+    normalizeText(address?.country),
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  const searchQuery = query || normalizeText(businessName);
+
+  if (!searchQuery) {
+    return "";
+  }
+
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
+}
+
+function toAreaServed(address) {
+  const city = normalizeText(address?.city);
+  const region = normalizeText(address?.region || address?.state);
+  const country = normalizeText(address?.country) || "France";
+
+  return compactObject([
+    city
+      ? {
+          "@type": "City",
+          name: city,
+        }
+      : null,
+    region
+      ? {
+          "@type": "AdministrativeArea",
+          name: region,
+        }
+      : null,
+    country
+      ? {
+          "@type": "Country",
+          name: country,
+        }
+      : null,
+  ]);
+}
+
+function toContactPoint({ phone, email, baseUrl }) {
+  const telephone = normalizeText(phone);
+  const contactEmail = normalizeText(email);
+
+  if (!telephone && !contactEmail) {
+    return null;
+  }
+
+  return compactObject({
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    telephone: telephone || undefined,
+    email: contactEmail || undefined,
+    availableLanguage: ["fr", "en"],
+    url: buildAbsoluteUrl(baseUrl, "/contact"),
+  });
 }
 
 function toOpeningHoursSpecification(openingHours) {
@@ -197,9 +264,33 @@ export function buildSeoSchemas({
   const siteName = getRestaurantDisplayName();
   const socialLinks = getSocialLinks(restaurant).map((item) => item.href);
   const websiteId = `${baseUrl}/#website`;
+  const organizationId = `${baseUrl}/#organization`;
   const restaurantId = `${baseUrl}/#restaurant`;
+  const address = toSchemaPostalAddress(restaurant?.address);
+  const logoUrl = buildAbsoluteUrl(baseUrl, DEFAULT_LOGO_IMAGE);
+  const contactPoint = toContactPoint({
+    phone: restaurant?.phone,
+    email: restaurant?.email,
+    baseUrl,
+  });
+  const hasMap = toMapUrl(restaurant?.address, siteName);
+  const areaServed = toAreaServed(restaurant?.address);
 
   const schemas = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": organizationId,
+      name: siteName,
+      url: baseUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
+      image: logoUrl,
+      sameAs: socialLinks,
+      contactPoint,
+    },
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -207,6 +298,9 @@ export function buildSeoSchemas({
       name: siteName,
       url: baseUrl,
       inLanguage: "fr-FR",
+      publisher: {
+        "@id": organizationId,
+      },
     },
     {
       "@context": "https://schema.org",
@@ -223,6 +317,9 @@ export function buildSeoSchemas({
         "@type": "ImageObject",
         url: imageUrl,
       },
+      about: {
+        "@id": restaurantId,
+      },
     },
     {
       "@context": "https://schema.org",
@@ -231,16 +328,24 @@ export function buildSeoSchemas({
       name: siteName,
       url: baseUrl,
       image: imageUrl,
+      logo: logoUrl,
       servesCuisine: ["Cuisine italienne", "Pizzas", "Restaurant"],
       acceptsReservations: true,
       menu: buildAbsoluteUrl(baseUrl, "/menus"),
       telephone: normalizeText(restaurant?.phone) || undefined,
       email: normalizeText(restaurant?.email) || undefined,
-      address: toSchemaPostalAddress(restaurant?.address),
+      address,
       openingHoursSpecification: toOpeningHoursSpecification(
         restaurant?.opening_hours,
       ),
+      hasMap: hasMap || undefined,
+      areaServed: areaServed.length ? areaServed : undefined,
+      currenciesAccepted: "EUR",
       sameAs: socialLinks,
+      mainEntityOfPage: canonicalUrl,
+      parentOrganization: {
+        "@id": organizationId,
+      },
     },
   ];
 

@@ -34,10 +34,10 @@ export default function HomePage({ seoRestaurantData = null }) {
   return (
     <>
       <SeoHeadComponent
-        title="Les Capucins by Lily | Restaurant italien à Turenne"
-        description="Les Capucins by Lily vous accueille à Turenne dans un cadre chaleureux, avec une cuisine italienne généreuse, une carte soignée et la réservation en ligne."
+        title="Restaurant à Turenne | Cuisine italienne & pizzas | Les Capucins by Lily"
+        description="Restaurant à Turenne, Les Capucins by Lily propose une cuisine italienne maison, des pizzas généreuses, des plats à emporter et la réservation en ligne."
         path="/"
-        image="/img/hero/header.jpg"
+        image="/img/hero/header.webp"
         breadcrumbs={[{ name: "Accueil", path: "/" }]}
         restaurantData={seoRestaurantData}
       />
@@ -46,13 +46,13 @@ export default function HomePage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <HomePageComponent heroRef={heroRef} />

@@ -53,7 +53,7 @@ export default function FooterComponent() {
           <Link href="/" className="flex items-center gap-4 desktop:self-start">
             <div className="relative h-[68px] w-[68px] overflow-hidden rounded-full border border-[rgba(246,231,230,0.4)] bg-white/12">
               <Image
-                src="/img/logo.png"
+                src="/img/logo.webp"
                 alt={brand.full}
                 fill
                 className="object-contain p-2"

@@ -37,10 +37,10 @@ export default function NewsPage({ seoRestaurantData = null }) {
   return (
     <>
       <SeoHeadComponent
-        title="Actualités - Les Capucins by Lily"
-        description="Retrouvez les actualités, nouveautés et temps forts du restaurant Les Capucins by Lily à Turenne."
+        title="Actualités du restaurant à Turenne | Les Capucins by Lily"
+        description="Retrouvez les actualités, nouveautés et temps forts du restaurant Les Capucins by Lily à Turenne, en Corrèze."
         path="/news"
-        image="/img/news/header_news.png"
+        image="/img/news/header_news.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Actualités", path: "/news" },
@@ -52,13 +52,13 @@ export default function NewsPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
@@ -66,7 +66,7 @@ export default function NewsPage({ seoRestaurantData = null }) {
             title="Actualités"
             eyebrow="À suivre"
             description="Événements, nouveautés, rendez-vous et temps forts du restaurant."
-            imgUrl="news/header_news.png"
+            imgUrl="news/header_news.webp"
           />
         </div>
 

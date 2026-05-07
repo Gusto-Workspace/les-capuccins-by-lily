@@ -38,10 +38,10 @@ export default function ReservationsPage({ seoRestaurantData = null }) {
   return (
     <>
       <SeoHeadComponent
-        title="Réserver une table - Les Capucins by Lily"
-        description="Réservez votre table en ligne chez Les Capucins by Lily et choisissez votre date, votre horaire et votre nombre de convives."
+        title="Réservation restaurant à Turenne | Les Capucins by Lily"
+        description="Réservez une table dans notre restaurant à Turenne et choisissez en ligne votre date, votre horaire et votre nombre de convives."
         path="/reservations"
-        image="/img/reservations/header_reservations.png"
+        image="/img/reservations/header_reservations.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Réserver", path: "/reservations" },
@@ -53,21 +53,21 @@ export default function ReservationsPage({ seoRestaurantData = null }) {
         <NavComponent
           isVisible={!showScrolledNav}
           scrolled={false}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <NavComponent
           isVisible={showScrolledNav}
           scrolled={true}
-          logoSrc="/img/logo.png"
+          logoSrc="/img/logo.webp"
         />
 
         <div ref={heroRef}>
           <BannerComponent
             title="Réserver une table"
             eyebrow="À votre table"
-            description="Préparez votre venue et choisissez le créneau qui vous convient en quelques instants."
-            imgUrl="reservations/header_reservations.png"
+            description="Préparez votre venue dans notre restaurant à Turenne et choisissez le créneau qui vous convient en quelques instants."
+            imgUrl="reservations/header_reservations.webp"
           />
         </div>
 

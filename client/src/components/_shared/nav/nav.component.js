@@ -44,7 +44,7 @@ function Brand({ logoSrc, brand }) {
 export default function NavComponent({
   isVisible = true,
   scrolled = false,
-  logoSrc = "/img/logo.png",
+  logoSrc = "/img/logo.webp",
 }) {
   const router = useRouter();
   const { restaurantContext } = useContext(GlobalContext);
