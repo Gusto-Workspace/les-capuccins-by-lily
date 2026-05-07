@@ -87,13 +87,13 @@ export default function PolicyPage({ seoRestaurantData = null }) {
 
         <section className="relative overflow-hidden bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
           <GraphicElementComponent
-            src="/img/elements/3.png"
+            src="/img/elements/3.webp"
             className="left-[-44px] top-[180px] hidden h-[170px] w-[170px] opacity-30 desktop:block"
             sizes="170px"
             disableMotion
           />
           <GraphicElementComponent
-            src="/img/elements/1.png"
+            src="/img/elements/1.webp"
             className="bottom-[120px] right-[-40px] hidden h-[160px] w-[160px] opacity-30 desktop:block"
             sizes="160px"
             disableMotion

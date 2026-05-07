@@ -37,7 +37,7 @@ export default function ContactPage({ seoRestaurantData = null }) {
         title="Contact - Les Capucins by Lily"
         description="Contactez Les Capucins by Lily à Turenne pour une réservation, une demande de groupe ou toute information pratique."
         path="/contact"
-        image="/img/contact/header_contact.png"
+        image="/img/contact/header_contact.webp"
         breadcrumbs={[
           { name: "Accueil", path: "/" },
           { name: "Contact", path: "/contact" },
@@ -63,7 +63,7 @@ export default function ContactPage({ seoRestaurantData = null }) {
             title="Nous contacter"
             eyebrow="Contact"
             description="Une question, une demande particulière ou une réservation de groupe ? L’équipe vous répond rapidement."
-            imgUrl="contact/header_contact.png"
+            imgUrl="contact/header_contact.webp"
           />
         </div>
 

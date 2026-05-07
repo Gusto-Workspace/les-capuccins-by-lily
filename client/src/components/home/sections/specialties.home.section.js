@@ -58,12 +58,12 @@ export default function SpecialtiesHomeSection() {
 
       <div className="relative mx-auto max-w-[1400px]">
         <GraphicElementComponent
-          src="/img/elements/9.png"
+          src="/img/elements/9.webp"
           className="bottom-[-222px] left-[-192px] hidden h-[270px] w-[270px] opacity-34 desktop:block"
           sizes="270px"
         />
         <GraphicElementComponent
-          src="/img/elements/6.png"
+          src="/img/elements/6.webp"
           className="right-[-174px] -top-[154px] hidden h-[280px] w-[280px] opacity-34 desktop:block"
           sizes="280px"
         />

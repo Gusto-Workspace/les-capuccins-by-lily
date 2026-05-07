@@ -176,12 +176,12 @@ export default function OtherMenusComponent({ restaurantData }) {
   return (
     <section className="relative mt-24 overflow-visible">
       <GraphicElementComponent
-        src="/img/elements/1.png"
+        src="/img/elements/1.webp"
         className="left-[-118px] top-[64px] hidden h-[250px] w-[250px] opacity-42 desktop:block"
         sizes="250px"
       />
       <GraphicElementComponent
-        src="/img/elements/8.png"
+        src="/img/elements/8.webp"
         className="right-[-112px] bottom-[44px] hidden h-[240px] w-[240px] opacity-40 desktop:block"
         sizes="240px"
       />

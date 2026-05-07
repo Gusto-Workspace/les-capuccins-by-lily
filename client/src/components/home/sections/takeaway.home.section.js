@@ -13,7 +13,7 @@ export default function TakeawayHomeSection() {
     >
       <div className="relative mx-auto max-w-[1400px]">
         <GraphicElementComponent
-          src="/img/elements/7.png"
+          src="/img/elements/7.webp"
           className="right-[-108px] top-[74px] hidden h-[350px] w-[350px] rotate-[8deg] opacity-42 desktop:block"
           sizes="250px"
           disableMotion

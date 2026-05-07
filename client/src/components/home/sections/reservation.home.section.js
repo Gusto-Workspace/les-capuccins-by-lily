@@ -30,7 +30,7 @@ export default function ReservationHomeSection({ restaurantData }) {
 
       <div className="relative mx-auto grid max-w-[1400px] gap-10 desktop:grid-cols-[0.86fr_1.14fr] desktop:items-center">
         <GraphicElementComponent
-          src="/img/elements/10.png"
+          src="/img/elements/10.webp"
           className="bottom-[-220px] right-[-254px] hidden h-[400px] w-[400px] opacity-20 desktop:block"
           sizes="170px"
           disableMotion

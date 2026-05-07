@@ -257,12 +257,12 @@ export default function NotFoundPage() {
           <section className="site-shell relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
             <div className="relative mx-auto max-w-[1450px]">
               <GraphicElementComponent
-                src="/img/elements/4.png"
+                src="/img/elements/4.webp"
                 className="left-[-78px] top-[26px] hidden h-[240px] w-[160px] opacity-42 desktop:block"
                 sizes="160px"
               />
               <GraphicElementComponent
-                src="/img/elements/2.png"
+                src="/img/elements/2.webp"
                 className="right-[-122px] top-[32%] hidden h-[220px] w-[220px] opacity-38 desktop:block"
                 sizes="220px"
               />

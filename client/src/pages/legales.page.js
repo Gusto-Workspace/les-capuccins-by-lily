@@ -87,13 +87,13 @@ export default function LegalesPage({ seoRestaurantData = null }) {
 
         <section className="relative overflow-hidden bg-[var(--site-cream)] px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
           <GraphicElementComponent
-            src="/img/elements/2.png"
+            src="/img/elements/2.webp"
             className="left-[-42px] top-[140px] hidden h-[170px] w-[170px] opacity-30 desktop:block"
             sizes="170px"
             disableMotion
           />
           <GraphicElementComponent
-            src="/img/elements/4.png"
+            src="/img/elements/4.webp"
             className="bottom-[120px] right-[-38px] hidden h-[160px] w-[160px] opacity-30 desktop:block"
             sizes="160px"
             disableMotion

@@ -54,12 +54,12 @@ export default function ListMenusComponent({ restaurantData }) {
     <section className="site-shell overflow-x-hidden relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
       <div className="relative mx-auto max-w-[1380px]">
         <GraphicElementComponent
-          src="/img/elements/4.png"
+          src="/img/elements/4.webp"
           className="left-[-56px] top-[35%] hidden h-[260px] w-[156px] opacity-52 desktop:block"
           sizes="156px"
         />
         <GraphicElementComponent
-          src="/img/elements/2.png"
+          src="/img/elements/2.webp"
           className="right-[-88px] top-[20px] hidden h-[230px] w-[230px] opacity-44 desktop:block"
           sizes="230px"
         />

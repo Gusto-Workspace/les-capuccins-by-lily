@@ -40,12 +40,12 @@ export default function FooterComponent() {
 
       <div className="mx-auto max-w-[1600px]">
         <GraphicElementComponent
-          src="/img/elements/10.png"
+          src="/img/elements/10.webp"
           className="bottom-[-22px] left-[-22px] hidden h-[150px] w-[150px] opacity-30 desktop:block"
           sizes="190px"
         />
         <GraphicElementComponent
-          src="/img/elements/9.png"
+          src="/img/elements/9.webp"
           className="bottom-[-18px] right-[-22px] hidden h-[146px] w-[146px] opacity-30 desktop:block"
           sizes="180px"
         />
