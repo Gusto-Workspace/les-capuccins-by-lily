@@ -139,27 +139,27 @@ export function getSocialLinks(restaurantData) {
     {
       label: "Facebook",
       href: normalizeExternalHref(socialMedia?.facebook),
-      iconClass: "fa-brands fa-facebook-f",
+      icon: "facebook",
     },
     {
       label: "Instagram",
       href: normalizeExternalHref(socialMedia?.instagram),
-      iconClass: "fa-brands fa-instagram",
+      icon: "instagram",
     },
     {
       label: "TikTok",
       href: normalizeExternalHref(socialMedia?.tiktok),
-      iconClass: "fa-brands fa-tiktok",
+      icon: "tiktok",
     },
     {
       label: "YouTube",
       href: normalizeExternalHref(socialMedia?.youtube),
-      iconClass: "fa-brands fa-youtube",
+      icon: "youtube",
     },
     {
       label: "LinkedIn",
       href: normalizeExternalHref(socialMedia?.linkedIn),
-      iconClass: "fa-brands fa-linkedin-in",
+      icon: "linkedin",
     },
   ].filter((item) => item.href);
 }

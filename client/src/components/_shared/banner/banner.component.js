@@ -1,3 +1,4 @@
+import Image from "next/image";
 import RevealOnScrollComponent from "../motion/reveal-on-scroll.component";
 import WaveDividerComponent from "../wave-divider.component";
 
@@ -9,10 +10,16 @@ export default function BannerComponent({
 }) {
   return (
     <section className="relative text-balance isolate flex min-h-[460px] items-center overflow-hidden px-5 pb-24 pt-36 text-[var(--site-cream)] tablet:min-h-[520px] tablet:px-8 tablet:pb-28 tablet:pt-40 desktop:min-h-[620px] desktop:px-[90px] desktop:pt-44">
-      <div
-        className="absolute inset-[-4%] bg-cover bg-center site-ken-burns"
-        style={{ backgroundImage: `url('/img/${imgUrl}')` }}
-      />
+      <div className="absolute inset-[-4%]">
+        <Image
+          src={`/img/${imgUrl}`}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="site-ken-burns object-cover object-center"
+        />
+      </div>
       <div className="absolute inset-0 bg-[rgba(55,26,16,0.58)]" />
 
       <div className="relative mx-auto flex w-full max-w-[1600px]">

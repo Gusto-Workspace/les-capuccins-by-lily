@@ -165,9 +165,11 @@ export default function BookingBarComponent({
       <div className="grid gap-4 desktop:grid-cols-2">
         <FieldWrapper
           label="Nombre de convives"
+          fieldId="booking-number-of-guests"
           invalid={invalidField === "numberOfGuests"}
         >
           <select
+            id="booking-number-of-guests"
             name="numberOfGuests"
             value={bookingData.numberOfGuests}
             onChange={handleFieldChange}
@@ -187,8 +189,13 @@ export default function BookingBarComponent({
           />
         </FieldWrapper>
 
-        <FieldWrapper label="Date" invalid={invalidField === "reservationDate"}>
+        <FieldWrapper
+          label="Date"
+          fieldId="booking-reservation-date"
+          invalid={invalidField === "reservationDate"}
+        >
           <input
+            id="booking-reservation-date"
             type="date"
             name="reservationDate"
             min={formatReservationDateForApi(new Date())}
@@ -206,10 +213,12 @@ export default function BookingBarComponent({
 
         <FieldWrapper
           label="Horaire"
+          fieldId="booking-reservation-time"
           invalid={invalidField === "reservationTime"}
           className="desktop:col-span-2"
         >
           <select
+            id="booking-reservation-time"
             name="reservationTime"
             value={bookingData.reservationTime}
             onChange={handleFieldChange}
@@ -259,10 +268,19 @@ export default function BookingBarComponent({
   );
 }
 
-function FieldWrapper({ label, invalid = false, className = "", children }) {
+function FieldWrapper({
+  label,
+  fieldId,
+  invalid = false,
+  className = "",
+  children,
+}) {
   return (
     <div className={`relative ${className}`.trim()}>
-      <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]">
+      <label
+        htmlFor={fieldId}
+        className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
+      >
         {label}
       </label>
       <div

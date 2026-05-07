@@ -109,12 +109,17 @@ export default function FormContactCompnent() {
             ) : null}
 
             <div className="grid gap-5 desktop:grid-cols-2">
-              <Field label="Nom complet *" error={errors.fullName?.message}>
+              <Field
+                label="Nom complet *"
+                fieldId="contact-full-name"
+                error={errors.fullName?.message}
+              >
                 <div className="relative">
                   <InputIcon>
                     <User size={17} strokeWidth={1.5} />
                   </InputIcon>
                   <input
+                    id="contact-full-name"
                     type="text"
                     placeholder="Votre nom"
                     className="site-input h-[56px] px-11 text-[15px] tablet:text-[16px]"
@@ -125,12 +130,17 @@ export default function FormContactCompnent() {
                 </div>
               </Field>
 
-              <Field label="Email *" error={errors.email?.message}>
+              <Field
+                label="Email *"
+                fieldId="contact-email"
+                error={errors.email?.message}
+              >
                 <div className="relative">
                   <InputIcon>
                     <Mail size={17} strokeWidth={1.5} />
                   </InputIcon>
                   <input
+                    id="contact-email"
                     type="email"
                     placeholder="Votre email"
                     className="site-input h-[56px] px-11 text-[15px] tablet:text-[16px]"
@@ -147,12 +157,17 @@ export default function FormContactCompnent() {
             </div>
 
             <div className="grid gap-5 desktop:grid-cols-2">
-              <Field label="Téléphone" error={errors.phone?.message}>
+              <Field
+                label="Téléphone"
+                fieldId="contact-phone"
+                error={errors.phone?.message}
+              >
                 <div className="relative">
                   <InputIcon>
                     <Phone size={17} strokeWidth={1.5} />
                   </InputIcon>
                   <input
+                    id="contact-phone"
                     type="text"
                     placeholder="Votre téléphone"
                     className="site-input h-[56px] px-11 text-[15px] tablet:text-[16px]"
@@ -161,8 +176,13 @@ export default function FormContactCompnent() {
                 </div>
               </Field>
 
-              <Field label="Sujet *" error={errors.subject?.message}>
+              <Field
+                label="Sujet *"
+                fieldId="contact-subject"
+                error={errors.subject?.message}
+              >
                 <input
+                  id="contact-subject"
                   type="text"
                   placeholder="Objet de votre message"
                   className="site-input h-[56px] px-4 text-[15px] tablet:text-[16px]"
@@ -173,12 +193,17 @@ export default function FormContactCompnent() {
               </Field>
             </div>
 
-            <Field label="Message *" error={errors.message?.message}>
+            <Field
+              label="Message *"
+              fieldId="contact-message"
+              error={errors.message?.message}
+            >
               <div className="relative">
                 <span className="pointer-events-none absolute left-4 top-5 text-[rgba(184,121,93,0.7)]">
                   <MessageSquare size={17} strokeWidth={1.5} />
                 </span>
                 <textarea
+                  id="contact-message"
                   rows={8}
                   placeholder="Votre message..."
                   className="site-textarea w-full resize-none px-11 py-4 text-[15px] leading-[1.8] tablet:text-[16px]"
@@ -217,10 +242,13 @@ export default function FormContactCompnent() {
   );
 }
 
-function Field({ label, error, children }) {
+function Field({ label, fieldId, error, children }) {
   return (
     <div>
-      <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]">
+      <label
+        htmlFor={fieldId}
+        className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
+      >
         {label}
       </label>
       {children}

@@ -20,8 +20,12 @@ body {
   margin: 0;
   background: var(--site-cream);
   color: var(--site-ink);
-  font-family: "Manrope", sans-serif;
+  font-family: sans-serif;
   text-rendering: optimizeLegibility;
+}
+
+.font-root {
+  font-family: var(--font-manrope), sans-serif;
 }
 
 a {
@@ -30,19 +34,19 @@ a {
 }
 
 .yeseva-one-regular {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant-garamond), serif;
   font-weight: 600;
   font-style: normal;
   letter-spacing: -0.03em;
 }
 
 .script-font {
-  font-family: "Allura", cursive;
+  font-family: var(--font-allura), cursive;
   font-weight: 400;
 }
 
 .nav-font {
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant-garamond), serif;
   font-weight: 700;
   letter-spacing: 0.045em;
 }

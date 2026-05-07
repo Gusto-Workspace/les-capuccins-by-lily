@@ -4,10 +4,31 @@ import "@/styles/custom/_index.scss";
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import axios from "axios";
+import { Allura, Cormorant_Garamond, Manrope } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { appWithTranslation } from "next-i18next";
 import { GlobalProvider } from "@/contexts/global.context";
+
+const allura = Allura({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-allura",
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-cormorant-garamond",
+});
+
+const manrope = Manrope({
+  weight: ["300", "400", "500", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-manrope",
+});
 
 function TrackVisits() {
   const router = useRouter();
@@ -26,9 +47,16 @@ function TrackVisits() {
     // Si pas de session ou session expirée, on logge une nouvelle session
     if (!last || now - last > SESSION_TIMEOUT) {
       localStorage.setItem("lastVisitSession", String(now));
-      axios
-        .post(`${API_URL}/restaurants/${RESTAURANT_ID}/visits`)
-        .catch((e) => console.error("log session :", e));
+
+      const visitUrl = `${API_URL}/restaurants/${RESTAURANT_ID}/visits`;
+      const timeoutId = window.setTimeout(() => {
+        fetch(visitUrl, {
+          method: "POST",
+          keepalive: true,
+        }).catch((e) => console.error("log session :", e));
+      }, 2500);
+
+      return () => window.clearTimeout(timeoutId);
     }
   }, [router.isReady, router.asPath, API_URL, RESTAURANT_ID]);
 
@@ -37,11 +65,15 @@ function TrackVisits() {
 
 function App({ Component, pageProps }) {
   return (
-    <GlobalProvider>
-      <TrackVisits />
-      <Component {...pageProps} />
-      <Analytics />
-    </GlobalProvider>
+    <div
+      className={`${manrope.variable} ${cormorantGaramond.variable} ${allura.variable} font-root`}
+    >
+      <GlobalProvider>
+        <TrackVisits />
+        <Component {...pageProps} />
+        <Analytics />
+      </GlobalProvider>
+    </div>
   );
 }
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.component";
 import WaveDividerComponent from "../../_shared/wave-divider.component";
 import HomeActionLink from "../home-action-link.component";
@@ -12,10 +13,16 @@ export default function HeroHomeSection({
       ref={heroRef}
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden px-5 pb-28 pt-32 text-[var(--site-cream)] tablet:px-8 tablet:pb-32 tablet:pt-36 desktop:px-[90px]"
     >
-      <div
-        className="absolute inset-[-4%] bg-cover bg-center site-ken-burns"
-        style={{ backgroundImage: "url('/img/hero/header.webp')" }}
-      />
+      <div className="absolute inset-[-4%]">
+        <Image
+          src="/img/hero/header.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="site-ken-burns object-cover object-center"
+        />
+      </div>
       <div className="absolute inset-0 bg-[rgba(55,26,16,0.56)]" />
 
       <div className="relative mx-auto flex w-full max-w-[1600px] items-center justify-center">

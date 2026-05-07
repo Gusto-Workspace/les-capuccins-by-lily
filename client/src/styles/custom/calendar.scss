@@ -26,7 +26,7 @@
 }
 .reservation-calendar .react-calendar__navigation__label {
   flex-grow: 1 !important;
-  font-family: "Cormorant Garamond", serif;
+  font-family: var(--font-cormorant-garamond), serif;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: 0.01em;

@@ -695,6 +695,7 @@ export default function FormReservationComponent({
                   <div className="grid gap-5 tablet:grid-cols-2">
                     <Field
                       label="Prénom*"
+                      fieldId="reservation-customer-first-name"
                       name="customerFirstName"
                       value={reservationData.customerFirstName}
                       onChange={handleInputChange}
@@ -703,6 +704,7 @@ export default function FormReservationComponent({
                     />
                     <Field
                       label="Nom*"
+                      fieldId="reservation-customer-last-name"
                       name="customerLastName"
                       value={reservationData.customerLastName}
                       onChange={handleInputChange}
@@ -711,6 +713,7 @@ export default function FormReservationComponent({
                     />
                     <Field
                       label="Email*"
+                      fieldId="reservation-customer-email"
                       name="customerEmail"
                       value={reservationData.customerEmail}
                       onChange={handleInputChange}
@@ -719,6 +722,7 @@ export default function FormReservationComponent({
                     />
                     <Field
                       label="Téléphone*"
+                      fieldId="reservation-customer-phone"
                       name="customerPhone"
                       value={reservationData.customerPhone}
                       onChange={handleInputChange}
@@ -726,10 +730,14 @@ export default function FormReservationComponent({
                       invalid={invalidFields.customerPhone}
                     />
                     <div className="tablet:col-span-2">
-                      <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
+                      <label
+                        htmlFor="reservation-commentary"
+                        className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]"
+                      >
                         Commentaire
                       </label>
                       <textarea
+                        id="reservation-commentary"
                         name="commentary"
                         value={reservationData.commentary}
                         onChange={handleInputChange}
@@ -784,6 +792,7 @@ export default function FormReservationComponent({
 }
 function Field({
   label,
+  fieldId,
   name,
   value,
   onChange,
@@ -793,10 +802,14 @@ function Field({
 }) {
   return (
     <div>
-      <label className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
+      <label
+        htmlFor={fieldId}
+        className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]"
+      >
         {label}
       </label>
       <input
+        id={fieldId}
         type={type}
         name={name}
         value={value}

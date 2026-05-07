@@ -1,6 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useContext } from "react";
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Music2,
+  Youtube,
+} from "lucide-react";
 import { GlobalContext } from "@/contexts/global.context";
 import { hasVisibleNews } from "@/_assets/utils/news.utils";
 import WaveDividerComponent from "../wave-divider.component";
@@ -15,6 +22,13 @@ export default function FooterComponent() {
   const restaurantData = restaurantContext?.restaurantData;
   const brand = getRestaurantBrandParts();
   const socialLinks = getSocialLinks(restaurantData);
+  const iconByPlatform = {
+    facebook: Facebook,
+    instagram: Instagram,
+    tiktok: Music2,
+    youtube: Youtube,
+    linkedin: Linkedin,
+  };
   const footerLinks = [
     { label: "Carte & menus", href: "/menus" },
     { label: "Réserver", href: "/reservations" },
@@ -112,16 +126,22 @@ export default function FooterComponent() {
 
           <div className="flex flex-wrap items-center justify-center gap-5 desktop:justify-end">
             {socialLinks.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target="_blank"
-                rel="noreferrer"
-                aria-label={item.label}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(246,231,230,0.42)] bg-white/12 text-[var(--site-cream)] transition hover:-translate-y-[1px] hover:bg-white/18 hover:text-white"
-              >
-                <i className={item.iconClass} />
-              </a>
+              (() => {
+                const Icon = iconByPlatform[item.icon] || Music2;
+
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={item.label}
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(246,231,230,0.42)] bg-white/12 text-[var(--site-cream)] transition hover:-translate-y-[1px] hover:bg-white/18 hover:text-white"
+                  >
+                    <Icon size={18} strokeWidth={1.8} />
+                  </a>
+                );
+              })()
             ))}
           </div>
         </div>
