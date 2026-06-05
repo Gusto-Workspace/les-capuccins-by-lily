@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import {
@@ -289,10 +296,6 @@ export default function ManageReservationsComponent({
                 <div className="site-card relative overflow-hidden rounded-[34px] p-6 tablet:p-8 desktop:p-10">
                   <div className="absolute right-[-34px] top-[-30px] h-[120px] w-[120px] rounded-full border border-[rgba(223,160,132,0.22)] bg-[rgba(223,160,132,0.08)]" />
 
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange-deep)]">
-                    Réservation #{String(reservation?._id || "").slice(-8).toUpperCase()}
-                  </p>
-
                   <div className="mt-5 flex flex-wrap items-center gap-3">
                     <StatusPill status={reservation?.status} />
                     {reservation?.reservationTime ? (
@@ -339,7 +342,9 @@ export default function ManageReservationsComponent({
                     <SummaryItem
                       icon={CalendarDays}
                       label="Date"
-                      value={formatReservationDateLabel(reservation?.reservationDate)}
+                      value={formatReservationDateLabel(
+                        reservation?.reservationDate,
+                      )}
                     />
                     <SummaryItem
                       icon={Clock3}
@@ -496,8 +501,8 @@ function renderPrimaryContent({
                 Réservation en attente de validation
               </p>
               <p className="mt-2 text-[15px] leading-[1.8] text-[var(--site-ink-soft)]">
-                Tant que cette étape n’est pas finalisée, la réservation ne
-                peut pas être considérée comme confirmée.
+                Tant que cette étape n’est pas finalisée, la réservation ne peut
+                pas être considérée comme confirmée.
               </p>
             </div>
           </div>
@@ -769,13 +774,9 @@ function StatusPill({ status }) {
   );
 }
 
-function ButtonLink({
-  href,
-  children,
-  variant = "primary",
-  className = "",
-}) {
-  const classes = `${variant === "outline" ? "site-button site-button--outline" : "site-button"} ${className}`.trim();
+function ButtonLink({ href, children, variant = "primary", className = "" }) {
+  const classes =
+    `${variant === "outline" ? "site-button site-button--outline" : "site-button"} ${className}`.trim();
   const isExternal = /^(https?:|mailto:|tel:)/.test(String(href || ""));
 
   if (!href) return null;
@@ -839,11 +840,7 @@ function getReservationStatusLabel(status) {
   return labels[String(status || "").trim()] || "Réservation";
 }
 
-function getReservationApiErrorMessage({
-  payload,
-  status,
-  fallbackMessage,
-}) {
+function getReservationApiErrorMessage({ payload, status, fallbackMessage }) {
   const code = String(payload?.code || "").trim();
   const message = String(payload?.message || "").trim();
   const normalizedMessage = message.toLowerCase();
