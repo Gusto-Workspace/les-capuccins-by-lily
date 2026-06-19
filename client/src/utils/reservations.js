@@ -14,6 +14,26 @@ export function getOpeningHours(restaurant) {
     : [];
 }
 
+function getExceptionalOpeningForDate({ reservationDate, parameters }) {
+  const parsedDate = parseReservationDateValue(reservationDate);
+  if (!parsedDate) return null;
+
+  const dateKey = formatReservationDateForApi(parsedDate);
+  const openings = Array.isArray(parameters?.exceptional_openings)
+    ? parameters.exceptional_openings
+    : [];
+
+  const opening = openings.find(
+    (item) => String(item?.date || "").slice(0, 10) === dateKey,
+  );
+
+  if (!opening || !Array.isArray(opening.hours) || opening.hours.length === 0) {
+    return null;
+  }
+
+  return { day: "exceptional", isClosed: false, hours: opening.hours };
+}
+
 export function parseReservationDateValue(value) {
   if (value instanceof Date) {
     if (Number.isNaN(value.getTime())) return null;
@@ -57,6 +77,12 @@ export function getDayHoursForDate({ reservationDate, restaurant }) {
   const openingHours = getOpeningHours(restaurant);
   const selectedDay = parsedDate.getDay();
   const dayIndex = selectedDay === 0 ? 6 : selectedDay - 1;
+  const exceptionalOpening = getExceptionalOpeningForDate({
+    reservationDate: parsedDate,
+    parameters,
+  });
+
+  if (exceptionalOpening) return exceptionalOpening;
 
   return parameters.same_hours_as_restaurant
     ? openingHours[dayIndex]
@@ -197,6 +223,19 @@ export function minutesFromHHmm(timeStr) {
 export function isBlockingReservation(reservation) {
   if (!reservation) return false;
 
+  if (reservation.status === "Waitlist") {
+    const state = String(reservation?.waitlistOffer?.state || "").trim();
+    const expiresAt = reservation?.waitlistOffer?.offerExpiresAt
+      ? new Date(reservation.waitlistOffer.offerExpiresAt).getTime()
+      : null;
+
+    return (
+      state === "offered" &&
+      Number.isFinite(expiresAt) &&
+      expiresAt > Date.now()
+    );
+  }
+
   if (
     !["AwaitingBankHold", "Pending", "Confirmed", "Active", "Late"].includes(
       reservation.status,
@@ -282,16 +321,14 @@ export function getAvailableReservationTimes({
   if (!restaurant?._id || !parsedDate) return [];
 
   const parameters = getReservationParameters(restaurant);
-  const openingHours = getOpeningHours(restaurant);
   const tablesCatalog = Array.isArray(parameters.tables)
     ? parameters.tables
     : [];
   const manage = !!parameters.manage_disponibilities;
-  const selectedDay = parsedDate.getDay();
-  const dayIndex = selectedDay === 0 ? 6 : selectedDay - 1;
-  const dayHours = parameters.same_hours_as_restaurant
-    ? openingHours[dayIndex]
-    : parameters.reservation_hours?.[dayIndex];
+  const dayHours = getDayHoursForDate({
+    reservationDate: parsedDate,
+    restaurant,
+  });
 
   if (
     !dayHours ||
@@ -413,4 +450,83 @@ export function getAvailableReservationTimes({
 
     return conflicts.length < availableEligibleTables.length;
   });
+}
+
+export function isPublicWaitlistEnabled(restaurant) {
+  const waitlist = getReservationParameters(restaurant)?.waitlist || {};
+  return Boolean(waitlist.enabled && waitlist.public_enabled);
+}
+
+export function getReservationTimeOptions({
+  reservationDate,
+  numberOfGuests,
+  restaurant,
+  reservationsList = [],
+}) {
+  const parsedDate = parseReservationDateValue(reservationDate);
+  if (!restaurant?._id || !parsedDate) return [];
+
+  const parameters = getReservationParameters(restaurant);
+  const dayHours = getDayHoursForDate({
+    reservationDate: parsedDate,
+    restaurant,
+  });
+
+  if (
+    !dayHours ||
+    dayHours.isClosed ||
+    !Array.isArray(dayHours.hours) ||
+    dayHours.hours.length === 0
+  ) {
+    return [];
+  }
+
+  const interval = parameters.interval || 30;
+  let candidateTimes = dayHours.hours.flatMap(({ open, close }) =>
+    generateTimeOptions(open, close, interval),
+  );
+
+  if (isToday(parsedDate)) {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    candidateTimes = candidateTimes.filter((time) => {
+      const [hour, minute] = time.split(":").map(Number);
+      return hour * 60 + minute > currentMinutes;
+    });
+  }
+
+  candidateTimes = candidateTimes.filter((time) => {
+    const candidateDurationMs = Math.max(
+      1,
+      getOccupancyMinutes(parameters, time) * 60 * 1000,
+    );
+    const candidateDateTime = buildReservationDateTime(parsedDate, time);
+
+    return !isDateTimeBlocked(
+      parameters,
+      candidateDateTime,
+      candidateDurationMs,
+    );
+  });
+
+  const availableTimes = getAvailableReservationTimes({
+    reservationDate,
+    numberOfGuests,
+    restaurant,
+    reservationsList,
+  });
+  const availableSet = new Set(availableTimes);
+
+  if (
+    !parameters.manage_disponibilities ||
+    !numberOfGuests ||
+    !isPublicWaitlistEnabled(restaurant)
+  ) {
+    return availableTimes.map((time) => ({ time, type: "available" }));
+  }
+
+  return candidateTimes.map((time) => ({
+    time,
+    type: availableSet.has(time) ? "available" : "waitlist",
+  }));
 }

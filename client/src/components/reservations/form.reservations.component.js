@@ -9,6 +9,7 @@ import SectionHeadingComponent from "../_shared/section-heading.component";
 import {
   formatReservationDateForApi,
   getAvailableReservationTimes,
+  getReservationTimeOptions,
   isReservationDateClosed,
   parseReservationDateValue,
 } from "@/utils/reservations";
@@ -31,8 +32,11 @@ export default function FormReservationComponent({
     table: "",
   });
   const [availableTimes, setAvailableTimes] = useState([]);
-  const [resolvedAvailabilitySelectionKey, setResolvedAvailabilitySelectionKey] =
-    useState("");
+  const [timeOptions, setTimeOptions] = useState([]);
+  const [
+    resolvedAvailabilitySelectionKey,
+    setResolvedAvailabilitySelectionKey,
+  ] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -185,6 +189,7 @@ export default function FormReservationComponent({
   useEffect(() => {
     if (!restaurant?._id || !reservationData.reservationDate || dataLoading) {
       setAvailableTimes([]);
+      setTimeOptions([]);
       setResolvedAvailabilitySelectionKey("");
       setIsLoading(Boolean(dataLoading));
       return;
@@ -200,8 +205,15 @@ export default function FormReservationComponent({
     });
 
     setIsLoading(true);
-    setAvailableTimes(
-      getAvailableReservationTimes({
+    const nextAvailableTimes = getAvailableReservationTimes({
+      reservationDate: reservationData.reservationDate,
+      numberOfGuests: reservationData.numberOfGuests,
+      restaurant,
+      reservationsList,
+    });
+    setAvailableTimes(nextAvailableTimes);
+    setTimeOptions(
+      getReservationTimeOptions({
         reservationDate: reservationData.reservationDate,
         numberOfGuests: reservationData.numberOfGuests,
         restaurant,
@@ -238,7 +250,7 @@ export default function FormReservationComponent({
       setPendingPrefilledTime("");
       return;
     }
-    if (availableTimes.includes(pendingPrefilledTime)) {
+    if (timeOptions.some((option) => option.time === pendingPrefilledTime)) {
       setInvalidFields((prev) => {
         if (!prev.reservationTime) return prev;
 
@@ -263,7 +275,7 @@ export default function FormReservationComponent({
     );
     setPendingPrefilledTime("");
   }, [
-    availableTimes,
+    timeOptions,
     dataLoading,
     isLoading,
     pendingPrefilledTime,
@@ -356,9 +368,8 @@ export default function FormReservationComponent({
     e.preventDefault();
     setError(null);
     setSuccessMessage("");
-    const nextInvalidFields = getMissingRequiredReservationFields(
-      reservationData,
-    );
+    const nextInvalidFields =
+      getMissingRequiredReservationFields(reservationData);
 
     if (Object.keys(nextInvalidFields).length > 0) {
       setInvalidFields((prev) => ({
@@ -367,12 +378,17 @@ export default function FormReservationComponent({
       }));
       return;
     }
-    if (!availableTimes.includes(reservationData.reservationTime)) {
+    const selectedTimeOption = timeOptions.find(
+      (option) => option.time === reservationData.reservationTime,
+    );
+    const isWaitlistRequest = selectedTimeOption?.type === "waitlist";
+
+    if (!selectedTimeOption) {
       setInvalidFields((prev) => ({
         ...prev,
         reservationTime: true,
       }));
-      setError("Veuillez sélectionner un horaire disponible.");
+      setError("Veuillez sélectionner un horaire proposé.");
       return;
     }
 
@@ -402,14 +418,14 @@ export default function FormReservationComponent({
       idempotencyKey,
     };
     try {
-      const res = await fetch(
-        `${apiBaseUrl}/restaurants/${restaurant._id}/reservations`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        },
-      );
+      const endpoint = isWaitlistRequest
+        ? `${apiBaseUrl}/restaurants/${restaurant._id}/reservations/waitlist`
+        : `${apiBaseUrl}/restaurants/${restaurant._id}/reservations`;
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         throw new Error(j.message || "Erreur lors de la réservation");
@@ -446,7 +462,9 @@ export default function FormReservationComponent({
       }));
       setInvalidFields({});
       setSuccessMessage(
-        "Votre réservation a bien été effectuée. Nous avons bien reçu votre demande.",
+        isWaitlistRequest
+          ? "Votre demande a été ajoutée à la liste d’attente. Vous recevrez un email si une place se libère."
+          : "Votre réservation a bien été effectuée. Nous avons bien reçu votre demande.",
       );
       if (router.query.reservationDate || router.query.reservationTime) {
         await router.replace("/reservations", undefined, { shallow: true });
@@ -477,6 +495,10 @@ export default function FormReservationComponent({
     reservationData.numberOfGuests,
     reservationData.reservationTime,
   ]);
+  const selectedTimeOption = timeOptions.find(
+    (option) => option.time === reservationData.reservationTime,
+  );
+  const isWaitlistSelection = selectedTimeOption?.type === "waitlist";
   return (
     <>
       {showPendingBankHoldModal && pendingBankHoldReservation && (
@@ -633,11 +655,13 @@ export default function FormReservationComponent({
                         </div>
                       )}
                     </div>
-                    {!isLoading && availableTimes.length > 0 ? (
+                    {!isLoading && timeOptions.length > 0 ? (
                       <div className="grid grid-cols-2 gap-3 tablet:grid-cols-3 desktop:grid-cols-4">
-                        {availableTimes.map((time) => {
+                        {timeOptions.map((option) => {
+                          const time = option.time;
                           const isActive =
                             reservationData.reservationTime === time;
+                          const isWaitlist = option.type === "waitlist";
                           return (
                             <button
                               key={time}
@@ -658,13 +682,25 @@ export default function FormReservationComponent({
                                 }));
                               }}
                               disabled={!reservationData.numberOfGuests}
+                              aria-label={
+                                isWaitlist
+                                  ? `${formatTimeDisplay(time)} complet, liste d’attente`
+                                  : formatTimeDisplay(time)
+                              }
                               className={`min-w-0 rounded-[14px] border px-3 py-3 text-[14px] transition tablet:px-4 tablet:text-[15px] ${
                                 isActive
                                   ? "border-[var(--site-orange)] bg-[var(--site-orange)] text-white"
-                                  : "border-[var(--site-line)] bg-white/90 text-[var(--site-ink)] hover:border-[var(--site-orange)] hover:text-[var(--site-orange-deep)]"
+                                  : isWaitlist
+                                    ? "border-dashed border-[var(--site-orange)]/70 bg-white/70 text-[var(--site-orange-deep)]"
+                                    : "border-[var(--site-line)] bg-white/90 text-[var(--site-ink)] hover:border-[var(--site-orange)] hover:text-[var(--site-orange-deep)]"
                               }`}
                             >
                               {formatTimeDisplay(time)}
+                              {isWaitlist ? (
+                                <span className="mt-1 block text-[10px] uppercase tracking-[0.12em]">
+                                  Complet
+                                </span>
+                              ) : null}
                             </button>
                           );
                         })}
@@ -676,6 +712,13 @@ export default function FormReservationComponent({
                         </p>
                       )
                     )}
+                    {isWaitlistSelection ? (
+                      <p className="mt-4 text-[14px] leading-[1.7] text-[var(--site-ink-soft)] tablet:text-[15px]">
+                        Ce créneau est complet. Vous pouvez vous inscrire en
+                        liste d’attente et nous vous préviendrons si une place
+                        se libère.
+                      </p>
+                    ) : null}
                   </RevealOnScrollComponent>
                 </div>
 
@@ -761,17 +804,17 @@ export default function FormReservationComponent({
                     <button
                       type="submit"
                       disabled={
-                        !isReservationFormComplete ||
-                        isLoading ||
-                        isSubmitting
+                        !isReservationFormComplete || isLoading || isSubmitting
                       }
                       className="site-button w-full disabled:cursor-not-allowed disabled:opacity-50 tablet:w-auto tablet:min-w-[220px] tablet:text-[13px] tablet:tracking-[0.28em]"
                     >
                       {isSubmitting ? (
                         <span className="flex items-center gap-2">
                           <Loader2 size={18} className="animate-spin" />
-                          Envoi...
+                          {isWaitlistSelection ? "Inscription..." : "Envoi..."}
                         </span>
+                      ) : isWaitlistSelection ? (
+                        "Liste d’attente"
                       ) : (
                         "Confirmer"
                       )}
