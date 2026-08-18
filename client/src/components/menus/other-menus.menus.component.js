@@ -41,29 +41,35 @@ function RestaurantMenuBlock({ block }) {
       {hasLines ? (
         <div className="mt-5 space-y-2.5">
           {lines.map((line, index) => {
-          if (isMenuBlankLine(line)) {
-            return <div key={`${block.id}-blank-${index}`} className="h-2" aria-hidden="true" />;
-          }
+            if (isMenuBlankLine(line)) {
+              return (
+                <div
+                  key={`${block.id}-blank-${index}`}
+                  className="h-2"
+                  aria-hidden="true"
+                />
+              );
+            }
 
-          if (isMenuSeparatorLabel(line)) {
+            if (isMenuSeparatorLabel(line)) {
+              return (
+                <p
+                  key={`${block.id}-separator-${index}`}
+                  className="text-center text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
+                >
+                  {line}
+                </p>
+              );
+            }
+
             return (
               <p
-                key={`${block.id}-separator-${index}`}
-                className="text-center text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)]"
+                key={`${block.id}-${index}`}
+                className="text-center text-[15px] leading-[1.65] text-[rgba(71,42,34,0.74)] tablet:text-[16px]"
               >
                 {line}
               </p>
             );
-          }
-
-          return (
-            <p
-              key={`${block.id}-${index}`}
-              className="text-center text-[15px] leading-[1.65] text-[rgba(71,42,34,0.74)] tablet:text-[16px]"
-            >
-              {line}
-            </p>
-          );
           })}
         </div>
       ) : null}
@@ -152,6 +158,19 @@ function CategoryMenuCard({ category }) {
       <div className="mt-7 grid gap-4 justify-items-center">
         {category.items.map((item) => (
           <CategoryMenuItem key={item.id} item={item} />
+        ))}
+
+        {category.subCategories.map((subCategory) => (
+          <section key={subCategory.id} className="mt-5 w-full text-center">
+            <h4 className="mb-4 text-[14px] font-semibold uppercase tracking-[0.16em] text-[var(--site-orange-deep)]">
+              {subCategory.title}
+            </h4>
+            <div className="grid gap-4 justify-items-center">
+              {subCategory.items.map((item) => (
+                <CategoryMenuItem key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
         ))}
       </div>
     </article>

@@ -176,6 +176,95 @@ export function isDateTimeBlocked(parameters, candidateDateTime, occupancyMs) {
   );
 }
 
+function getReservationDayIndex(reservationDate) {
+  const parsedDate = parseReservationDateValue(reservationDate);
+  if (!parsedDate) return null;
+  const jsDay = parsedDate.getDay();
+  return jsDay === 0 ? 6 : jsDay - 1;
+}
+
+function hasSlotCoverLimitDay(limit) {
+  return (
+    Number.isInteger(limit?.day) &&
+    Number(limit.day) >= 0 &&
+    Number(limit.day) <= 6
+  );
+}
+
+function getActiveSlotCoverLimit(parameters, reservationTime, reservationDate) {
+  const time = String(reservationTime || "").slice(0, 5);
+  const limits = Array.isArray(parameters?.slot_cover_limits)
+    ? parameters.slot_cover_limits
+    : [];
+  const dayIndex = getReservationDayIndex(reservationDate);
+  const matchingTimeLimits = limits.filter(
+    (entry) =>
+      String(entry?.time || "").slice(0, 5) === time,
+  );
+  const exactDayLimit =
+    Number.isInteger(dayIndex) &&
+    matchingTimeLimits.find(
+      (entry) => hasSlotCoverLimitDay(entry) && Number(entry.day) === dayIndex,
+    );
+  const fallbackLimit = matchingTimeLimits.find(
+    (entry) => !hasSlotCoverLimitDay(entry),
+  );
+  const limit = exactDayLimit || fallbackLimit;
+
+  if (exactDayLimit && exactDayLimit.active === false) return null;
+
+  const maxCovers = Math.floor(Number(limit?.maxCovers || 0));
+
+  if (
+    !limit ||
+    limit.active === false ||
+    !/^\d{2}:\d{2}$/.test(time) ||
+    maxCovers <= 0
+  ) {
+    return null;
+  }
+  return { time, maxCovers };
+}
+
+function hasActiveSlotCoverLimits(parameters) {
+  return Array.isArray(parameters?.slot_cover_limits)
+    ? parameters.slot_cover_limits.some(
+        (limit) =>
+          limit?.active !== false &&
+          /^\d{2}:\d{2}$/.test(String(limit?.time || "").slice(0, 5)) &&
+          Number(limit?.maxCovers || 0) > 0,
+      )
+    : false;
+}
+
+function isSlotCoverCapacityAvailable({
+  parameters,
+  slotCoverUsage = [],
+  reservationDate,
+  reservationTime,
+  numberOfGuests,
+}) {
+  const limit = getActiveSlotCoverLimit(
+    parameters,
+    reservationTime,
+    reservationDate,
+  );
+  if (!limit) return true;
+
+  const dateKey = formatReservationDateForApi(reservationDate);
+  const usage = Array.isArray(slotCoverUsage)
+    ? slotCoverUsage.find(
+        (item) =>
+          String(item?.date || "").slice(0, 10) === dateKey &&
+          String(item?.time || "").slice(0, 5) === limit.time,
+      )
+    : null;
+  const usedCovers = Math.max(0, Number(usage?.covers || 0));
+  const requestedCovers = Math.max(0, Number(numberOfGuests || 0));
+
+  return usedCovers + requestedCovers <= limit.maxCovers;
+}
+
 function getBlockedTableIdsForDateTime(
   parameters,
   candidateDateTime,
@@ -316,6 +405,7 @@ export function getAvailableReservationTimes({
   numberOfGuests,
   restaurant,
   reservationsList = [],
+  slotCoverUsage = [],
 }) {
   const parsedDate = parseReservationDateValue(reservationDate);
   if (!restaurant?._id || !parsedDate) return [];
@@ -366,6 +456,16 @@ export function getAvailableReservationTimes({
       candidateDurationMs,
     );
   });
+
+  times = times.filter((time) =>
+    isSlotCoverCapacityAvailable({
+      parameters,
+      slotCoverUsage,
+      reservationDate: parsedDate,
+      reservationTime: time,
+      numberOfGuests,
+    }),
+  );
 
   if (!manage || !numberOfGuests) {
     return times;
@@ -462,6 +562,7 @@ export function getReservationTimeOptions({
   numberOfGuests,
   restaurant,
   reservationsList = [],
+  slotCoverUsage = [],
 }) {
   const parsedDate = parseReservationDateValue(reservationDate);
   if (!restaurant?._id || !parsedDate) return [];
@@ -514,11 +615,13 @@ export function getReservationTimeOptions({
     numberOfGuests,
     restaurant,
     reservationsList,
+    slotCoverUsage,
   });
   const availableSet = new Set(availableTimes);
 
   if (
-    !parameters.manage_disponibilities ||
+    (!parameters.manage_disponibilities &&
+      !hasActiveSlotCoverLimits(parameters)) ||
     !numberOfGuests ||
     !isPublicWaitlistEnabled(restaurant)
   ) {

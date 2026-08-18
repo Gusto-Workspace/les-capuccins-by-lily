@@ -116,6 +116,24 @@ export default function ListMenusComponent({ restaurantData }) {
                           description={item.description}
                         />
                       ))}
+
+                      {category.subCategories.map((subCategory) => (
+                        <div key={subCategory.id} className="pt-5">
+                          <h3 className="script-font mb-5 text-[34px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[40px]">
+                            {subCategory.title}
+                          </h3>
+                          <div className="space-y-5 tablet:space-y-6">
+                            {subCategory.items.map((item) => (
+                              <MenuEntry
+                                key={item.id}
+                                name={item.name}
+                                price={item.price}
+                                description={item.description}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </RevealOnScrollComponent>
                 ))}

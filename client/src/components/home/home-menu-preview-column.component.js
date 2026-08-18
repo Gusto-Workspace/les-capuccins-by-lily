@@ -21,29 +21,38 @@ export default function HomeMenuPreviewColumn({
       </div>
 
       <div className="space-y-5">
-        {items.map((item) => (
-          <div key={item.id}>
-            <div className="flex flex-col items-center gap-2 desktop:flex-row desktop:items-start desktop:gap-4">
-              <p className="min-w-0 text-[16px] font-semibold text-[var(--site-ink)]">
-                {item.name}
-              </p>
-              {item.price ? (
-                <>
-                  <div className="mt-[13px] hidden min-w-0 flex-1 border-b border-dotted border-[rgba(223,160,132,0.72)] desktop:block" />
-                  <span className="shrink-0 text-[15px] font-semibold text-[var(--site-orange-deep)]">
-                    {item.price}
-                  </span>
-                </>
+        {items.map((item) =>
+          item.isSubCategoryHeading ? (
+            <h4
+              key={item.id}
+              className="pt-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-[var(--site-orange-deep)]"
+            >
+              {item.name}
+            </h4>
+          ) : (
+            <div key={item.id}>
+              <div className="flex flex-col items-center gap-2 desktop:flex-row desktop:items-start desktop:gap-4">
+                <p className="min-w-0 text-[16px] font-semibold text-[var(--site-ink)]">
+                  {item.name}
+                </p>
+                {item.price ? (
+                  <>
+                    <div className="mt-[13px] hidden min-w-0 flex-1 border-b border-dotted border-[rgba(223,160,132,0.72)] desktop:block" />
+                    <span className="shrink-0 text-[15px] font-semibold text-[var(--site-orange-deep)]">
+                      {item.price}
+                    </span>
+                  </>
+                ) : null}
+              </div>
+
+              {item.description ? (
+                <p className="mx-auto mt-2 max-w-[320px] text-[13px] leading-[1.7] text-[var(--site-ink-soft)] desktop:mx-0">
+                  {item.description}
+                </p>
               ) : null}
             </div>
-
-            {item.description ? (
-              <p className="mx-auto mt-2 max-w-[320px] text-[13px] leading-[1.7] text-[var(--site-ink-soft)] desktop:mx-0">
-                {item.description}
-              </p>
-            ) : null}
-          </div>
-        ))}
+          ),
+        )}
       </div>
     </div>
   );
