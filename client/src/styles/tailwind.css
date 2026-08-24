@@ -144,6 +144,10 @@
     background-color: inherit;
     content: "";
   }
+  .gusto-print-mode [data-print-menu-section] {
+    break-before: page;
+    page-break-before: always;
+  }
   [data-print-category-title],
   [data-print-subcategory-title] {
     break-after: avoid;

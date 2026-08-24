@@ -208,7 +208,10 @@ export default function OtherMenusComponent({
   }
 
   return (
-    <section className="relative mt-24 overflow-visible">
+    <section
+      className="relative mt-24 overflow-visible"
+      data-print-menu-section={printMode ? "true" : undefined}
+    >
       {!printMode ? (
         <>
           <GraphicElementComponent
