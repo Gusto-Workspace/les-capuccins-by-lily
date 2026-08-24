@@ -31,6 +31,11 @@ import NavComponent from "@/components/_shared/nav/nav.component";
 import SectionHeadingComponent from "@/components/_shared/section-heading.component";
 import EditReservationAvailability from "@/components/reservations/edit-availability.reservations.component";
 import { parseReservationDateValue } from "@/utils/reservations";
+import {
+  buildReservationCommentary,
+  getReservationCommentaryText,
+  getReservationSeatingPreference,
+} from "@/utils/reservation-commentary";
 
 export default function ManageReservationsComponent({
   reservationId,
@@ -54,7 +59,13 @@ export default function ManageReservationsComponent({
   const [isUpdating, setIsUpdating] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({ reservationDate: "", reservationTime: "", numberOfGuests: "" });
+  const [editData, setEditData] = useState({
+    reservationDate: "",
+    reservationTime: "",
+    numberOfGuests: "",
+    seatingPreference: "interior",
+    commentary: "",
+  });
 
   const contactInfos = useMemo(
     () => buildContactInfos(restaurant),
@@ -118,7 +129,10 @@ export default function ManageReservationsComponent({
       setLoadError("");
 
       const response = await fetch(
-        buildManageApiUrl(`${apiBaseUrl}/reservations/${reservationId}`, manageToken),
+        buildManageApiUrl(
+          `${apiBaseUrl}/reservations/${reservationId}`,
+          manageToken,
+        ),
       );
       const data = await response.json().catch(() => ({}));
 
@@ -161,7 +175,10 @@ export default function ManageReservationsComponent({
       setSuccessMessage("");
 
       const response = await fetch(
-        buildManageApiUrl(`${apiBaseUrl}/reservations/${reservation._id}/cancel`, manageToken),
+        buildManageApiUrl(
+          `${apiBaseUrl}/reservations/${reservation._id}/cancel`,
+          manageToken,
+        ),
         {
           method: "POST",
           headers: {
@@ -199,6 +216,10 @@ export default function ManageReservationsComponent({
       reservationDate: getReservationEditDate(reservation?.reservationDate),
       reservationTime: String(reservation?.reservationTime || "").slice(0, 5),
       numberOfGuests: String(reservation?.numberOfGuests || ""),
+      seatingPreference: getReservationSeatingPreference(
+        reservation?.commentary,
+      ),
+      commentary: getReservationCommentaryText(reservation?.commentary),
     });
     setShowCancelConfirm(false);
     setError("");
@@ -209,7 +230,11 @@ export default function ManageReservationsComponent({
   async function handleUpdateReservation(event) {
     event.preventDefault();
     if (!reservation?._id || !apiBaseUrl) return;
-    if (!editData.reservationDate || !editData.reservationTime || !editData.numberOfGuests) {
+    if (
+      !editData.reservationDate ||
+      !editData.reservationTime ||
+      !editData.numberOfGuests
+    ) {
       setError("Choisissez une date, un horaire et un nombre de convives.");
       return;
     }
@@ -218,26 +243,46 @@ export default function ManageReservationsComponent({
       setIsUpdating(true);
       setError("");
       setSuccessMessage("");
-      const response = await fetch(buildManageApiUrl(`${apiBaseUrl}/reservations/${reservation._id}`, manageToken), {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editData),
-      });
+      const response = await fetch(
+        buildManageApiUrl(
+          `${apiBaseUrl}/reservations/${reservation._id}`,
+          manageToken,
+        ),
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            reservationDate: editData.reservationDate,
+            reservationTime: editData.reservationTime,
+            numberOfGuests: editData.numberOfGuests,
+            commentary: buildReservationCommentary(
+              editData.seatingPreference,
+              editData.commentary,
+            ),
+          }),
+        },
+      );
       const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(getReservationApiErrorMessage({
-          payload: data,
-          status: response.status,
-          fallbackMessage: "Impossible de modifier la réservation.",
-        }));
+        throw new Error(
+          getReservationApiErrorMessage({
+            payload: data,
+            status: response.status,
+            fallbackMessage: "Impossible de modifier la réservation.",
+          }),
+        );
       }
       setReservation(data.reservation || reservation);
       setManagement(data.management || null);
       setIsEditing(false);
       setShowCancelConfirm(false);
-      setSuccessMessage(data.message || "Votre réservation a bien été modifiée.");
+      setSuccessMessage(
+        data.message || "Votre réservation a bien été modifiée.",
+      );
     } catch (updateError) {
-      setError(updateError?.message || "Impossible de modifier la réservation.");
+      setError(
+        updateError?.message || "Impossible de modifier la réservation.",
+      );
     } finally {
       setIsUpdating(false);
     }
@@ -662,8 +707,13 @@ function renderPrimaryContent({
       {canModify || canCancel ? (
         <>
           {canModify && isEditing ? (
-            <form onSubmit={handleUpdateReservation} className="mt-8 rounded-[26px] border border-[var(--site-line)] bg-[rgba(255,255,255,0.6)] p-5">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange-deep)]">Modifier la réservation</p>
+            <form
+              onSubmit={handleUpdateReservation}
+              className="mt-8 rounded-[26px] border border-[var(--site-line)] bg-[rgba(255,255,255,0.6)] p-5"
+            >
+              <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange-deep)]">
+                Modifier la réservation
+              </p>
               <EditReservationAvailability
                 apiBaseUrl={apiBaseUrl}
                 manageToken={manageToken}
@@ -673,8 +723,23 @@ function renderPrimaryContent({
                 setEditData={setEditData}
               />
               <div className="mt-6 flex flex-col gap-3 tablet:flex-row">
-                <button type="submit" disabled={isUpdating} className="site-button border border-[var(--site-orange)] disabled:cursor-not-allowed disabled:opacity-60">{isUpdating ? "Enregistrement..." : "Enregistrer les modifications"}</button>
-                <button type="button" onClick={() => setIsEditing(false)} disabled={isUpdating} className="site-button site-button--outline">Annuler</button>
+                <button
+                  type="submit"
+                  disabled={isUpdating}
+                  className="site-button border border-[var(--site-orange)] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {isUpdating
+                    ? "Enregistrement..."
+                    : "Enregistrer les modifications"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  disabled={isUpdating}
+                  className="site-button site-button--outline"
+                >
+                  Annuler
+                </button>
               </div>
             </form>
           ) : null}
@@ -688,8 +753,24 @@ function renderPrimaryContent({
           ) : null}
 
           <div className="mt-8 flex flex-col gap-4 tablet:flex-row">
-            {canModify && !isEditing ? <button type="button" onClick={startEditingReservation} className="site-button tablet:min-w-[240px]">Modifier la réservation</button> : null}
-            {canCancel && !isEditing ? <button type="button" onClick={() => setShowCancelConfirm((prev) => !prev)} className="site-button site-button--outline tablet:min-w-[240px]">Annuler la réservation</button> : null}
+            {canModify && !isEditing ? (
+              <button
+                type="button"
+                onClick={startEditingReservation}
+                className="site-button tablet:min-w-[240px]"
+              >
+                Modifier la réservation
+              </button>
+            ) : null}
+            {canCancel && !isEditing ? (
+              <button
+                type="button"
+                onClick={() => setShowCancelConfirm((prev) => !prev)}
+                className="site-button site-button--outline tablet:min-w-[240px]"
+              >
+                Annuler la réservation
+              </button>
+            ) : null}
           </div>
         </>
       ) : (

@@ -13,6 +13,7 @@ import {
   isReservationDateClosed,
   parseReservationDateValue,
 } from "@/utils/reservations";
+import { buildReservationCommentary } from "@/utils/reservation-commentary";
 export default function FormReservationComponent({
   apiBaseUrl,
   restaurant,
@@ -28,6 +29,7 @@ export default function FormReservationComponent({
     customerLastName: "",
     customerEmail: "",
     customerPhone: "",
+    seatingPreference: "interior",
     commentary: "",
     table: "",
   });
@@ -422,7 +424,10 @@ export default function FormReservationComponent({
       customerLastName: reservationData.customerLastName.trim(),
       customerEmail: reservationData.customerEmail.trim(),
       customerPhone: reservationData.customerPhone.trim(),
-      commentary: reservationData.commentary,
+      commentary: buildReservationCommentary(
+        reservationData.seatingPreference,
+        reservationData.commentary,
+      ),
       table: tablePayload || undefined,
       returnUrl: `${window.location.origin}/reservations`,
       idempotencyKey,
@@ -467,6 +472,7 @@ export default function FormReservationComponent({
         customerLastName: "",
         customerEmail: "",
         customerPhone: "",
+        seatingPreference: "interior",
         commentary: "",
         table: manage ? "auto" : "",
       }));
@@ -785,6 +791,31 @@ export default function FormReservationComponent({
                       invalid={invalidFields.customerPhone}
                     />
                     <div className="tablet:col-span-2">
+                      <p className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
+                        Emplacement souhaité
+                      </p>
+                      <div className="grid gap-3 tablet:grid-cols-2">
+                        <SeatingOption
+                          name="seatingPreference"
+                          value="interior"
+                          label="Intérieur"
+                          checked={
+                            reservationData.seatingPreference === "interior"
+                          }
+                          onChange={handleInputChange}
+                        />
+                        <SeatingOption
+                          name="seatingPreference"
+                          value="exterior"
+                          label="Extérieur"
+                          checked={
+                            reservationData.seatingPreference === "exterior"
+                          }
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="tablet:col-span-2">
                       <label
                         htmlFor="reservation-commentary"
                         className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]"
@@ -874,6 +905,28 @@ function Field({
         className={`site-input h-[52px] px-4 text-[15px] text-[var(--site-ink)] tablet:h-[56px] tablet:px-5 tablet:text-[16px] ${invalid ? "border-[#c55050] bg-[#fff4f1] focus:border-[#c55050]" : ""}`}
       />
     </div>
+  );
+}
+
+function SeatingOption({ name, value, label, checked, onChange }) {
+  return (
+    <label
+      className={`flex cursor-pointer items-center gap-3 rounded-[16px] border px-4 py-4 text-[15px] text-[var(--site-ink)] transition tablet:px-5 tablet:text-[16px] ${
+        checked
+          ? "border-[var(--site-orange)] bg-[rgba(246,229,218,0.72)]"
+          : "border-[var(--site-line)] bg-white/80 hover:border-[var(--site-orange)]"
+      }`}
+    >
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        onChange={onChange}
+        className="h-4 w-4 accent-[var(--site-orange)]"
+      />
+      <span>{label}</span>
+    </label>
   );
 }
 

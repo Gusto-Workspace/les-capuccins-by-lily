@@ -8,6 +8,7 @@ import {
   isReservationDateClosed,
   parseReservationDateValue,
 } from "@/utils/reservations";
+import { RESERVATION_SEATING_OPTIONS } from "@/utils/reservation-commentary";
 
 const peopleOptions = Array.from({ length: 12 }, (_, index) =>
   String(index + 1),
@@ -30,7 +31,12 @@ export default function EditReservationAvailability({
     let isCurrent = true;
 
     async function loadAvailability() {
-      if (!apiBaseUrl || !manageToken || !restaurant?._id || !reservation?._id) {
+      if (
+        !apiBaseUrl ||
+        !manageToken ||
+        !restaurant?._id ||
+        !reservation?._id
+      ) {
         if (isCurrent) {
           setReservationsList([]);
           setSlotCoverUsage([]);
@@ -162,6 +168,61 @@ export default function EditReservationAvailability({
         </select>
       </div>
 
+      <div>
+        <p className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]">
+          Emplacement souhaité
+        </p>
+        <div className="grid gap-3 tablet:grid-cols-2">
+          {RESERVATION_SEATING_OPTIONS.map((option) => (
+            <label
+              key={option.value}
+              className={`flex cursor-pointer items-center gap-3 rounded-[16px] border px-4 py-4 text-[15px] text-[var(--site-ink)] transition tablet:px-5 tablet:text-[16px] ${
+                editData.seatingPreference === option.value
+                  ? "border-[var(--site-orange)] bg-[rgba(246,229,218,0.72)]"
+                  : "border-[var(--site-line)] bg-white/80 hover:border-[var(--site-orange)]"
+              }`}
+            >
+              <input
+                type="radio"
+                name="reservation-edit-seating"
+                value={option.value}
+                checked={editData.seatingPreference === option.value}
+                onChange={(event) =>
+                  setEditData((current) => ({
+                    ...current,
+                    seatingPreference: event.target.value,
+                  }))
+                }
+                className="h-4 w-4 accent-[var(--site-orange)]"
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <label
+          htmlFor="reservation-edit-commentary"
+          className="mb-3 block text-[11px] font-semibold uppercase tracking-[0.24em] text-[var(--site-orange-deep)] tablet:text-[12px] tablet:tracking-[0.32em]"
+        >
+          Commentaire
+        </label>
+        <textarea
+          id="reservation-edit-commentary"
+          value={editData.commentary}
+          onChange={(event) =>
+            setEditData((current) => ({
+              ...current,
+              commentary: event.target.value,
+            }))
+          }
+          rows={4}
+          className="site-textarea w-full resize-none px-4 py-4 text-[15px] text-[var(--site-ink)] tablet:px-5 tablet:text-[16px]"
+          placeholder="Une demande particulière ?"
+        />
+      </div>
+
       <div className="grid gap-6 desktop:grid-cols-[1fr_1fr]">
         <div className="site-card rounded-[30px] p-5 tablet:p-6 desktop:p-7">
           <div className="mb-5">
@@ -250,12 +311,13 @@ export default function EditReservationAvailability({
           ) : null}
         </div>
       </div>
-
     </div>
   );
 }
 
 function formatTimeDisplay(value) {
-  const [hour, minute] = String(value || "").slice(0, 5).split(":");
+  const [hour, minute] = String(value || "")
+    .slice(0, 5)
+    .split(":");
   return `${hour}h${minute}`;
 }
