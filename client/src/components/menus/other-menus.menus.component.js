@@ -84,10 +84,6 @@ function RestaurantMenuCard({ menu, index = 0 }) {
   const menuBlocks = buildMenuBlocks(menu);
   const priceLabel = getMenuPriceLabel(menu);
 
-  if (!menuBlocks.length) {
-    return null;
-  }
-
   return (
     <article
       className="rounded-[38px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-8 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-9"
@@ -114,18 +110,20 @@ function RestaurantMenuCard({ menu, index = 0 }) {
           </div>
 
           {menu?.description ? (
-            <p className="mx-auto mt-4 max-w-[620px] text-[16px] leading-[1.75] text-[rgba(71,42,34,0.76)]">
+            <p className="mx-auto mt-4 max-w-[620px] text-balance text-[16px] leading-[1.75] text-[rgba(71,42,34,0.76)]">
               {menu.description}
             </p>
           ) : null}
         </div>
       </div>
 
-      <div className="mt-7 grid gap-4 justify-items-center">
-        {menuBlocks.map((block) => (
-          <RestaurantMenuBlock key={block.id} block={block} />
-        ))}
-      </div>
+      {menuBlocks.length ? (
+        <div className="mt-7 grid gap-4 justify-items-center">
+          {menuBlocks.map((block) => (
+            <RestaurantMenuBlock key={block.id} block={block} />
+          ))}
+        </div>
+      ) : null}
     </article>
   );
 }
