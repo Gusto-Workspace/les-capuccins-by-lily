@@ -50,8 +50,12 @@ export default function BookingBarComponent({
           setReservationsListLoading(true);
         }
 
+        const query = new URLSearchParams({
+          from: bookingData.reservationDate,
+          to: bookingData.reservationDate,
+        });
         const response = await fetch(
-          `${apiBaseUrl}/public/restaurants/${restaurant._id}/reservations`,
+          `${apiBaseUrl}/public/restaurants/${restaurant._id}/reservations?${query.toString()}`,
         );
         const data = await response.json().catch(() => ({}));
 
@@ -90,7 +94,7 @@ export default function BookingBarComponent({
     return () => {
       isMounted = false;
     };
-  }, [apiBaseUrl, restaurant?._id]);
+  }, [apiBaseUrl, bookingData.reservationDate, restaurant?._id]);
 
   const availableTimes = useMemo(() => {
     if (reservationsListLoading) {

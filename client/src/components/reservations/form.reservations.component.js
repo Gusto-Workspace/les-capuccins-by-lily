@@ -75,8 +75,10 @@ export default function FormReservationComponent({
     }
     try {
       setReservationsListLoading(true);
+      const dateKey = formatReservationDateForApi(reservationData.reservationDate);
+      const query = new URLSearchParams({ from: dateKey, to: dateKey });
       const res = await fetch(
-        `${apiBaseUrl}/public/restaurants/${restaurant._id}/reservations`,
+        `${apiBaseUrl}/public/restaurants/${restaurant._id}/reservations?${query.toString()}`,
       );
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -101,7 +103,7 @@ export default function FormReservationComponent({
     } finally {
       setReservationsListLoading(false);
     }
-  }, [apiBaseUrl, restaurant?._id]);
+  }, [apiBaseUrl, reservationData.reservationDate, restaurant?._id]);
   useEffect(() => {
     setReservationData((prev) => ({ ...prev, table: manage ? "auto" : "" }));
   }, [manage]);
