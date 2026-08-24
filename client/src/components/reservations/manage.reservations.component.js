@@ -29,10 +29,12 @@ import BannerComponent from "@/components/_shared/banner/banner.component";
 import GraphicElementComponent from "@/components/_shared/graphic-element.component";
 import NavComponent from "@/components/_shared/nav/nav.component";
 import SectionHeadingComponent from "@/components/_shared/section-heading.component";
+import EditReservationAvailability from "@/components/reservations/edit-availability.reservations.component";
 import { parseReservationDateValue } from "@/utils/reservations";
 
 export default function ManageReservationsComponent({
   reservationId,
+  manageToken,
   apiBaseUrl,
 }) {
   const { restaurantContext } = useContext(GlobalContext);
@@ -49,7 +51,10 @@ export default function ManageReservationsComponent({
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isCanceling, setIsCanceling] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editData, setEditData] = useState({ reservationDate: "", reservationTime: "", numberOfGuests: "" });
 
   const contactInfos = useMemo(
     () => buildContactInfos(restaurant),
@@ -80,6 +85,7 @@ export default function ManageReservationsComponent({
     String(reservation?.status || "") === "AwaitingBankHold" &&
     management?.reasonCode !== "BANK_HOLD_EXPIRED";
   const isCanceled = String(reservation?.status || "") === "Canceled";
+  const canModify = management?.canModify === true && !restaurantMismatch;
   const canCancel = management?.canCancel === true && !restaurantMismatch;
 
   useEffect(() => {
@@ -101,7 +107,7 @@ export default function ManageReservationsComponent({
   }, []);
 
   const fetchReservation = useCallback(async () => {
-    if (!reservationId || !apiBaseUrl) {
+    if (!reservationId || !manageToken || !apiBaseUrl) {
       setLoadError("Ce lien de réservation est invalide.");
       setIsLoading(false);
       return;
@@ -112,7 +118,7 @@ export default function ManageReservationsComponent({
       setLoadError("");
 
       const response = await fetch(
-        `${apiBaseUrl}/reservations/${reservationId}`,
+        buildManageApiUrl(`${apiBaseUrl}/reservations/${reservationId}`, manageToken),
       );
       const data = await response.json().catch(() => ({}));
 
@@ -140,7 +146,7 @@ export default function ManageReservationsComponent({
     } finally {
       setIsLoading(false);
     }
-  }, [apiBaseUrl, reservationId]);
+  }, [apiBaseUrl, manageToken, reservationId]);
 
   useEffect(() => {
     fetchReservation();
@@ -155,7 +161,7 @@ export default function ManageReservationsComponent({
       setSuccessMessage("");
 
       const response = await fetch(
-        `${apiBaseUrl}/reservations/${reservation._id}/cancel`,
+        buildManageApiUrl(`${apiBaseUrl}/reservations/${reservation._id}/cancel`, manageToken),
         {
           method: "POST",
           headers: {
@@ -188,6 +194,55 @@ export default function ManageReservationsComponent({
     }
   }
 
+  function startEditingReservation() {
+    setEditData({
+      reservationDate: getReservationEditDate(reservation?.reservationDate),
+      reservationTime: String(reservation?.reservationTime || "").slice(0, 5),
+      numberOfGuests: String(reservation?.numberOfGuests || ""),
+    });
+    setShowCancelConfirm(false);
+    setError("");
+    setSuccessMessage("");
+    setIsEditing(true);
+  }
+
+  async function handleUpdateReservation(event) {
+    event.preventDefault();
+    if (!reservation?._id || !apiBaseUrl) return;
+    if (!editData.reservationDate || !editData.reservationTime || !editData.numberOfGuests) {
+      setError("Choisissez une date, un horaire et un nombre de convives.");
+      return;
+    }
+
+    try {
+      setIsUpdating(true);
+      setError("");
+      setSuccessMessage("");
+      const response = await fetch(buildManageApiUrl(`${apiBaseUrl}/reservations/${reservation._id}`, manageToken), {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editData),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(getReservationApiErrorMessage({
+          payload: data,
+          status: response.status,
+          fallbackMessage: "Impossible de modifier la réservation.",
+        }));
+      }
+      setReservation(data.reservation || reservation);
+      setManagement(data.management || null);
+      setIsEditing(false);
+      setShowCancelConfirm(false);
+      setSuccessMessage(data.message || "Votre réservation a bien été modifiée.");
+    } catch (updateError) {
+      setError(updateError?.message || "Impossible de modifier la réservation.");
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
   return (
     <div className="relative bg-[var(--site-cream)]">
       <NavComponent
@@ -205,9 +260,9 @@ export default function ManageReservationsComponent({
       <main>
         <div ref={heroRef}>
           <BannerComponent
-            title="Annuler ma réservation"
+            title="Gérer ma réservation"
             eyebrow="Gestion en ligne"
-            description="Retrouvez ici le détail de votre réservation et, si nécessaire, annulez-la en quelques instants. Pour toute modification, contactez directement le restaurant."
+            description="Retrouvez ici le détail de votre réservation, modifiez-la ou annulez-la en quelques instants. Pour toute demande particulière, contactez directement l’équipe du restaurant."
             imgUrl="reservations/header_reservations.webp"
           />
         </div>
@@ -307,11 +362,15 @@ export default function ManageReservationsComponent({
 
                   <div className="mt-8">
                     {renderPrimaryContent({
+                      apiBaseUrl,
+                      manageToken,
+                      restaurant,
                       brand,
                       reservation,
                       management,
                       isAwaitingBankHold,
                       isCanceled,
+                      canModify,
                       canCancel,
                       error,
                       successMessage,
@@ -319,6 +378,13 @@ export default function ManageReservationsComponent({
                       showCancelConfirm,
                       setShowCancelConfirm,
                       handleCancelReservation,
+                      handleUpdateReservation,
+                      startEditingReservation,
+                      isEditing,
+                      editData,
+                      setEditData,
+                      setIsEditing,
+                      isUpdating,
                       contactHref,
                       reservationId,
                     })}
@@ -390,7 +456,7 @@ export default function ManageReservationsComponent({
                       Besoin d’aide
                     </p>
                     <p className="mt-3 text-[15px] leading-[1.8] text-[var(--site-ink-soft)]">
-                      Une modification doit être traitée directement avec
+                      Pour toute demande particulière, contactez directement
                       l’équipe du restaurant.
                     </p>
 
@@ -465,11 +531,15 @@ function StateCard({
 }
 
 function renderPrimaryContent({
+  apiBaseUrl,
+  manageToken,
+  restaurant,
   brand,
   reservation,
   management,
   isAwaitingBankHold,
   isCanceled,
+  canModify,
   canCancel,
   error,
   successMessage,
@@ -477,6 +547,13 @@ function renderPrimaryContent({
   showCancelConfirm,
   setShowCancelConfirm,
   handleCancelReservation,
+  handleUpdateReservation,
+  startEditingReservation,
+  isEditing,
+  editData,
+  setEditData,
+  setIsEditing,
+  isUpdating,
   contactHref,
   reservationId,
 }) {
@@ -563,9 +640,9 @@ function renderPrimaryContent({
   return (
     <div>
       <SectionHeadingComponent
-        eyebrow="Annulation"
-        title="Annuler cette réservation"
-        description={`Cette page permet uniquement d’annuler votre réservation chez ${brand.full}. Pour tout ajustement, merci de contacter directement le restaurant.`}
+        eyebrow="Gestion de la réservation"
+        title="Modifier ou annuler cette réservation"
+        description={`Modifiez la date, l’horaire ou le nombre de couverts de votre réservation chez ${brand.full}, ou annulez-la en ligne. Pour toute demande particulière, contactez directement l’équipe du restaurant.`}
         align="left"
         className="mx-0 max-w-none"
       />
@@ -582,40 +659,37 @@ function renderPrimaryContent({
         </InlineAlert>
       ) : null}
 
-      {canCancel ? (
+      {canModify || canCancel ? (
         <>
-          <div className="mt-8 rounded-[26px] border border-[rgba(176,94,77,0.16)] bg-[rgba(255,255,255,0.6)] p-5">
-            <div className="flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[rgba(223,160,132,0.18)] text-[var(--site-orange-deep)]">
-                <TriangleAlert size={18} strokeWidth={1.8} />
+          {canModify && isEditing ? (
+            <form onSubmit={handleUpdateReservation} className="mt-8 rounded-[26px] border border-[var(--site-line)] bg-[rgba(255,255,255,0.6)] p-5">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-[var(--site-orange-deep)]">Modifier la réservation</p>
+              <EditReservationAvailability
+                apiBaseUrl={apiBaseUrl}
+                manageToken={manageToken}
+                restaurant={restaurant}
+                reservation={reservation}
+                editData={editData}
+                setEditData={setEditData}
+              />
+              <div className="mt-6 flex flex-col gap-3 tablet:flex-row">
+                <button type="submit" disabled={isUpdating} className="site-button border border-[var(--site-orange)] disabled:cursor-not-allowed disabled:opacity-60">{isUpdating ? "Enregistrement..." : "Enregistrer les modifications"}</button>
+                <button type="button" onClick={() => setIsEditing(false)} disabled={isUpdating} className="site-button site-button--outline">Annuler</button>
               </div>
-              <div>
-                <p className="text-[16px] font-semibold text-[var(--site-ink)]">
-                  Confirmation requise
-                </p>
-                <p className="mt-2 text-[15px] leading-[1.8] text-[var(--site-ink-soft)]">
-                  En confirmant l’annulation, votre réservation sera annulée
-                  immédiatement et le créneau pourra redevenir disponible.
-                </p>
-              </div>
+            </form>
+          ) : null}
+
+          {!isEditing ? (
+            <div className="mt-8 rounded-[26px] border border-[rgba(176,94,77,0.16)] bg-[rgba(255,255,255,0.6)] p-5 text-[15px] leading-[1.8] text-[var(--site-ink-soft)]">
+              Vous pouvez modifier votre date, votre horaire ou le nombre de
+              couverts. En cas d’annulation, votre réservation sera annulée
+              immédiatement et le créneau pourra redevenir disponible.
             </div>
-          </div>
+          ) : null}
 
           <div className="mt-8 flex flex-col gap-4 tablet:flex-row">
-            <button
-              type="button"
-              onClick={() => setShowCancelConfirm((prev) => !prev)}
-              className="site-button tablet:min-w-[240px]"
-            >
-              Annuler la réservation
-            </button>
-            <ButtonLink
-              href={contactHref}
-              variant="outline"
-              className="tablet:min-w-[220px]"
-            >
-              Contacter le restaurant
-            </ButtonLink>
+            {canModify && !isEditing ? <button type="button" onClick={startEditingReservation} className="site-button tablet:min-w-[240px]">Modifier la réservation</button> : null}
+            {canCancel && !isEditing ? <button type="button" onClick={() => setShowCancelConfirm((prev) => !prev)} className="site-button site-button--outline tablet:min-w-[240px]">Annuler la réservation</button> : null}
           </div>
         </>
       ) : (
@@ -629,10 +703,6 @@ function renderPrimaryContent({
         <div className="mt-8 rounded-[26px] border border-[rgba(176,94,77,0.22)] bg-[rgba(255,242,239,0.92)] p-5">
           <p className="text-[16px] font-semibold text-[var(--site-ink)]">
             Confirmez-vous l’annulation de votre réservation ?
-          </p>
-          <p className="mt-2 text-[15px] leading-[1.8] text-[var(--site-ink-soft)]">
-            Cette action est immédiate. Si vous souhaitez simplement modifier
-            votre venue, contactez le restaurant à la place.
           </p>
 
           <div className="mt-5 flex flex-col gap-3 tablet:flex-row">
@@ -811,6 +881,16 @@ function formatReservationDateLabel(value) {
   }
 
   return format(parsedDate, "EEEE d MMMM yyyy", { locale: fr });
+}
+
+function buildManageApiUrl(url, manageToken) {
+  const separator = String(url || "").includes("?") ? "&" : "?";
+  return `${url}${separator}token=${encodeURIComponent(manageToken || "")}`;
+}
+
+function getReservationEditDate(value) {
+  const parsedDate = parseReservationDateValue(value);
+  return parsedDate ? format(parsedDate, "yyyy-MM-dd") : "";
 }
 
 function formatTimeLabel(value) {

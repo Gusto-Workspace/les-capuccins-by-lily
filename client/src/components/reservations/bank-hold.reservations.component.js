@@ -23,6 +23,7 @@ function BankHoldForm({
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [reservationStatus, setReservationStatus] = useState("");
   const [redirectCountdown, setRedirectCountdown] = useState(3);
 
   useEffect(() => {
@@ -116,6 +117,7 @@ function BankHoldForm({
       }
 
       localStorage.removeItem("gm_pending_bank_hold");
+      setReservationStatus(String(finalizeData?.reservation?.status || ""));
       setSuccess(true);
       setMessage(
         flow === "scheduled"
@@ -136,6 +138,11 @@ function BankHoldForm({
       <div className="w-full rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
         <h1 className="text-2xl font-semibold">Réservation validée</h1>
         <p className="mt-4 text-black/70">{message}</p>
+        <p className="mt-3 text-sm leading-[1.7] text-black/65">
+          {reservationStatus === "Pending"
+            ? "Votre demande est en attente de confirmation. Dès qu’elle sera confirmée, vous pourrez la modifier ou l’annuler en contactant directement le restaurant ou en utilisant le lien présent dans l’e-mail de confirmation."
+            : "Votre réservation est confirmée. Pour la modifier ou l’annuler, contactez directement le restaurant ou utilisez le lien présent dans l’e-mail de confirmation."}
+        </p>
         <p className="mt-3 text-sm text-black/55">
           Retour vers la page de réservation dans{" "}
           <span className="font-semibold">{redirectCountdown}s</span>.

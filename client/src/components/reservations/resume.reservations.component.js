@@ -5,6 +5,7 @@ export default function ResumeReservationsComponent({
   apiBaseUrl,
   reservationId,
 }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -51,7 +52,7 @@ export default function ResumeReservationsComponent({
     }
 
     resume();
-  }, [reservationId, apiBaseUrl]);
+  }, [reservationId, apiBaseUrl, router.isReady]);
 
   if (loading) {
     return (

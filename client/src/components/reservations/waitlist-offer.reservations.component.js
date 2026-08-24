@@ -97,7 +97,7 @@ export default function WaitlistOfferReservationsComponent({
       }));
       setMessage(
         action === "accept"
-          ? "Votre réservation est confirmée."
+          ? "Votre réservation est confirmée. Pour la modifier ou l’annuler, contactez directement le restaurant ou utilisez le lien présent dans l’e-mail de confirmation."
           : "Votre refus a bien été pris en compte.",
       );
     } catch (err) {

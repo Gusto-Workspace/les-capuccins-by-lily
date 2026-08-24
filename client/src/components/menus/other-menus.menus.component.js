@@ -25,7 +25,10 @@ function RestaurantMenuBlock({ block }) {
   const hasLines = lines.length > 0;
 
   return (
-    <div className="mx-auto w-full max-w-[430px] rounded-[24px] border border-[rgba(223,160,132,0.22)] bg-white/82 px-6 py-6 text-center shadow-[0_14px_36px_rgba(127,83,66,0.08)]">
+    <div
+      className="mx-auto w-full max-w-[430px] rounded-[24px] border border-[rgba(223,160,132,0.22)] bg-white/82 px-6 py-6 text-center shadow-[0_14px_36px_rgba(127,83,66,0.08)]"
+      data-print-dish
+    >
       <div className="flex flex-col items-center">
         <h4 className="max-w-[90%] text-[21px] font-bold leading-[1.08] tracking-[-0.02em] text-[var(--site-ink)] tablet:text-[23px]">
           {block.title}
@@ -86,12 +89,29 @@ function RestaurantMenuCard({ menu, index = 0 }) {
   }
 
   return (
-    <article className="rounded-[38px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-8 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-9">
+    <article
+      className="rounded-[38px] border border-[rgba(223,160,132,0.24)] bg-[rgba(246,229,218,0.72)] px-6 py-8 shadow-[0_18px_48px_rgba(127,83,66,0.1)] tablet:px-8 tablet:py-9"
+      data-print-menu
+    >
       <div className="border-b border-[rgba(223,160,132,0.2)] pb-6 text-center">
         <div className="mx-auto max-w-[720px]">
-          <p className="script-font text-[52px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[64px]">
-            {getMenuTitle(menu, index + 1)}
-          </p>
+          <div data-print-title-price-row>
+            <p
+              className="script-font text-[52px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[64px]"
+              data-print-title
+            >
+              {getMenuTitle(menu, index + 1)}
+            </p>
+
+            {priceLabel ? (
+              <span
+                className="mt-5 inline-flex w-fit rounded-full border border-[rgba(223,160,132,0.24)] bg-white/82 px-4 py-2 text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--site-orange-deep)]"
+                data-print-price
+              >
+                {priceLabel}
+              </span>
+            ) : null}
+          </div>
 
           {menu?.description ? (
             <p className="mx-auto mt-4 max-w-[620px] text-[16px] leading-[1.75] text-[rgba(71,42,34,0.76)]">
@@ -99,12 +119,6 @@ function RestaurantMenuCard({ menu, index = 0 }) {
             </p>
           ) : null}
         </div>
-
-        {priceLabel ? (
-          <span className="mt-5 inline-flex w-fit rounded-full border border-[rgba(223,160,132,0.24)] bg-white/82 px-4 py-2 text-[13px] font-bold uppercase tracking-[0.18em] text-[var(--site-orange-deep)]">
-            {priceLabel}
-          </span>
-        ) : null}
       </div>
 
       <div className="mt-7 grid gap-4 justify-items-center">
@@ -177,7 +191,10 @@ function CategoryMenuCard({ category }) {
   );
 }
 
-export default function OtherMenusComponent({ restaurantData }) {
+export default function OtherMenusComponent({
+  restaurantData,
+  printMode = false,
+}) {
   const menus = getVisibleMenus(restaurantData);
   const menuCategories = getVisibleMenuCategories(restaurantData).filter(
     (category) =>
@@ -194,24 +211,28 @@ export default function OtherMenusComponent({ restaurantData }) {
 
   return (
     <section className="relative mt-24 overflow-visible">
-      <GraphicElementComponent
-        src="/img/elements/1.webp"
-        className="left-[-118px] top-[64px] hidden h-[250px] w-[250px] opacity-42 desktop:block"
-        sizes="250px"
-      />
-      <GraphicElementComponent
-        src="/img/elements/8.webp"
-        className="right-[-112px] bottom-[44px] hidden h-[240px] w-[240px] opacity-40 desktop:block"
-        sizes="240px"
-      />
-      <StickerPhotoComponent
-        src="/img/photos/3.webp"
-        alt="Pizza colorée"
-        className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
-        imageSizes="208px"
-        rotatePatch="8deg"
-        layerClassName="z-[1]"
-      />
+      {!printMode ? (
+        <>
+          <GraphicElementComponent
+            src="/img/elements/1.webp"
+            className="left-[-118px] top-[64px] hidden h-[250px] w-[250px] opacity-42 desktop:block"
+            sizes="250px"
+          />
+          <GraphicElementComponent
+            src="/img/elements/8.webp"
+            className="right-[-112px] bottom-[44px] hidden h-[240px] w-[240px] opacity-40 desktop:block"
+            sizes="240px"
+          />
+          <StickerPhotoComponent
+            src="/img/photos/3.webp"
+            alt="Pizza colorée"
+            className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
+            imageSizes="208px"
+            rotatePatch="8deg"
+            layerClassName="z-[1]"
+          />
+        </>
+      ) : null}
 
       <div className="relative z-30">
         <SectionHeadingComponent

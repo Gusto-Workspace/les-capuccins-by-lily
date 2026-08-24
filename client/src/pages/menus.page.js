@@ -10,11 +10,15 @@ import { buildStaticPageProps } from "@/_assets/utils/page-props.utils";
 
 // CONTEXT
 import { GlobalContext } from "@/contexts/global.context";
+import GustoPrintComponent, {
+  useGustoPrintMode,
+} from "@/components/_shared/gusto-print/gusto-print.component";
 
 export default function MenusPage({ seoRestaurantData = null }) {
   const { restaurantContext } = useContext(GlobalContext);
   const heroRef = useRef(null);
   const [showScrolledNav, setShowScrolledNav] = useState(false);
+  const { printMode, autoPrint } = useGustoPrintMode();
 
   useEffect(() => {
     const heroEl = heroRef.current;
@@ -34,6 +38,13 @@ export default function MenusPage({ seoRestaurantData = null }) {
     return () => observer.disconnect();
   }, []);
 
+  const menuContent = (
+    <ListMenusComponent
+      restaurantData={restaurantContext.restaurantData}
+      printMode={printMode}
+    />
+  );
+
   return (
     <>
       <SeoHeadComponent
@@ -48,32 +59,43 @@ export default function MenusPage({ seoRestaurantData = null }) {
         restaurantData={seoRestaurantData}
       />
 
-      <div className="relative">
-        <NavComponent
-          isVisible={!showScrolledNav}
-          scrolled={false}
-          logoSrc="/img/logo.webp"
-        />
-
-        <NavComponent
-          isVisible={showScrolledNav}
-          scrolled={true}
-          logoSrc="/img/logo.webp"
-        />
-
-        <div ref={heroRef}>
-          <BannerComponent
-            title="Carte & Menus"
-            eyebrow="La maison"
-            description="Une carte de restaurant à Turenne pensée pour le partage, les envies du moment et les classiques italiens qui font revenir."
-            imgUrl="menu-inspired/header_menu.webp"
+      {printMode ? (
+        <GustoPrintComponent
+          autoPrint={autoPrint}
+          restaurant={restaurantContext.restaurantData}
+          dataLoading={restaurantContext.dataLoading}
+          dataError={restaurantContext.dataError}
+        >
+          {menuContent}
+        </GustoPrintComponent>
+      ) : (
+        <div className="relative">
+          <NavComponent
+            isVisible={!showScrolledNav}
+            scrolled={false}
+            logoSrc="/img/logo.webp"
           />
+
+          <NavComponent
+            isVisible={showScrolledNav}
+            scrolled={true}
+            logoSrc="/img/logo.webp"
+          />
+
+          <div ref={heroRef}>
+            <BannerComponent
+              title="Carte & Menus"
+              eyebrow="La maison"
+              description="Une carte de restaurant à Turenne pensée pour le partage, les envies du moment et les classiques italiens qui font revenir."
+              imgUrl="menu-inspired/header_menu.webp"
+            />
+          </div>
+
+          {menuContent}
+
+          <FooterComponent />
         </div>
-
-        <ListMenusComponent restaurantData={restaurantContext.restaurantData} />
-
-        <FooterComponent />
-      </div>
+      )}
     </>
   );
 }
