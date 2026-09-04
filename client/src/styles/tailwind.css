@@ -114,6 +114,10 @@
   .gusto-print-mode [data-print-menu-section] {
     margin-top: 48px !important;
   }
+  .gusto-print-mode [data-print-menu-page] {
+    padding-right: 32px !important;
+    padding-left: 32px !important;
+  }
   .gusto-print-mode [data-print-menu-list] {
     grid-template-columns: minmax(0, 1fr) !important;
   }
