@@ -54,7 +54,10 @@ export default function ListMenusComponent({
   const categories = getVisibleDishCategories(restaurantData);
 
   return (
-    <section className="site-shell overflow-x-hidden relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]">
+    <section
+      className="site-shell overflow-x-hidden relative overflow-visible px-5 py-20 tablet:px-8 tablet:py-24 desktop:px-[90px] desktop:py-[110px]"
+      data-print-menu-page
+    >
       <div className="relative mx-auto max-w-[1380px]">
         {!printMode ? (
           <>
@@ -89,6 +92,7 @@ export default function ListMenusComponent({
             eyebrow="La carte"
             title="Nos plats à la carte"
             description="Les plats, pizzas et recettes de la maison sont présentés ici à part. Les formules et menus sont regroupés plus bas dans une section dédiée."
+            className="print-menu-heading"
           />
 
           {categories.length ? (
