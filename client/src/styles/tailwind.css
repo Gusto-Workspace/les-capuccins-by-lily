@@ -50,9 +50,6 @@
 .gusto-print-mode .print-menu-heading > p:first-child {
   font-size: 60px !important;
 }
-.gusto-print-mode [data-print-menu-section] {
-  margin-top: 16px !important;
-}
 .gusto-print-toolbar {
   display: flex;
   align-items: center;
@@ -114,6 +111,12 @@
   .gusto-print-toolbar > span {
     display: none;
   }
+  .gusto-print-mode [data-print-menu-section] {
+    margin-top: 48px !important;
+  }
+  .gusto-print-mode [data-print-menu-list] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 }
 @media print {
   html,
@@ -155,6 +158,7 @@
   }
   .gusto-print-mode [data-print-menu-section] {
     break-before: page;
+    margin-top: 16px !important;
     page-break-before: always;
   }
   .gusto-print-mode .print-menu-category + .print-menu-category {

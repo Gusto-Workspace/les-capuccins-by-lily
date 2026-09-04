@@ -247,6 +247,7 @@ export default function OtherMenusComponent({
           className={`mt-12 grid gap-6 ${
             totalMenuCards > 1 ? "desktop:grid-cols-2" : "mx-auto max-w-[760px]"
           }`}
+          data-print-menu-list
         >
           {menuCategories.map((category) => (
             <RevealOnScrollComponent key={category.id} variant="up">
