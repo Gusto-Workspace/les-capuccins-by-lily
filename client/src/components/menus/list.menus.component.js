@@ -91,7 +91,7 @@ export default function ListMenusComponent({
           <SectionHeadingComponent
             eyebrow="La carte"
             title="Nos plats à la carte"
-            description="Les plats, pizzas et recettes de la maison sont présentés ici à part. Les formules et menus sont regroupés plus bas dans une section dédiée."
+            description="Découvrez nos plats, pizzas et desserts, préparés avec soin à partir de produits de saison."
             className="print-menu-heading"
           />
 

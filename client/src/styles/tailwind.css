@@ -44,6 +44,12 @@
   margin: 0 !important;
   white-space: nowrap;
 }
+.gusto-print-mode [data-print-menu-page] {
+  padding-top: 16px !important;
+}
+.gusto-print-mode .print-menu-heading > p:first-child {
+  font-size: 60px !important;
+}
 .gusto-print-toolbar {
   display: flex;
   align-items: center;
@@ -147,12 +153,6 @@
   .gusto-print-mode [data-print-menu-section] {
     break-before: page;
     page-break-before: always;
-  }
-  .gusto-print-mode [data-print-menu-page] {
-    padding-top: 16px !important;
-  }
-  .gusto-print-mode .print-menu-heading > p:first-child {
-    font-size: 60px !important;
   }
   .gusto-print-mode .print-menu-category + .print-menu-category {
     margin-top: 32px !important;
