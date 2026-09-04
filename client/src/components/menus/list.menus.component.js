@@ -100,7 +100,7 @@ export default function ListMenusComponent({
                     key={category.id}
                     variant="up"
                     delay={index * 80}
-                    className="pb-2 last:pb-0"
+                    className="print-menu-category pb-2 last:pb-0"
                   >
                     <div
                       data-print-category-first-chunk

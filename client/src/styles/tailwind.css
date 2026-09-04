@@ -148,6 +148,9 @@
     break-before: page;
     page-break-before: always;
   }
+  .gusto-print-mode .print-menu-category + .print-menu-category {
+    margin-top: 32px !important;
+  }
   [data-print-category-title],
   [data-print-subcategory-title] {
     break-after: avoid;
