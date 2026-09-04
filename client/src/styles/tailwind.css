@@ -151,6 +151,15 @@
   .gusto-print-mode .print-menu-category + .print-menu-category {
     margin-top: 32px !important;
   }
+  .gusto-print-mode .print-menu-category [data-print-dish] {
+    padding-bottom: 12px !important;
+  }
+  .gusto-print-mode
+    .print-menu-category
+    [data-print-dish]
+    + [data-print-dish] {
+    margin-top: 12px !important;
+  }
   [data-print-category-title],
   [data-print-subcategory-title] {
     break-after: avoid;
