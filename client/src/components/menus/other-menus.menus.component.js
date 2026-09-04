@@ -240,6 +240,7 @@ export default function OtherMenusComponent({
           eyebrow="Les menus"
           title="Nos menus & formules"
           description="Retrouvez ici les formules du midi, menus complets et propositions regroupées à part de la carte, avec une présentation dédiée."
+          className="print-menu-heading"
         />
 
         <div
