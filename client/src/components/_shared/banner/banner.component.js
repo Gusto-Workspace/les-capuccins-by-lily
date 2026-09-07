@@ -10,7 +10,7 @@ export default function BannerComponent({
 }) {
   return (
     <section className="relative text-balance isolate flex min-h-[460px] items-center overflow-hidden px-5 pb-24 pt-36 text-[var(--site-cream)] tablet:min-h-[520px] tablet:px-8 tablet:pb-28 tablet:pt-40 desktop:min-h-[620px] desktop:px-[90px] desktop:pt-44">
-      <div className="absolute inset-[-4%]">
+      <div className="pointer-events-none absolute inset-[-4%] select-none">
         <Image
           src={`/img/${imgUrl}`}
           alt=""
@@ -20,7 +20,7 @@ export default function BannerComponent({
           className="site-ken-burns object-cover object-center"
         />
       </div>
-      <div className="absolute inset-0 bg-[rgba(55,26,16,0.58)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[rgba(55,26,16,0.58)]" />
 
       <div className="relative mx-auto flex w-full max-w-[1600px]">
         <div className="max-w-[760px]">

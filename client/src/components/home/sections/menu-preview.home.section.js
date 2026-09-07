@@ -60,7 +60,8 @@ export default function MenuPreviewHomeSection({ menuColumns = [] }) {
         <StickerPhotoComponent
           src="/img/photos/4.webp"
           alt="Pizza blanche"
-          className="bottom-[-214px] left-[28px] h-[220px] w-[220px] rotate-[-6deg]"
+          className="bottom-[-214px] left-[28px] hidden h-[220px] w-[220px] rotate-[-6deg] tablet:block"
+          layerClassName="z-20"
           imageSizes="220px"
           revealDelay={140}
         />

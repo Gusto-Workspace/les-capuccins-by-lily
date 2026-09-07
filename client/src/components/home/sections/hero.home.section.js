@@ -13,7 +13,7 @@ export default function HeroHomeSection({
       ref={heroRef}
       className="relative isolate flex min-h-[100svh] items-center overflow-hidden px-5 pb-28 pt-32 text-[var(--site-cream)] tablet:px-8 tablet:pb-32 tablet:pt-36 desktop:px-[90px]"
     >
-      <div className="absolute inset-[-4%]">
+      <div className="pointer-events-none absolute inset-[-4%] select-none">
         <Image
           src="/img/hero/header.webp"
           alt=""
@@ -23,7 +23,7 @@ export default function HeroHomeSection({
           className="site-ken-burns object-cover object-center"
         />
       </div>
-      <div className="absolute inset-0 bg-[rgba(55,26,16,0.56)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[rgba(55,26,16,0.56)]" />
 
       <div className="relative mx-auto flex w-full max-w-[1600px] items-center justify-center">
         <div className="max-w-[860px] text-center">

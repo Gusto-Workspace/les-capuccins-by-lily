@@ -26,7 +26,7 @@ export default function HomePageComponent({ heroRef = null }) {
   }));
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-clip">
       <HeroHomeSection
         heroRef={heroRef}
         brandMain={brand.main}

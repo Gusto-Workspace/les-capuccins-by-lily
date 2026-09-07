@@ -21,7 +21,7 @@ export default function TakeawayHomeSection() {
         <StickerPhotoComponent
           src="/img/photos/2.webp"
           alt="Plat de la maison"
-          className="bottom-[-92px] left-[80px] h-[190px] w-[245px] rotate-[-5deg]"
+          className="bottom-[-92px] left-[80px] hidden h-[190px] w-[245px] rotate-[-5deg] tablet:block"
           imageSizes="245px"
           revealDelay={120}
           disableMotion
