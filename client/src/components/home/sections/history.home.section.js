@@ -24,14 +24,15 @@ export default function HistoryHomeSection({ restaurantName }) {
       <StickerPhotoComponent
         src="/img/photos/hall.webp"
         alt="Vue de la salle"
-        className="bottom-[-240px] left-[42px] h-[320px] w-[225px] rotate-[-8deg]"
+        className="bottom-[-240px] left-[42px] hidden h-[320px] w-[225px] rotate-[-8deg] tablet:block"
+        layerClassName="z-20"
         imageSizes="190px"
         revealDelay={60}
       />
       <StickerPhotoComponent
         src="/img/photos/1.webp"
         alt="Salade de la maison"
-        className="bottom-[100px] right-[28px] h-[350px] w-[263px] rotate-[8deg]"
+        className="bottom-[100px] right-[-88px] h-[350px] w-[263px] rotate-[8deg] desktop:right-[28px]"
         imageSizes="263px"
         rotatePatch="7deg"
         revealDelay={140}

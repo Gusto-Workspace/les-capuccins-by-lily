@@ -6,7 +6,7 @@ export default function StickerPhotoComponent({
   src,
   alt = "",
   className = "",
-  layerClassName = "z-20",
+  layerClassName = "z-0 desktop:z-20",
   imageClassName = "object-cover",
   imageSizes = "280px",
   patchClassName = "",
@@ -21,7 +21,7 @@ export default function StickerPhotoComponent({
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none absolute hidden select-none desktop:block ${layerClassName} ${className}`.trim()}
+      className={`pointer-events-none absolute select-none opacity-[0.14] tablet:opacity-[0.18] desktop:opacity-100 ${layerClassName} ${className}`.trim()}
     >
       <RevealOnScrollComponent
         variant={revealVariant}

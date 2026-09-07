@@ -230,7 +230,7 @@ export default function OtherMenusComponent({
             className="right-[-10px] top-[164px] h-[208px] w-[208px] rotate-[7deg]"
             imageSizes="208px"
             rotatePatch="8deg"
-            layerClassName="z-[1]"
+            layerClassName="z-0 desktop:z-[1]"
           />
         </>
       ) : null}
