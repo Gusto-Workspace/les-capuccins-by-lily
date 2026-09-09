@@ -14,6 +14,14 @@ import {
   parseReservationDateValue,
 } from "@/utils/reservations";
 import { buildReservationCommentary } from "@/utils/reservation-commentary";
+
+function createReservationIdempotencyKey() {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `resa_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+}
+
 export default function FormReservationComponent({
   apiBaseUrl,
   restaurant,
@@ -46,6 +54,7 @@ export default function FormReservationComponent({
   const [invalidFields, setInvalidFields] = useState({});
   const [reservationsList, setReservationsList] = useState([]);
   const [slotCoverUsage, setSlotCoverUsage] = useState([]);
+  const [serviceCoverUsage, setServiceCoverUsage] = useState([]);
   const [reservationsListLoading, setReservationsListLoading] = useState(false);
   const [hasAppliedQueryPrefill, setHasAppliedQueryPrefill] = useState(false);
   const [pendingPrefilledTime, setPendingPrefilledTime] = useState("");
@@ -54,12 +63,9 @@ export default function FormReservationComponent({
     restaurant?.reservations?.parameters ||
     {};
   const manage = !!parameters.manage_disponibilities;
-  const [idempotencyKey] = useState(() => {
-    if (typeof crypto !== "undefined" && crypto.randomUUID) {
-      return crypto.randomUUID();
-    }
-    return `resa_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-  });
+  const [idempotencyKey, setIdempotencyKey] = useState(
+    createReservationIdempotencyKey,
+  );
   const PENDING_BANK_HOLD_STORAGE_KEY = "gm_pending_bank_hold";
   const [pendingBankHoldReservation, setPendingBankHoldReservation] =
     useState(null);
@@ -71,6 +77,7 @@ export default function FormReservationComponent({
     if (!apiBaseUrl || !restaurant?._id) {
       setReservationsList([]);
       setSlotCoverUsage([]);
+      setServiceCoverUsage([]);
       return [];
     }
     try {
@@ -92,13 +99,18 @@ export default function FormReservationComponent({
       const nextSlotCoverUsage = Array.isArray(data?.slotCoverUsage)
         ? data.slotCoverUsage
         : [];
+      const nextServiceCoverUsage = Array.isArray(data?.serviceCoverUsage)
+        ? data.serviceCoverUsage
+        : [];
       setReservationsList(nextReservations);
       setSlotCoverUsage(nextSlotCoverUsage);
+      setServiceCoverUsage(nextServiceCoverUsage);
       return nextReservations;
     } catch (error) {
       console.error("[fetchReservationsList]", error);
       setReservationsList([]);
       setSlotCoverUsage([]);
+      setServiceCoverUsage([]);
       return [];
     } finally {
       setReservationsListLoading(false);
@@ -222,6 +234,7 @@ export default function FormReservationComponent({
       restaurant,
       reservationsList,
       slotCoverUsage,
+      serviceCoverUsage,
     });
     setAvailableTimes(nextAvailableTimes);
     setTimeOptions(
@@ -231,6 +244,7 @@ export default function FormReservationComponent({
         restaurant,
         reservationsList,
         slotCoverUsage,
+        serviceCoverUsage,
       }),
     );
     setResolvedAvailabilitySelectionKey(nextSelectionKey);
@@ -242,6 +256,7 @@ export default function FormReservationComponent({
     reservationData.numberOfGuests,
     reservationsList,
     slotCoverUsage,
+    serviceCoverUsage,
     reservationsListLoading,
   ]);
   useEffect(() => {
@@ -479,6 +494,7 @@ export default function FormReservationComponent({
         table: manage ? "auto" : "",
       }));
       setInvalidFields({});
+      setIdempotencyKey(createReservationIdempotencyKey());
       setSuccessMessage(
         isWaitlistRequest
           ? "Votre demande a été ajoutée à la liste d’attente. Vous recevrez un email si une place se libère."

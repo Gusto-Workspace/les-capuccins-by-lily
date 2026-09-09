@@ -240,6 +240,7 @@ export function getSeoRouteEntries(baseUrl) {
     { path: "/", priority: "1.0", changefreq: "weekly" },
     { path: "/menus", priority: "0.9", changefreq: "weekly" },
     { path: "/reservations", priority: "0.9", changefreq: "weekly" },
+    { path: "/take-away", priority: "0.9", changefreq: "weekly" },
     { path: "/contact", priority: "0.8", changefreq: "monthly" },
     { path: "/news", priority: "0.7", changefreq: "weekly" },
     { path: "/legales", priority: "0.3", changefreq: "yearly" },

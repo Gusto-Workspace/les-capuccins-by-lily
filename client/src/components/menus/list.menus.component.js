@@ -6,20 +6,6 @@ import RevealOnScrollComponent from "../_shared/motion/reveal-on-scroll.componen
 import StickerPhotoComponent from "../_shared/sticker-photo.component";
 import { getVisibleDishCategories } from "../../_assets/utils/site-display.utils";
 
-function getCategoryHeading(title) {
-  const normalizedTitle = String(title || "").trim();
-
-  if (!normalizedTitle) {
-    return "Nos suggestions";
-  }
-
-  if (/^nos\s/i.test(normalizedTitle)) {
-    return normalizedTitle;
-  }
-
-  return `Nos ${normalizedTitle.toLowerCase()}`;
-}
-
 function MenuEntry({ name, price, description }) {
   return (
     <div className="pb-4 last:pb-0 tablet:pb-5" data-print-dish>
@@ -117,7 +103,7 @@ export default function ListMenusComponent({
                           className="script-font text-[50px] font-semibold leading-none text-[var(--site-orange)] tablet:text-[62px]"
                           data-print-category-title
                         >
-                          {getCategoryHeading(category.title)}
+                          {category.title}
                         </p>
 
                         {category.description ? (

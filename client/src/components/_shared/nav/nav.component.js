@@ -10,7 +10,7 @@ import { getRestaurantBrandParts } from "@/_assets/utils/site-display.utils";
 const baseMenuItems = [
   { label: "Carte & menus", href: "/menus" },
   { label: "Réserver", href: "/reservations" },
-  { label: "Vente à emporter", href: "/#emporter" },
+  { label: "Vente à emporter", href: "/take-away" },
   { label: "Actualités", href: "/news", visibilityKey: "news" },
   { label: "Contact", href: "/contact" },
 ];

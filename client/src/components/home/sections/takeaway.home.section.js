@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import HomeActionLink from "../home-action-link.component";
 import HomeSectionHeading from "../home-section-heading.component";
 import GraphicElementComponent from "../../_shared/graphic-element.component";
@@ -6,6 +7,41 @@ import RevealOnScrollComponent from "../../_shared/motion/reveal-on-scroll.compo
 import StickerPhotoComponent from "../../_shared/sticker-photo.component";
 
 export default function TakeawayHomeSection() {
+  const [orderingAvailable, setOrderingAvailable] = useState(false);
+
+  useEffect(() => {
+    const apiBaseUrl = String(process.env.NEXT_PUBLIC_API_URL || "").replace(
+      /\/+$/,
+      "",
+    );
+    const restaurantId = String(
+      process.env.NEXT_PUBLIC_RESTAURANT_ID || "",
+    ).trim();
+    if (!apiBaseUrl || !restaurantId) return;
+
+    const controller = new AbortController();
+    fetch(
+      `${apiBaseUrl}/restaurants/${restaurantId}/take-away/public/catalog`,
+      { signal: controller.signal },
+    )
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return response.json().catch(() => null);
+      })
+      .then((data) => {
+        const settings = data?.settings;
+        setOrderingAvailable(
+          Boolean(
+            data?.catalog?.length &&
+            (settings?.pickupEnabled || settings?.deliveryEnabled),
+          ),
+        );
+      })
+      .catch(() => {});
+
+    return () => controller.abort();
+  }, []);
+
   return (
     <section
       id="emporter"
@@ -65,7 +101,11 @@ export default function TakeawayHomeSection() {
               </p>
 
               <div className="mt-8 flex flex-col gap-4">
-                <HomeActionLink href="/contact">Nous contacter</HomeActionLink>
+                {orderingAvailable ? (
+                  <HomeActionLink href="/take-away">Commander</HomeActionLink>
+                ) : (
+                  <HomeActionLink href="/contact">Nous contacter</HomeActionLink>
+                )}
                 <Link href="/menus" className="site-button site-button--outline">
                   Voir la carte
                 </Link>

@@ -32,7 +32,7 @@ export default function FooterComponent() {
   const footerLinks = [
     { label: "Carte & menus", href: "/menus" },
     { label: "Réserver", href: "/reservations" },
-    { label: "Vente à emporter", href: "/#emporter" },
+    { label: "Vente à emporter", href: "/take-away" },
     ...(hasVisibleNews(restaurantData)
       ? [{ label: "Actualités", href: "/news" }]
       : []),

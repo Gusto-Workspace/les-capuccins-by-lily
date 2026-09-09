@@ -29,6 +29,7 @@ export default function BookingBarComponent({
   }));
   const [reservationsList, setReservationsList] = useState([]);
   const [slotCoverUsage, setSlotCoverUsage] = useState([]);
+  const [serviceCoverUsage, setServiceCoverUsage] = useState([]);
   const [reservationsListLoading, setReservationsListLoading] = useState(false);
   const [invalidField, setInvalidField] = useState("");
 
@@ -40,6 +41,7 @@ export default function BookingBarComponent({
         if (isMounted) {
           setReservationsList([]);
           setSlotCoverUsage([]);
+          setServiceCoverUsage([]);
           setReservationsListLoading(false);
         }
         return;
@@ -72,6 +74,11 @@ export default function BookingBarComponent({
           setSlotCoverUsage(
             Array.isArray(data?.slotCoverUsage) ? data.slotCoverUsage : [],
           );
+          setServiceCoverUsage(
+            Array.isArray(data?.serviceCoverUsage)
+              ? data.serviceCoverUsage
+              : [],
+          );
         }
       } catch (fetchError) {
         console.error(
@@ -81,6 +88,7 @@ export default function BookingBarComponent({
         if (isMounted) {
           setReservationsList([]);
           setSlotCoverUsage([]);
+          setServiceCoverUsage([]);
         }
       } finally {
         if (isMounted) {
@@ -107,12 +115,14 @@ export default function BookingBarComponent({
       restaurant,
       reservationsList,
       slotCoverUsage,
+      serviceCoverUsage,
     });
   }, [
     bookingData.numberOfGuests,
     bookingData.reservationDate,
     reservationsList,
     slotCoverUsage,
+    serviceCoverUsage,
     reservationsListLoading,
     restaurant,
   ]);
