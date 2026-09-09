@@ -85,13 +85,6 @@ export default function GustoPrintComponent({
         ) : !hasContent ? (
           <div className="gusto-print-status">
             <p>La carte ne contient actuellement aucun plat ou menu publié.</p>
-            <button
-              type="button"
-              onClick={() => window.close()}
-              data-gusto-no-print
-            >
-              Fermer cet onglet
-            </button>
           </div>
         ) : (
           children
