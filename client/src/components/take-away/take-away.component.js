@@ -530,11 +530,9 @@ function Confirmation({ order, onNewOrder }) {
             <span>{formatMoney(order?.total, order?.currency)}</span>
           </div>
           <p className="mt-3 text-sm text-[var(--site-ink-soft)]">
-            {paidOnline
+            {order?.paymentMethod === "online"
               ? "Paiement effectué en ligne"
-              : order?.fulfillmentMode === "delivery"
-                ? "Paiement à la livraison"
-                : "Paiement au retrait"}
+              : "Paiement au retrait"}
           </p>
           {order?.fulfillmentMode === "delivery" && order?.deliveryAddress ? (
             <p className="mt-4 text-sm leading-6">
@@ -698,10 +696,11 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
       if (current === "delivery" && !settings.deliveryEnabled) return "pickup";
       return current;
     });
-    if (settings.paymentPolicy === "online_required")
+    if (mode === "delivery") setPaymentMethod("online");
+    else if (settings.paymentPolicy === "online_required")
       setPaymentMethod("online");
-    if (settings.paymentPolicy === "on_site") setPaymentMethod("on_site");
-  }, [settings]);
+    else if (settings.paymentPolicy === "on_site") setPaymentMethod("on_site");
+  }, [mode, settings]);
 
   useEffect(() => {
     if (!settings || step !== "checkout" || !dateKey) return;
@@ -826,7 +825,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
       }
       setReconciling(false);
       setSubmitError(
-        "Le paiement a été reçu par Stripe, mais sa confirmation par le restaurant prend un peu plus de temps. Actualisez cette page dans quelques instants : votre commande ne sera pas recréée.",
+        "Le paiement a été reçu, mais sa confirmation par le restaurant prend un peu plus de temps. Actualisez cette page dans quelques instants : votre commande ne sera pas recréée.",
       );
     },
     [apiBaseUrl, finishOrder, restaurantId],
@@ -1058,7 +1057,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
       customerEmail: customer.email.trim(),
       customerNote: customer.note.trim(),
       fulfillmentMode: mode,
-      paymentMethod,
+      paymentMethod: mode === "delivery" ? "online" : paymentMethod,
       slotId,
       items: cart.map((item) => ({
         catalogItemId: item.catalogItemId,
@@ -1675,18 +1674,18 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                 <h2 className="yeseva-one-regular mt-2 text-[36px]">
                   Comment souhaitez-vous régler ?
                 </h2>
-                {settings.paymentPolicy === "customer_choice" ? (
+                {mode === "pickup" &&
+                settings.paymentPolicy === "customer_choice" ? (
                   <div className="mt-6 grid gap-3 tablet:grid-cols-2">
                     {[
                       {
                         value: "online",
                         label: "Payer en ligne",
-                        detail: "Paiement sécurisé par Stripe",
+                        detail: "Paiement sécurisé en ligne",
                       },
                       {
                         value: "on_site",
-                        label:
-                          mode === "delivery" ? "À la livraison" : "Au retrait",
+                        label: "Au retrait",
                         detail: "Règlement directement au restaurant",
                       },
                     ].map((choice) => (
@@ -1705,10 +1704,10 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                   </div>
                 ) : (
                   <p className="mt-5 rounded-[20px] bg-[var(--site-peach)] p-5 font-semibold">
-                    {settings.paymentPolicy === "online_required"
-                      ? "Paiement en ligne sécurisé par Stripe"
-                      : mode === "delivery"
-                        ? "Paiement à la livraison"
+                    {mode === "delivery"
+                      ? "Paiement en ligne"
+                      : settings.paymentPolicy === "online_required"
+                        ? "Paiement en ligne sécurisé"
                         : "Paiement au retrait"}
                   </p>
                 )}

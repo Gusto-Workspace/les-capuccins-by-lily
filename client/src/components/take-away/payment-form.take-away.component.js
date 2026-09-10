@@ -85,8 +85,8 @@ function PaymentForm({ busy, onPaymentConfirmed }) {
       </button>
 
       <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs leading-5 text-[var(--site-ink-soft)]">
-        <LockKeyhole size={15} aria-hidden="true" /> Paiement sécurisé par
-        Stripe. Les données bancaires ne passent pas par Gusto.
+        <LockKeyhole size={15} aria-hidden="true" /> Paiement sécurisé. Les
+        données bancaires ne passent pas par Gusto.
       </p>
     </form>
   );
