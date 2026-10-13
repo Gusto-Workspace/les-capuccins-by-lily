@@ -50,7 +50,7 @@ export default function TakeAwayPage({ seoRestaurantData = null }) {
         <div ref={heroRef}>
           <BannerComponent
             title="Vente à emporter"
-            eyebrow="Les Capuccins chez vous"
+            eyebrow="Les Capucins chez vous"
             description="Composez votre commande, choisissez votre créneau et nous nous occupons du reste."
             imgUrl="hero/header.webp"
           />
