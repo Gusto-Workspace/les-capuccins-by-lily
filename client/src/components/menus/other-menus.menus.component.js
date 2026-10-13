@@ -70,7 +70,10 @@ function RestaurantMenuBlock({ block }) {
                 key={`${block.id}-${index}`}
                 className="text-center text-[15px] leading-[1.65] text-[rgba(71,42,34,0.74)] tablet:text-[16px]"
               >
-                {line}
+                {line?.name || line}
+                {line?.description ? (
+                  <span className="block text-[0.85em] opacity-70">{line.description}</span>
+                ) : null}
               </p>
             );
           })}
