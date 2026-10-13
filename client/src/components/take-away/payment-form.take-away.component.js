@@ -62,7 +62,7 @@ function PaymentForm({ busy, onPaymentConfirmed }) {
         <PaymentElement
           options={{
             layout: "tabs",
-            wallets: { link: "never" },
+            wallets: { applePay: "auto", googlePay: "never", link: "never" },
           }}
         />
       </div>
