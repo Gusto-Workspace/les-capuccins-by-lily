@@ -1,0 +1,166 @@
+[
+  {
+    "label": "before",
+    "width": 390,
+    "scrollWidth": 404,
+    "elements": [
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 436
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 662
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-100",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 577
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 697
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 567
+      },
+      {
+        "tag": "DIV",
+        "className": "pointer-events-none absolute inset-[-4%] select-none",
+        "right": 406
+      },
+      {
+        "tag": "IMG",
+        "className": "site-ken-burns object-cover object-center",
+        "right": 410
+      },
+      {
+        "tag": "DIV",
+        "className": "site-reveal site-reveal--right  site-card relative rounded-[30px] p-5 tablet:p-6 desktop:p-7",
+        "right": 404
+      }
+    ]
+  },
+  {
+    "label": "after",
+    "width": 390,
+    "scrollWidth": 404,
+    "elements": [
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 436
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 662
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-100",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 577
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 697
+      },
+      {
+        "tag": "A",
+        "className": "group flex items-center gap-4 transition-opacity duration-300 hover:opacity-70 opacity-85",
+        "right": 721
+      },
+      {
+        "tag": "SPAN",
+        "className": "text-[11px] uppercase tracking-[0.32em] text-[rgba(71,42,34,0.45)]",
+        "right": 438
+      },
+      {
+        "tag": "SPAN",
+        "className": "nav-font text-[32px] leading-none text-[var(--site-ink)] tablet:text-[36px]",
+        "right": 567
+      },
+      {
+        "tag": "DIV",
+        "className": "pointer-events-none absolute inset-[-4%] select-none",
+        "right": 406
+      },
+      {
+        "tag": "IMG",
+        "className": "site-ken-burns object-cover object-center",
+        "right": 410
+      },
+      {
+        "tag": "DIV",
+        "className": "site-reveal site-reveal--right  site-card relative rounded-[30px] p-5 tablet:p-6 desktop:p-7",
+        "right": 404
+      }
+    ]
+  }
+]

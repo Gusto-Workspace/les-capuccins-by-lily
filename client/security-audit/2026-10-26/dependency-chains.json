@@ -1,0 +1,307 @@
+{
+  "@next/eslint-plugin-next": [
+    {
+      "node": "node_modules/@next/eslint-plugin-next",
+      "chain": [
+        "eslint-config-next@14.2.35",
+        "@next/eslint-plugin-next@14.2.35"
+      ],
+      "production": false
+    }
+  ],
+  "axios": [
+    {
+      "node": "node_modules/axios",
+      "chain": [
+        "axios@1.13.6"
+      ],
+      "production": true
+    }
+  ],
+  "baseline-browser-mapping": [
+    {
+      "node": "node_modules/baseline-browser-mapping",
+      "chain": [
+        "autoprefixer@10.4.27",
+        "browserslist@4.28.1",
+        "baseline-browser-mapping@2.10.8"
+      ],
+      "production": false
+    }
+  ],
+  "body-parser": [
+    {
+      "node": "node_modules/body-parser",
+      "chain": [
+        "express@4.22.1",
+        "body-parser@1.20.4"
+      ],
+      "production": true
+    }
+  ],
+  "brace-expansion": [
+    {
+      "node": "node_modules/@typescript-eslint/typescript-estree/node_modules/brace-expansion",
+      "chain": [
+        "eslint-config-next@14.2.35",
+        "@typescript-eslint/parser@8.57.1",
+        "@typescript-eslint/typescript-estree@8.57.1",
+        "minimatch@10.2.4",
+        "brace-expansion@5.0.4"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/brace-expansion",
+      "chain": [
+        "eslint@8.57.1",
+        "minimatch@3.1.5",
+        "brace-expansion@1.1.12"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/glob/node_modules/brace-expansion",
+      "chain": [
+        "eslint-config-next@14.2.35",
+        "@next/eslint-plugin-next@14.2.35",
+        "glob@10.3.10",
+        "minimatch@9.0.9",
+        "brace-expansion@2.0.2"
+      ],
+      "production": false
+    }
+  ],
+  "browserslist": [
+    {
+      "node": "node_modules/browserslist",
+      "chain": [
+        "autoprefixer@10.4.27",
+        "browserslist@4.28.1"
+      ],
+      "production": false
+    }
+  ],
+  "eslint-config-next": [
+    {
+      "node": "node_modules/eslint-config-next",
+      "chain": [
+        "eslint-config-next@14.2.35"
+      ],
+      "production": false
+    }
+  ],
+  "follow-redirects": [
+    {
+      "node": "node_modules/follow-redirects",
+      "chain": [
+        "axios@1.13.6",
+        "follow-redirects@1.15.11"
+      ],
+      "production": true
+    }
+  ],
+  "form-data": [
+    {
+      "node": "node_modules/form-data",
+      "chain": [
+        "axios@1.13.6",
+        "form-data@4.0.5"
+      ],
+      "production": true
+    },
+    {
+      "node": "node_modules/superagent/node_modules/form-data",
+      "chain": [
+        "sib-api-v3-sdk@8.5.0",
+        "superagent@3.7.0",
+        "form-data@2.5.5"
+      ],
+      "production": true
+    }
+  ],
+  "glob": [
+    {
+      "node": "node_modules/glob",
+      "chain": [
+        "eslint-config-next@14.2.35",
+        "@next/eslint-plugin-next@14.2.35",
+        "glob@10.3.10"
+      ],
+      "production": false
+    }
+  ],
+  "i18next-fs-backend": [
+    {
+      "node": "node_modules/i18next-fs-backend",
+      "chain": [
+        "next-i18next@15.4.3",
+        "i18next-fs-backend@2.6.1"
+      ],
+      "production": true
+    }
+  ],
+  "immutable": [
+    {
+      "node": "node_modules/immutable",
+      "chain": [
+        "sass@1.98.0",
+        "immutable@5.1.5"
+      ],
+      "production": true
+    }
+  ],
+  "js-yaml": [
+    {
+      "node": "node_modules/js-yaml",
+      "chain": [
+        "eslint@8.57.1",
+        "js-yaml@4.1.1"
+      ],
+      "production": false
+    }
+  ],
+  "nanoid": [
+    {
+      "node": "node_modules/nanoid",
+      "chain": [
+        "postcss@8.5.8",
+        "nanoid@3.3.11"
+      ],
+      "production": true
+    }
+  ],
+  "next": [
+    {
+      "node": "node_modules/next",
+      "chain": [
+        "next@14.2.35"
+      ],
+      "production": true
+    }
+  ],
+  "path-to-regexp": [
+    {
+      "node": "node_modules/path-to-regexp",
+      "chain": [
+        "express@4.22.1",
+        "path-to-regexp@0.1.12"
+      ],
+      "production": true
+    }
+  ],
+  "picomatch": [
+    {
+      "node": "node_modules/anymatch/node_modules/picomatch",
+      "chain": [
+        "tailwindcss@3.4.19",
+        "chokidar@3.6.0",
+        "anymatch@3.1.3",
+        "picomatch@2.3.1"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/micromatch/node_modules/picomatch",
+      "chain": [
+        "tailwindcss@3.4.19",
+        "micromatch@4.0.8",
+        "picomatch@2.3.1"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/picomatch",
+      "chain": [
+        "sass@1.98.0",
+        "@parcel/watcher@2.5.6",
+        "picomatch@4.0.3"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/tailwindcss/node_modules/picomatch",
+      "chain": [
+        "tailwindcss@3.4.19",
+        "chokidar@3.6.0",
+        "readdirp@3.6.0",
+        "picomatch@2.3.1"
+      ],
+      "production": false
+    }
+  ],
+  "postcss": [
+    {
+      "node": "node_modules/next/node_modules/postcss",
+      "chain": [
+        "next@14.2.35",
+        "postcss@8.4.31"
+      ],
+      "production": true
+    },
+    {
+      "node": "node_modules/postcss",
+      "chain": [
+        "postcss@8.5.8"
+      ],
+      "production": false
+    }
+  ],
+  "postcss-selector-parser": [
+    {
+      "node": "node_modules/postcss-nested/node_modules/postcss-selector-parser",
+      "chain": [
+        "tailwindcss@3.4.19",
+        "postcss-nested@6.2.0",
+        "postcss-selector-parser@6.1.2"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/postcss-selector-parser",
+      "chain": [
+        "postcss-nesting@13.0.2",
+        "postcss-selector-parser@7.1.1"
+      ],
+      "production": false
+    },
+    {
+      "node": "node_modules/tailwindcss/node_modules/postcss-selector-parser",
+      "chain": [
+        "tailwindcss@3.4.19",
+        "postcss-selector-parser@6.1.2"
+      ],
+      "production": false
+    }
+  ],
+  "proxy-addr": [
+    {
+      "node": "node_modules/proxy-addr",
+      "chain": [
+        "express@4.22.1",
+        "proxy-addr@2.0.7"
+      ],
+      "production": true
+    }
+  ],
+  "qs": [
+    {
+      "node": "node_modules/qs",
+      "chain": [
+        "express@4.22.1",
+        "qs@6.14.2"
+      ],
+      "production": true
+    }
+  ],
+  "source-map-js": [
+    {
+      "node": "node_modules/source-map-js",
+      "chain": [
+        "postcss@8.5.8",
+        "source-map-js@1.2.1"
+      ],
+      "production": true
+    }
+  ]
+}

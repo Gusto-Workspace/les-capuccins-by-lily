@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-26",
+  "node": "24.22.1",
+  "npm": "11.19.1",
+  "npm_ci": "passed",
+  "npm_ls_all": "passed",
+  "production_build": "passed",
+  "lockfile_sha256": "949ce324db4a7154b419acdb390bb802f7a90d26fd0f37991b0dead0ddf3856c",
+  "existing_tests": {
+    "passed": 23,
+    "failed": 0
+  },
+  "source_changes_by_audit": "package.json and package-lock.json only; source and configuration preserved",
+  "browser": "Chrome desktop 1440px and mobile 390px, simulated API; see browser-checks.json",
+  "real_stripe_and_3ds": "not tested",
+  "safari_firefox": "not tested",
+  "remaining_audit_package": "next@14.2.35",
+  "remaining_provider_confirmation": "GHSA-2464-fhr4-w9xw: fixed native library in Vercel managed Image Optimization service must be confirmed"
+}

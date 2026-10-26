@@ -2,7 +2,12 @@ import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
-export default function TakeAwayDialog({ title, children, onClose }) {
+export default function TakeAwayDialog({
+  title,
+  children,
+  onClose,
+  titleClassName = "",
+}) {
   const ref = useRef(null);
   const titleId = useId();
 
@@ -54,7 +59,7 @@ export default function TakeAwayDialog({ title, children, onClose }) {
       ) : null}
       <h2
         id={titleId}
-        className="yeseva-one-regular break-words text-[32px] leading-tight tablet:text-[40px]"
+        className={`yeseva-one-regular break-words text-[32px] leading-tight tablet:text-[40px] ${titleClassName}`}
       >
         {title}
       </h2>

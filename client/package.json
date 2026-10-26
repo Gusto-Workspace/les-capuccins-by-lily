@@ -16,10 +16,10 @@
     "@stripe/stripe-js": "^5.2.0",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "axios": "^1.7.7",
+    "axios": "^1.20.0",
     "crypto": "^1.0.1",
     "date-fns": "^4.1.0",
-    "express": "^4.21.1",
+    "express": "^4.22.3",
     "gsap": "^3.12.5",
     "i18next": "^23.16.0",
     "jwt-decode": "^4.0.0",
@@ -40,11 +40,20 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.15",
-    "postcss": "^8.4.47",
+    "postcss": "^8.5.31",
     "postcss-nesting": "^13.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "sass": "^1.79.5",
     "tailwindcss": "^3.4.13"
+  },
+  "overrides": {
+    "next": {
+      "postcss": "8.5.31"
+    },
+    "@next/eslint-plugin-next": {
+      "glob": "10.5.0"
+    },
+    "postcss-selector-parser": "7.1.7"
   }
 }

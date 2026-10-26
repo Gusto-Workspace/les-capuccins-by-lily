@@ -1,0 +1,60 @@
+{
+  "browser": "Chrome via Playwright 1.56.1",
+  "api": "simulated; no real operations",
+  "checks": [
+    {
+      "path": "/",
+      "width": 1440,
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/menus",
+      "width": 1440,
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/reservations",
+      "width": 1440,
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/",
+      "width": 390,
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/menus",
+      "width": 390,
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "path": "/reservations",
+      "width": 390,
+      "status": 200,
+      "horizontalOverflow": true
+    },
+    {
+      "path": "/menus?gustoPrint=1&autoprint=1",
+      "printCalls": 1
+    },
+    {
+      "path": "/reservations/audit-reservation/bank-hold",
+      "prepareErrorHandled": true
+    },
+    {
+      "reservationSubmittedToMock": true
+    },
+    {
+      "path": "/take-away",
+      "status": 200
+    }
+  ],
+  "expectedBlockedStripeErrors": [
+    "Failed to load Stripe.js"
+  ]
+}

@@ -172,6 +172,7 @@ img {
 
 // Le contrôle natif iOS impose une largeur intrinsèque sans ces contraintes.
 input.take-away-date {
+  position: relative;
   display: block;
   box-sizing: border-box;
   width: 100%;
@@ -179,11 +180,24 @@ input.take-away-date {
   max-width: 100%;
   -webkit-appearance: none;
   appearance: none;
+  text-align: center;
 }
 
 input.take-away-date::-webkit-date-and-time-value {
   min-width: 0;
-  text-align: left;
+  text-align: center;
+}
+
+input.take-away-date::-webkit-datetime-edit {
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+
+// L'icône native reste cliquable sans décentrer le texte dans Chromium.
+input.take-away-date::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 16px;
 }
 
 .site-button {
@@ -210,6 +224,12 @@ input.take-away-date::-webkit-date-and-time-value {
 .site-button:hover {
   transform: translateY(-1px);
   opacity: 0.94;
+}
+
+// Le bouton flottant garde sa position, y compris au survol tactile iOS.
+.site-button.take-away-cart-button,
+.site-button.take-away-cart-button:hover {
+  transform: none;
 }
 
 .site-button--secondary {

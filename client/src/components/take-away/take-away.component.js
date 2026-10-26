@@ -1510,10 +1510,13 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
   return (
     <section className="relative mx-auto max-w-[1500px] px-5 py-14 tablet:px-8 tablet:py-20 desktop:px-[60px]">
       {pendingDraft && !order ? (
-        <TakeAwayDialog title="Une commande est en cours">
+        <TakeAwayDialog
+          title="Une commande est en cours"
+          titleClassName="text-center text-balance"
+        >
           <p className="mt-4 leading-7 text-[var(--site-ink-soft)]">
             Vous avez commencé une commande. Souhaitez-vous la reprendre ou
-            annuler ce brouillon pour en commencer une nouvelle ?
+            l'abandonner ?
           </p>
           <div className="mt-7 flex flex-col gap-3 tablet:flex-row tablet:justify-end">
             <button
@@ -1784,7 +1787,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                 <h2 className="yeseva-one-regular mt-2 text-[36px]">
                   Quand souhaitez-vous votre commande ?
                 </h2>
-                <div className="mt-6 w-full min-w-0 max-w-[320px]">
+                <div className="mx-auto mt-6 w-full min-w-0 max-w-[320px]">
                   <Field label="Date" required>
                     <input
                       type="date"
@@ -2010,13 +2013,21 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
 
       {step === "catalog" && cart.length ? (
         <>
-          <button
-            type="button"
-            onClick={() => setCartOpen(true)}
-            className="site-button fixed bottom-[max(18px,env(safe-area-inset-bottom))] left-1/2 z-40 w-[calc(100%-32px)] -translate-x-1/2 shadow-[0_18px_50px_rgba(71,42,34,0.3)] desktop:hidden"
+          <div
+            aria-hidden="true"
+            className="h-[calc(90px+env(safe-area-inset-bottom))] desktop:hidden"
+          />
+          <div
+            className="fixed bottom-[max(18px,env(safe-area-inset-bottom))] left-[max(20px,env(safe-area-inset-left))] right-[max(20px,env(safe-area-inset-right))] z-40 desktop:hidden"
           >
-            Voir mon panier · {itemCount} · {formatMoney(subtotal)}
-          </button>
+            <button
+              type="button"
+              onClick={() => setCartOpen(true)}
+              className="site-button take-away-cart-button w-full shadow-[0_18px_50px_rgba(71,42,34,0.3)]"
+            >
+              Voir mon panier · {itemCount} · {formatMoney(subtotal)}
+            </button>
+          </div>
           {cartOpen ? (
             <>
               <button
