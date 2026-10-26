@@ -162,6 +162,30 @@ img {
   box-shadow: 0 0 0 4px rgba(223, 160, 132, 0.12);
 }
 
+.take-away-dialog {
+  background: var(--site-cream);
+}
+
+.take-away-dialog::backdrop {
+  background: rgba(39, 20, 12, 0.55);
+}
+
+// Le contrôle natif iOS impose une largeur intrinsèque sans ces contraintes.
+input.take-away-date {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input.take-away-date::-webkit-date-and-time-value {
+  min-width: 0;
+  text-align: left;
+}
+
 .site-button {
   display: inline-flex;
   align-items: center;

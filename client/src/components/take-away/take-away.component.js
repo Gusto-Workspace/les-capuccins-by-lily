@@ -13,8 +13,12 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import PaymentTakeAwayComponent from "./payment-form.take-away.component";
+import paymentState from "@/_assets/utils/take-away-payment-state";
+import draftState from "@/_assets/utils/take-away-draft";
+import TakeAwayDialog from "./dialog.take-away.component";
 
 const CART_STORAGE_KEY = "capuccins_take_away_cart_v1";
+const DRAFT_STORAGE_KEY = "capuccins_take_away_draft_v1";
 const ATTEMPT_STORAGE_KEY = "capuccins_take_away_attempt_v1";
 const MAX_QUANTITY = 99;
 
@@ -53,6 +57,14 @@ function writeStorage(key, value) {
     window.localStorage.setItem(key, JSON.stringify(value));
   } catch {
     // Le stockage local reste un confort : le parcours fonctionne sans lui.
+  }
+}
+
+function removeStorage(key) {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Le parcours reste utilisable lorsque le stockage est désactivé.
   }
 }
 
@@ -201,42 +213,6 @@ function effectivePrice(item) {
   return Number(item.unitPrice || 0) + Number(item.optionPrice || 0);
 }
 
-function reconcileCart(cart, catalog) {
-  return (Array.isArray(cart) ? cart : []).flatMap((entry) => {
-    const item = catalog.find(
-      (candidate) => String(candidate._id) === String(entry.catalogItemId),
-    );
-    if (!item) return [];
-
-    const options = item.options || [];
-    const option = options.length
-      ? options.find(
-          (candidate) =>
-            String(candidate._id) === String(entry.optionId) ||
-            candidate.name === entry.optionName,
-        )
-      : null;
-    if (options.length && !option) return [];
-
-    return [
-      {
-        key: cartKey(item._id, option?._id),
-        catalogItemId: String(item._id),
-        name: item.name,
-        categoryName: item.categoryName || "À emporter",
-        unitPrice: Number(item.price || 0),
-        optionId: option ? String(option._id) : "",
-        optionName: option?.name || "",
-        optionPrice: Number(option?.price || 0),
-        quantity: Math.min(
-          MAX_QUANTITY,
-          Math.max(1, Number(entry.quantity || 1)),
-        ),
-      },
-    ];
-  });
-}
-
 function Field({ label, required = false, children }) {
   return (
     <label className="block">
@@ -369,7 +345,20 @@ function CartSummary({
   );
 }
 
-function CatalogCard({ item, selection, onSelection, onAdd }) {
+function CatalogCard({ item, selection, onSelection, onAdd, onDescription }) {
+  const descriptionRef = useRef(null);
+  const [descriptionTruncated, setDescriptionTruncated] = useState(false);
+  useEffect(() => {
+    const element = descriptionRef.current;
+    if (!element) return;
+    const measure = () =>
+      setDescriptionTruncated(element.scrollHeight > element.clientHeight + 1);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    document.fonts?.ready.then(measure);
+    return () => observer.disconnect();
+  }, [item.description]);
   const options = item.options || [];
   const selectedOption = options.find(
     (option) => String(option._id) === String(selection),
@@ -404,9 +393,23 @@ function CatalogCard({ item, selection, onSelection, onAdd }) {
           </h3>
 
           {item.description ? (
-            <p className="mt-2 line-clamp-2 text-[13px] leading-5 text-[var(--site-ink-soft)]">
+            <p
+              ref={descriptionRef}
+              className="mt-2 line-clamp-2 text-[13px] leading-5 text-[var(--site-ink-soft)]"
+            >
               {item.description}
             </p>
+          ) : null}
+          {descriptionTruncated ? (
+            <button
+              type="button"
+              onClick={() => onDescription(item)}
+              aria-label={`Voir plus sur ${item.name}`}
+              aria-haspopup="dialog"
+              className="mt-1 min-h-11 text-[13px] font-semibold text-[var(--site-orange-deep)] underline underline-offset-4"
+            >
+              Voir plus
+            </button>
           ) : null}
 
           {options.length ? (
@@ -458,9 +461,7 @@ function CatalogCard({ item, selection, onSelection, onAdd }) {
 }
 
 function Confirmation({ order, onNewOrder }) {
-  const isConfirmed = order?.status === "confirmed";
-  const paidOnline =
-    order?.paymentMethod === "online" && order?.paymentStatus === "paid";
+  const outcome = paymentState.orderOutcomeContent(order);
   const modeLabel =
     order?.fulfillmentMode === "delivery"
       ? "Livraison"
@@ -475,17 +476,10 @@ function Confirmation({ order, onNewOrder }) {
           Merci
         </p>
         <h2 className="yeseva-one-regular mt-2 text-[40px] leading-tight tablet:text-[50px]">
-          {isConfirmed
-            ? "Votre commande est confirmée."
-            : "Votre commande a bien été reçue."}
+          {outcome.title}
         </h2>
         <p className="mx-auto mt-5 max-w-[650px] leading-7 text-[var(--site-ink-soft)]">
-          {isConfirmed
-            ? "L’équipe des Capuccins va la préparer avec soin."
-            : "Le restaurant doit encore la confirmer. Vous recevrez un email dès qu’elle sera acceptée."}
-          {!isConfirmed && paidOnline
-            ? " Votre paiement a bien été effectué ; en cas de refus, son remboursement sera déclenché."
-            : ""}
+          {outcome.description}
         </p>
 
         <div className="mx-auto mt-8 max-w-[620px] rounded-[24px] bg-[var(--site-peach)] p-5 text-left tablet:p-7">
@@ -526,13 +520,33 @@ function Confirmation({ order, onNewOrder }) {
           </div>
 
           <div className="flex justify-between border-t border-[var(--site-line)] pt-5 text-lg font-bold">
-            <span>Total</span>
+            <span>{order.adjustments?.length ? "Total initial" : "Total"}</span>
             <span>{formatMoney(order?.total, order?.currency)}</span>
           </div>
+          {order.adjustments?.length ? (
+            <div className="mt-3 flex justify-between gap-4 text-sm">
+              <span>Montant de la commande après ajustements</span>
+              <span>
+                {formatMoney(
+                  Number(order.remainingAmountCents) / 100,
+                  order.currency,
+                )}
+              </span>
+            </div>
+          ) : null}
+          {Number(order.refundedAmountCents) > 0 ? (
+            <div className="mt-3 flex justify-between gap-4 text-sm">
+              <span>Montant remboursé</span>
+              <span>
+                {formatMoney(
+                  Number(order.refundedAmountCents) / 100,
+                  order.currency,
+                )}
+              </span>
+            </div>
+          ) : null}
           <p className="mt-3 text-sm text-[var(--site-ink-soft)]">
-            {order?.paymentMethod === "online"
-              ? "Paiement effectué en ligne"
-              : "Paiement au retrait"}
+            {outcome.paymentLabel}
           </p>
           {order?.fulfillmentMode === "delivery" && order?.deliveryAddress ? (
             <p className="mt-4 text-sm leading-6">
@@ -566,6 +580,11 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
   });
   const [cart, setCart] = useState([]);
   const [storageReady, setStorageReady] = useState(false);
+  const [pendingDraft, setPendingDraft] = useState(null);
+  const [draftNotice, setDraftNotice] = useState("");
+  const [descriptionItem, setDescriptionItem] = useState(null);
+  const [recoveringAttempt, setRecoveringAttempt] = useState(true);
+  const [recoveryError, setRecoveryError] = useState("");
   const [optionSelections, setOptionSelections] = useState({});
   const [cartOpen, setCartOpen] = useState(false);
   const [step, setStep] = useState("catalog");
@@ -578,19 +597,10 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
   });
   const [slotsReload, setSlotsReload] = useState(0);
   const [slotId, setSlotId] = useState("");
+  const slotIdRef = useRef(slotId);
+  slotIdRef.current = slotId;
   const [paymentMethod, setPaymentMethod] = useState("on_site");
-  const [customer, setCustomer] = useState({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    note: "",
-    line1: "",
-    line2: "",
-    zipCode: "",
-    city: "",
-    instructions: "",
-  });
+  const [customer, setCustomer] = useState(draftState.emptyCustomer);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [attempt, setAttempt] = useState(null);
@@ -603,10 +613,27 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
   const catalog = catalogState.data?.catalog || [];
 
   useEffect(() => {
-    setCart(readStorage(CART_STORAGE_KEY, []));
+    setPendingDraft(
+      draftState.readDraft(
+        readStorage(DRAFT_STORAGE_KEY, null),
+        readStorage(CART_STORAGE_KEY, []),
+        restaurantId,
+      ),
+    );
     const savedAttempt = readStorage(ATTEMPT_STORAGE_KEY, null);
     setAttempt(savedAttempt);
     attemptRef.current = savedAttempt;
+    setRecoveringAttempt(
+      Boolean(savedAttempt?.idempotencyKey && savedAttempt?.publicAccessToken),
+    );
+    if (
+      savedAttempt?.orderId &&
+      (!savedAttempt.idempotencyKey || !savedAttempt.publicAccessToken)
+    ) {
+      setRecoveryError(
+        "Les informations de votre commande sont incomplètes. Contactez le restaurant pour vérifier son état avant de recommander.",
+      );
+    }
     setStorageReady(true);
   }, []);
 
@@ -649,12 +676,67 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
 
   useEffect(() => {
     if (!storageReady || !catalogState.data) return;
-    setCart((current) => reconcileCart(current, catalog));
+    setCart((current) => draftState.reconcileCart(current, catalog));
   }, [catalog, catalogState.data, storageReady]);
 
   useEffect(() => {
-    if (storageReady) writeStorage(CART_STORAGE_KEY, cart);
-  }, [cart, storageReady]);
+    // Une commande serveur conserve son écran de récupération et ses informations.
+    if (!order || !pendingDraft || !settings || step === "confirmation") return;
+    const restored = draftState.restoreDraft(
+      pendingDraft,
+      catalog,
+      settings,
+      localDateKey(),
+    );
+    setCart(restored.cart);
+    setCustomer(restored.customer);
+    setOptionSelections(restored.optionSelections);
+    setMode(restored.mode);
+    setDateKey(restored.dateKey);
+    setSlotId(restored.slotId);
+    setPaymentMethod(restored.paymentMethod);
+    setPendingDraft(null);
+  }, [order, pendingDraft, settings, catalog, step]);
+
+  useEffect(() => {
+    // Le brouillon reste intact tant que le client n'a pas fait son choix.
+    if (!storageReady || pendingDraft || recoveringAttempt || recoveryError)
+      return;
+    if (["payment", "confirmation"].includes(step)) return;
+    const draft = {
+      version: 1,
+      restaurantId,
+      cart,
+      customer,
+      optionSelections,
+      step,
+      mode,
+      dateKey,
+      slotId,
+      paymentMethod,
+    };
+    if (draftState.hasDraftContent(draft)) {
+      writeStorage(DRAFT_STORAGE_KEY, draft);
+      writeStorage(CART_STORAGE_KEY, cart);
+    } else {
+      removeStorage(DRAFT_STORAGE_KEY);
+      removeStorage(CART_STORAGE_KEY);
+    }
+  }, [
+    cart,
+    customer,
+    dateKey,
+    mode,
+    optionSelections,
+    paymentMethod,
+    pendingDraft,
+    recoveringAttempt,
+    recoveryError,
+    restaurantId,
+    slotId,
+    step,
+    storageReady,
+  ]);
 
   useEffect(() => {
     if (!cart.length && cartOpen) setCartOpen(false);
@@ -664,7 +746,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
     attemptRef.current = attempt;
     if (storageReady) {
       if (attempt) writeStorage(ATTEMPT_STORAGE_KEY, attempt);
-      else window.localStorage.removeItem(ATTEMPT_STORAGE_KEY);
+      else removeStorage(ATTEMPT_STORAGE_KEY);
     }
   }, [attempt, storageReady]);
 
@@ -713,16 +795,22 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
     )
       .then(parseApiResponse)
       .then(({ slots }) => {
+        if (controller.signal.aborted) return;
         const now = Date.now();
         const futureSlots = (slots || []).filter(
           (slot) => new Date(slot.scheduledFor).getTime() > now,
         );
         setSlotsState({ loading: false, error: "", slots: futureSlots });
-        setSlotId((current) =>
-          futureSlots.some((slot) => slot.slotId === current && slot.available)
-            ? current
-            : "",
-        );
+        const current = slotIdRef.current;
+        if (
+          current &&
+          !futureSlots.some((slot) => slot.slotId === current && slot.available)
+        ) {
+          setSlotId("");
+          setDraftNotice(
+            "Le créneau choisi n’est plus disponible. Choisissez un nouveau créneau ; les autres informations sont conservées.",
+          );
+        }
       })
       .catch((error) => {
         if (error.name !== "AbortError") {
@@ -785,6 +873,9 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
   );
 
   const finishOrder = useCallback((resolvedOrder) => {
+    removeStorage(DRAFT_STORAGE_KEY);
+    removeStorage(CART_STORAGE_KEY);
+    setPendingDraft(null);
     setOrder(resolvedOrder);
     setCart([]);
     setClientSecret("");
@@ -814,7 +905,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
               headers: { "X-Take-Away-Token": activeAttempt.publicAccessToken },
             },
           ).then(parseApiResponse);
-          if (["paid", "refunded"].includes(result.order?.paymentStatus)) {
+          if (paymentState.hasFinalOrderOutcome(result.order)) {
             finishOrder(result.order);
             return;
           }
@@ -825,7 +916,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
       }
       setReconciling(false);
       setSubmitError(
-        "Le paiement a été reçu, mais sa confirmation par le restaurant prend un peu plus de temps. Actualisez cette page dans quelques instants : votre commande ne sera pas recréée.",
+        "La vérification du paiement n’est pas terminée. Vérifiez son statut dans quelques instants avant de tenter un nouveau paiement. Votre commande ne sera pas recréée.",
       );
     },
     [apiBaseUrl, finishOrder, restaurantId],
@@ -833,6 +924,13 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
 
   const reconcilePayment = useCallback(
     async (activeAttempt, paymentIntentId) => {
+      if (!activeAttempt?.orderId || !activeAttempt?.publicAccessToken) {
+        setSubmitError(
+          "La tentative de paiement est introuvable. Rechargez la page pour vérifier votre commande.",
+        );
+        setReconciling(false);
+        return;
+      }
       setReconciling(true);
       setSubmitError("");
       try {
@@ -886,7 +984,9 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
               },
             },
           ).then(parseApiResponse);
-          if (canceled || !recovered.order?._id) return;
+          if (canceled) return;
+          if (!recovered.order?._id)
+            throw new Error("TAKE_AWAY_REQUEST_FAILED");
           activeAttempt = {
             ...activeAttempt,
             orderId: recovered.order._id,
@@ -895,12 +995,17 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
           attemptRef.current = activeAttempt;
           writeStorage(ATTEMPT_STORAGE_KEY, activeAttempt);
         } catch (error) {
+          if (!canceled && error?.status === 404) {
+            setAttempt(null);
+            attemptRef.current = null;
+          }
           if (
             !canceled &&
             error?.name !== "AbortError" &&
             error?.status !== 404
           ) {
             setSubmitError(publicErrorMessage(error));
+            setRecoveryError(publicErrorMessage(error));
           }
           return;
         }
@@ -927,15 +1032,18 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
           },
         ).then(parseApiResponse);
         if (canceled) return;
-        if (
-          activeAttempt.completed ||
-          statusResult.order?.paymentMethod !== "online" ||
-          ["paid", "refunded"].includes(statusResult.order?.paymentStatus)
-        ) {
+        if (!statusResult.order?._id)
+          throw new Error("TAKE_AWAY_REQUEST_FAILED");
+        if (paymentState.hasFinalOrderOutcome(statusResult.order)) {
           finishOrder(statusResult.order);
           return;
         }
         if (statusResult.order?.paymentMethod === "online") {
+          // Keep a visible recovery screen even if resuming the PaymentIntent
+          // fails (expiry, response lost, or a concurrent confirmation).
+          setOrder(statusResult.order);
+          setClientSecret("");
+          setStep("payment");
           const paymentResult = await fetch(
             takeAwayEndpoint(
               apiBaseUrl,
@@ -949,9 +1057,13 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
             },
           ).then(parseApiResponse);
           if (!canceled) {
-            setClientSecret(paymentResult.clientSecret);
-            setOrder(paymentResult.order);
-            setStep("payment");
+            if (paymentState.hasFinalOrderOutcome(paymentResult.order)) {
+              finishOrder(paymentResult.order);
+            } else {
+              setClientSecret(paymentResult.clientSecret);
+              setOrder(paymentResult.order);
+              setStep("payment");
+            }
           }
         }
       } catch (error) {
@@ -960,11 +1072,20 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
           error?.name !== "AbortError" &&
           error?.status === 404
         ) {
-          setAttempt(null);
+          // Un identifiant de commande existe : ne pas la transformer en brouillon.
+          setRecoveryError(
+            "La commande enregistrée ne peut pas être vérifiée. Réessayez ou contactez le restaurant avant de recommander.",
+          );
+        } else if (!canceled && error?.name !== "AbortError") {
+          setSubmitError(publicErrorMessage(error));
+          setRecoveryError(publicErrorMessage(error));
+          if (error?.status === 409) await reconcilePayment(activeAttempt);
         }
       }
     }
-    resume();
+    resume().finally(() => {
+      if (!canceled) setRecoveringAttempt(false);
+    });
     return () => {
       canceled = true;
       controller.abort();
@@ -1026,7 +1147,17 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
 
   function checkoutValidation() {
     if (!cart.length) return "Votre panier est vide.";
-    if (!slotId) return "Choisissez un créneau disponible.";
+    if (
+      slotsState.loading ||
+      slotsState.error ||
+      !slotsState.slots.some(
+        (slot) =>
+          slot.slotId === slotId &&
+          slot.available &&
+          new Date(slot.scheduledFor).getTime() > Date.now(),
+      )
+    )
+      return "Choisissez un créneau disponible.";
     if (!customer.firstName.trim() || !customer.lastName.trim())
       return "Indiquez votre prénom et votre nom.";
     if (customer.phone.replace(/\D/g, "").length < 6)
@@ -1137,7 +1268,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
       writeStorage(ATTEMPT_STORAGE_KEY, activeAttempt);
       setOrder(createdOrder);
 
-      if (createdOrder.paymentMethod !== "online") {
+      if (paymentState.hasFinalOrderOutcome(createdOrder)) {
         finishOrder(createdOrder);
         return;
       }
@@ -1153,6 +1284,10 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
           headers: { "X-Take-Away-Token": activeAttempt.publicAccessToken },
         },
       ).then(parseApiResponse);
+      if (paymentState.hasFinalOrderOutcome(paymentResult.order)) {
+        finishOrder(paymentResult.order);
+        return;
+      }
       setClientSecret(paymentResult.clientSecret);
       setStep("payment");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1196,9 +1331,42 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
     setAttempt(null);
     attemptRef.current = null;
     setOrder(null);
+    cancelDraft();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function resumeDraft() {
+    const restored = draftState.restoreDraft(
+      pendingDraft,
+      catalog,
+      settings,
+      localDateKey(),
+    );
+    setCart(restored.cart);
+    setCustomer(restored.customer);
+    setOptionSelections(restored.optionSelections);
+    setMode(restored.mode);
+    setDateKey(restored.dateKey);
+    setSlotId(restored.slotId);
+    setPaymentMethod(restored.paymentMethod);
+    setStep(restored.step);
+    setDraftNotice(restored.notice);
+    setPendingDraft(null);
+  }
+
+  function cancelDraft() {
+    // Brouillon local uniquement : aucune requête d'annulation de commande.
+    removeStorage(DRAFT_STORAGE_KEY);
+    removeStorage(CART_STORAGE_KEY);
+    setPendingDraft(null);
+    setCart([]);
+    setCustomer(draftState.emptyCustomer());
+    setOptionSelections({});
+    setSlotId("");
+    setDateKey(localDateKey());
+    setDraftNotice("");
     setSubmitError("");
     setStep("catalog");
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   if (catalogState.loading) {
@@ -1264,8 +1432,8 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
             {reconciling ? (
               <div className="mt-6 rounded-[20px] bg-[var(--site-peach)] p-5">
                 <p className="flex items-center gap-3 font-semibold">
-                  <LoaderCircle className="animate-spin" size={20} /> Paiement
-                  reçu, confirmation de votre commande en cours…
+                  <LoaderCircle className="animate-spin" size={20} />{" "}
+                  Vérification du paiement et de votre commande en cours…
                 </p>
               </div>
             ) : clientSecret ? (
@@ -1290,6 +1458,15 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                 {submitError}
               </p>
             ) : null}
+            {submitError && !reconciling ? (
+              <button
+                type="button"
+                className="site-button site-button--outline mt-4"
+                onClick={() => reconcilePayment(attemptRef.current)}
+              >
+                Vérifier le statut du paiement
+              </button>
+            ) : null}
           </div>
           <CartSummary
             cart={orderCart}
@@ -1302,12 +1479,74 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
     );
   }
 
+  if (recoveringAttempt || recoveryError) {
+    return (
+      <section className="mx-auto max-w-[760px] px-5 py-14">
+        <div className="site-card rounded-[30px] p-6 tablet:p-8" role="status">
+          <h2 className="yeseva-one-regular text-[32px]">
+            Votre commande en cours
+          </h2>
+          <p className="mt-4 leading-7">
+            {recoveryError || "Vérification de votre commande en cours…"}
+          </p>
+          {recoveryError ? (
+            <button
+              type="button"
+              className="site-button mt-6"
+              onClick={() => window.location.reload()}
+            >
+              Réessayer la vérification
+            </button>
+          ) : null}
+        </div>
+      </section>
+    );
+  }
+
   const categories = Array.from(
     new Set(catalog.map((item) => item.categoryName || "À emporter")),
   );
 
   return (
     <section className="relative mx-auto max-w-[1500px] px-5 py-14 tablet:px-8 tablet:py-20 desktop:px-[60px]">
+      {pendingDraft && !order ? (
+        <TakeAwayDialog title="Une commande est en cours">
+          <p className="mt-4 leading-7 text-[var(--site-ink-soft)]">
+            Vous avez commencé une commande. Souhaitez-vous la reprendre ou
+            annuler ce brouillon pour en commencer une nouvelle ?
+          </p>
+          <div className="mt-7 flex flex-col gap-3 tablet:flex-row tablet:justify-end">
+            <button
+              type="button"
+              onClick={cancelDraft}
+              className="site-button site-button--outline"
+            >
+              Annuler
+            </button>
+            <button type="button" onClick={resumeDraft} className="site-button">
+              Reprendre
+            </button>
+          </div>
+        </TakeAwayDialog>
+      ) : null}
+      {descriptionItem ? (
+        <TakeAwayDialog
+          title={descriptionItem.name}
+          onClose={() => setDescriptionItem(null)}
+        >
+          <p className="mt-5 whitespace-pre-wrap break-words text-[15px] leading-7 text-[var(--site-ink-soft)]">
+            {descriptionItem.description}
+          </p>
+        </TakeAwayDialog>
+      ) : null}
+      {draftNotice ? (
+        <p
+          role="status"
+          className="mb-7 rounded-[20px] bg-[var(--site-peach)] p-5 text-sm leading-6"
+        >
+          {draftNotice}
+        </p>
+      ) : null}
       {step === "catalog" ? (
         <>
           <div className="mx-auto max-w-[760px] text-center">
@@ -1359,6 +1598,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                               }))
                             }
                             onAdd={(option) => addItem(item, option)}
+                            onDescription={setDescriptionItem}
                           />
                         ))}
                     </div>
@@ -1390,7 +1630,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
             <ChevronLeft size={17} /> Modifier mon panier
           </button>
           <div className="grid gap-8 desktop:grid-cols-[minmax(0,1fr)_380px] desktop:items-start">
-            <div className="space-y-7">
+            <div className="min-w-0 space-y-7">
               <div className="desktop:hidden">
                 <CartSummary
                   cart={cart}
@@ -1544,7 +1784,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                 <h2 className="yeseva-one-regular mt-2 text-[36px]">
                   Quand souhaitez-vous votre commande ?
                 </h2>
-                <div className="mt-6 max-w-[320px]">
+                <div className="mt-6 w-full min-w-0 max-w-[320px]">
                   <Field label="Date" required>
                     <input
                       type="date"
@@ -1554,7 +1794,7 @@ export default function TakeAwayComponent({ apiBaseUrl, restaurantId }) {
                         setDateKey(event.target.value);
                         setSlotId("");
                       }}
-                      className="site-input min-h-12 px-4"
+                      className="site-input take-away-date min-h-12 px-4"
                     />
                   </Field>
                 </div>

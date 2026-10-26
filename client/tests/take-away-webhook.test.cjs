@@ -6,6 +6,7 @@ const Stripe = require("stripe");
 
 const {
   createTakeAwayWebhookHandler,
+  postTakeAwayStripeEvent,
   readRawBody,
 } = require("../src/_assets/server/take-away-webhook");
 const {
@@ -201,4 +202,97 @@ test("the site HMAC uses the same timestamp-payload protocol as Gusto", () => {
 
   assert.equal(proof.timestamp, timestamp);
   assert.equal(proof.signature, expected);
+});
+
+test("an empty or unhandled acknowledgement remains retryable", async () => {
+  for (const result of [undefined, {}, { handled: false }]) {
+    const res = responseRecorder();
+    await routeHandler(async () => result)(signedRequest(eventPayload("payment_intent.succeeded")), res);
+    assert.equal(res.statusCode, 500);
+  }
+});
+
+test("the actual forwarding client rejects HTTP errors, HTML and incomplete JSON", async () => {
+  const env = { NEXT_PUBLIC_API_URL: "http://gusto.invalid/api", GUSTO_SHARED_SECRET: "synthetic_shared" };
+  for (const [status, body] of [[401, { code: "INVALID_SIGNATURE" }], [500, { error: "internal" }],
+    [200, null], [200, {}], [200, { received: true, handled: false }]]) {
+    await assert.rejects(postTakeAwayStripeEvent({}, { env, fetchImpl: async () => ({
+      ok: status === 200, status,
+      json: async () => { if (body === null) throw new Error("HTML"); return body; },
+    }) }));
+  }
+  let captured;
+  const result = await postTakeAwayStripeEvent({ event: { id: "evt_synthetic" } }, { env,
+    fetchImpl: async (url, options) => {
+      captured = { url, options };
+      return { ok: true, status: 200, json: async () => ({ received: true, handled: true }) };
+    } });
+  assert.equal(result.handled, true);
+  assert.equal(captured.url, "http://gusto.invalid/api/take-away/stripe-events");
+  assert.equal(captured.options.redirect, "error");
+  assert.ok(captured.options.signal);
+  assert.ok(captured.options.headers["x-gusto-signature"]);
+});
+
+test("a raw payload change invalidates the Stripe signature", async () => {
+  const payload = eventPayload("payment_intent.succeeded");
+  const signature = stripe.webhooks.generateTestHeaderString({ payload, secret: WEBHOOK_SECRET });
+  let calls = 0;
+  const res = responseRecorder();
+  await routeHandler(async () => { calls++; })(signedRequest(`${payload} `, signature), res);
+  assert.equal(res.statusCode, 400);
+  assert.equal(calls, 0);
+});
+
+test("errors containing sensitive payloads are never written to webhook logs", async () => {
+  const messages = [];
+  const original = console.error;
+  console.error = (...args) => messages.push(JSON.stringify(args));
+  try {
+    const res = responseRecorder();
+    await routeHandler(async () => { throw new Error("sensitive_synthetic_secret"); })(
+      signedRequest(eventPayload("payment_intent.succeeded")), res);
+    const signatureRes = responseRecorder();
+    await createTakeAwayWebhookHandler({ env: { NEXT_PUBLIC_RESTAURANT_ID: RESTAURANT_ID,
+      STRIPE_TAKE_AWAY_WEBHOOK_SECRET: WEBHOOK_SECRET },
+      webhooks: { constructEvent() { throw new Error("sensitive_synthetic_secret"); } },
+    })(signedRequest(eventPayload("payment_intent.succeeded")), signatureRes);
+  } finally { console.error = original; }
+  assert.equal(messages.length, 2);
+  assert.ok(messages.every((message) => !message.includes("sensitive_synthetic_secret")));
+});
+
+test("failed and canceled events preserve backend errors and only acknowledge confirmed processing", async () => {
+  const originalLog = console.error;
+  const logs = [];
+  console.error = (...args) => logs.push(args);
+  try {
+    for (const type of ["payment_intent.payment_failed", "payment_intent.canceled"]) {
+      for (const status of [400, 401, 403, 404, 409, 500, 503, 200]) {
+        const code = status === 401 ? "INVALID_SIGNATURE" : status === 404
+          ? "TAKE_AWAY_ORDER_NOT_FOUND" : "SYNTHETIC_BACKEND_ERROR";
+        const handler = routeHandler((payload) => postTakeAwayStripeEvent(payload, {
+          env: { NEXT_PUBLIC_API_URL: "https://gusto.invalid/api", GUSTO_SHARED_SECRET: "synthetic_hmac" },
+          fetchImpl: async () => ({ ok: status === 200, status,
+            json: async () => status === 200 ? { received: true, handled: true }
+              : { error: "Backend synthetic error", code },
+          }),
+        }));
+        const payload = JSON.parse(eventPayload(type));
+        Object.assign(payload.data.object, { status: type.endsWith("canceled")
+          ? "canceled" : "requires_payment_method", amount_received: 0 });
+        const res = responseRecorder();
+        await handler(signedRequest(JSON.stringify(payload)), res);
+        if (status === 200) {
+          assert.equal(res.statusCode, 200);
+          assert.equal(res.body.handled, true);
+        } else {
+          assert.equal(res.statusCode, 500);
+          assert.deepEqual(res.body, { error: "Transmission webhook impossible" });
+          assert.equal(logs.at(-1)[1].upstreamStatus, status);
+          assert.equal(logs.at(-1)[1].code, code);
+        }
+      }
+    }
+  } finally { console.error = originalLog; }
 });

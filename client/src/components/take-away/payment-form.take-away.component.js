@@ -16,7 +16,7 @@ function getPaymentErrorMessage(error) {
   if (code.includes("expired") || code.includes("incorrect")) {
     return "Les informations de carte semblent incorrectes. Veuillez les vérifier.";
   }
-  return "Le paiement n’a pas pu être validé. Aucun nouveau débit n’a été créé ; vous pouvez réessayer.";
+  return "Le résultat du paiement n’est pas confirmé. Vérifiez son statut avant de tenter un nouveau paiement.";
 }
 
 function PaymentForm({ busy, onPaymentConfirmed }) {

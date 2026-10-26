@@ -26,14 +26,16 @@ async function readRawBody(req) {
 }
 
 async function postTakeAwayStripeEvent(payload, options = {}) {
-  return postGustoService("take-away/stripe-events", payload, options);
+  return postGustoService("take-away/stripe-events", payload, {
+    ...options, requireWebhookReceipt: true,
+  });
 }
 
 function createTakeAwayWebhookHandler(options = {}) {
   const env = options.env || process.env;
   const webhooks =
     options.webhooks || options.stripe?.webhooks || Stripe.webhooks;
-  const postEvent = options.postEvent || postTakeAwayStripeEvent;
+  const postEvent = options.postEvent || ((payload) => postTakeAwayStripeEvent(payload, { env }));
 
   return async function takeAwayWebhookHandler(req, res) {
     if (req.method !== "POST") {
@@ -59,10 +61,8 @@ function createTakeAwayWebhookHandler(options = {}) {
         webhookSecret,
       );
     } catch (error) {
-      console.error(
-        "[take-away-webhook-signature-error]",
-        error?.message || error,
-      );
+      // Stripe errors can contain the raw payload, including client_secret.
+      console.error("[take-away-webhook-signature-error]", { code: "INVALID_STRIPE_SIGNATURE" });
       return res.status(400).json({ error: "Signature webhook invalide" });
     }
 
@@ -89,6 +89,9 @@ function createTakeAwayWebhookHandler(options = {}) {
         restaurantId: configuredRestaurantId,
         event,
       });
+      if (result?.handled !== true) {
+        throw Object.assign(new Error("Événement non traité"), { code: "GUSTO_INVALID_ACK" });
+      }
       return res.status(200).json({
         received: true,
         handled: result?.handled !== false,
@@ -99,8 +102,11 @@ function createTakeAwayWebhookHandler(options = {}) {
         eventType: event.type || null,
         paymentObjectId: stripeObject?.id || null,
         restaurantId: configuredRestaurantId,
-        code: error?.code || "WEBHOOK_FORWARD_FAILED",
-        message: error?.message || String(error),
+        code: error?.name === "TimeoutError" ? "GUSTO_FORWARD_TIMEOUT"
+          : /^[A-Z0-9_]{1,80}$/.test(error?.code || error?.cause?.code || "")
+            ? error.code || error.cause.code : "WEBHOOK_FORWARD_FAILED",
+        errorType: error?.name || "Error",
+        upstreamStatus: Number(error?.status) || null,
       });
       return res.status(500).json({ error: "Transmission webhook impossible" });
     }
